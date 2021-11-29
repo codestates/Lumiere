@@ -5,11 +5,39 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server/index",
+    "server": "nodemon server/index",
+    "client": "npm start --prefix client",
+    "predev": "kill -9 $(lsof -i :5000 | grep -i -E -o '\\s[0-9]+\\s') || true",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node server/seeder",
+    "data:destroy": "node server/seeder -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codestates/Lumiere.git"
   },
   "author": "Minimanimo",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codestates/Lumiere/issues"
+  },
+  "homepage": "https://github.com/codestates/Lumiere#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
+    "mongoose": "^6.0.13",
+    "validator": "^13.7.0"
+  },
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "nodemon": "^2.0.15"
   }
 }
