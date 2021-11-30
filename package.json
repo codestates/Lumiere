@@ -38,6 +38,11 @@
   },
   "devDependencies": {
     "concurrently": "^6.4.0",
-    "nodemon": "^2.0.15"
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb": "^19.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.0"
   }
 }
