@@ -1,11 +1,11 @@
 import React from 'react';
-
+import './App.css';
 
 function App() {
 
   return (
     <div className="App">
-      Lumiere 프로젝트
+      <header>Lumiere 프로젝트</header>
     </div>
   );
 }
