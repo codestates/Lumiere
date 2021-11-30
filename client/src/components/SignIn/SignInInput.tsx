@@ -1,6 +1,10 @@
-const SignInput = () => {
+const SignInInput = () => {
+  return (
+    <>
+      <h1>SignInInput</h1>
+      <span>hello</span>
+    </>
+  );
+};
 
-}
-
-
-export default SignInput
+export default SignInInput;
