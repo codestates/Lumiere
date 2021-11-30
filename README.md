@@ -5,7 +5,7 @@
  -->
  
 # Favicon & Logo
-<img width='20%' src='https://user-images.githubusercontent.com/83930702/143862720-676a0287-ddef-4e81-8a2a-7404fd11167c.png' alt='루미에르 심볼' />
+<img width='20%' src='https://user-images.githubusercontent.com/83930702/143972152-84715903-5971-49dc-b782-1a482495b3fc.png' alt='루미에르 심볼' />
 <img width='50%' src='https://user-images.githubusercontent.com/83930702/143862715-087cd8d7-a5b8-452b-8044-ebc69a47e248.png' alt='루미에르 로고' />
  
  # 🎨 서비스 소개
