@@ -9,6 +9,7 @@ module.exports = {
         'react/jsx-filename-extension': [1, { extensions: ['.tsx', 'jsx'] }],
         'react/function-component-definition': 'off',
         'react/jsx-uses-react': 'off',
+        'react/react-in-jsx-scope': 'off',
         'react/jsx-curly-brace-presence': 'error',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
       },
