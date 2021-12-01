@@ -1,6 +1,6 @@
 const artists = [
   {
-    code: 0000,
+    code: '0001',
     name: '안영희',
     aka: 'Bye',
     record: `안영희 작가는 자신의 작품을 통해 따듯한 기운을 전파하고자 노력합니다. 
@@ -10,7 +10,7 @@ const artists = [
     countOfWorks: 4,
   },
   {
-    code: 0001,
+    code: '0002',
     name: '로키산맥',
     aka: 'Tesseract Owner',
     record: `로키 작가의 작품에서는 인공과 자연의 유기적인 조화가 돋보입니다. 
