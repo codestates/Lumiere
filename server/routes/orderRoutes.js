@@ -1,5 +1,4 @@
 import express from 'express';
-const router = express.Router();
 import {
   addOrderItems,
   getOrderById,
@@ -8,7 +7,8 @@ import {
   getMyOrders,
   getOrders,
 } from '../controllers/orderController.js';
-import { protect, admin } from '../middleware/authMiddleware.js';
+import { protect, admin } from '../middleware/auth.js';
+const router = express.Router();
 
 // 순서도 중요하다
 // when you placed (/:id) above the (/myorder), then you input the URL with /.../myorders,
