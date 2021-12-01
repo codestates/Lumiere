@@ -26,7 +26,7 @@ const eventSchema = mongoose.Schema(
       required: true,
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 const Event = mongoose.model('Event', eventSchema);

@@ -48,7 +48,7 @@ const artistSchema = mongoose.Schema(
       default: true,
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 const Artist = mongoose.model('Artist', artistSchema);

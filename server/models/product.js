@@ -87,7 +87,7 @@ const productSchema = mongoose.Schema(
       default: Date.now,
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 const Product = mongoose.model('Product', productSchema);
