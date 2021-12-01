@@ -15,7 +15,7 @@ const userSchema = mongoose.Schema(
         type: String,
         minlength: [8, '비밀번호를 8자 이상 입력해주세요'],
         match: [
-          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,20}$/,
+          /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,20}$/,
           '비밀번호 형식에 맞지않습니다',
         ],
       },
@@ -66,11 +66,11 @@ const userSchema = mongoose.Schema(
   },
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.general.password);
+userSchema.methods.matchPassword = async (enteredPassword) => {
+  await bcrypt.compare(enteredPassword, this.general.password);
 };
 
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async (next) => {
   if (!this.isModified('general')) {
     next();
   }
