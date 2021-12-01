@@ -1,8 +1,16 @@
+import SignInTitle from 'components/SignIn/SignInTitle';
+import SignInContent from 'components/SignIn/SignInContent';
+import Footer from 'components/Footer/Footer';
+import { SignInContainer } from './styled';
+
 const SignIn = () => {
   return (
     <>
-      <h1>SignIn</h1>
-      <span>hello</span>
+      <SignInContainer>
+        <SignInTitle />
+        <SignInContent />
+      </SignInContainer>
+      <Footer />
     </>
   );
 };
