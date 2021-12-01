@@ -4,8 +4,10 @@ import colors from 'colors';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
+import artistRoutes from './routes/artistRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import eventRoutes from './routes/eventRoutes.js';
 import { errHandler, notFound } from './middleware/error.js';
 
 dotenv.config();
@@ -27,8 +29,10 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/users', userRoutes);
+app.use('/api/artists', artistRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/events', eventRoutes);
 
 // custom handler for error
 app.use(notFound);
