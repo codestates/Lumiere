@@ -1,7 +1,8 @@
 import styled from 'styled-components/macro';
 
 export const SignInContainer = styled.section`
-  padding: 3rem 2.5rem;
+  /* 헤더크기만큼 padding-top을 줌 */
+  padding-top: 6vh;
 `;
 
 export const SignInWrap = styled.div`
