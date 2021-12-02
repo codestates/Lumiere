@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 export const FooterContainer = styled.footer`
   display: flex;
@@ -17,7 +17,6 @@ export const TeamInfoBox = styled.ul`
       margin-bottom: 0.5rem;
       font-size: 1.2rem;
       font-weight: bold;
-      color: var(--color-black);
     }
     span {
       padding: 0 0 0.3rem 0.6rem;
