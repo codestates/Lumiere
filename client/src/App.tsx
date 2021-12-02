@@ -7,7 +7,7 @@ import Artists from 'pages/ArtistsPage/Artists';
 import Cart from 'pages/CartPage/Cart';
 import MyPage from 'pages/MyPage/MyPage';
 import Zzim from 'pages/MyPage/ZzimPage/Zzim';
-import Admin from 'pages/AdminPage/Admin';
+import AdminOrderList from 'pages/AdminPage/AdminOrderList';
 import { GlobalStyle } from 'styles/global-style';
 
 function App() {
