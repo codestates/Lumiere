@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { RecoilRoot } from 'recoil';
 import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RecoilRoot>
+      {/* RecoilRoot provider를 이용하여 recoil을 사용가능하도록 설정. */}
+      <App />
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root'),
 );

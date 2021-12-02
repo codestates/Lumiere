@@ -2,17 +2,27 @@ import styled from 'styled-components/macro';
 
 // SigninTitle
 export const SignInTitleWrap = styled.div`
-  flex: 1;
+  /* flex: 1; */
   text-align: center;
   span {
     font-size: 0.8rem;
   }
+
+  @media only screen and (min-width: 768px) {
+    span {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
-export const SignInSub = styled.h2`
+export const SignInSub = styled.h1`
   margin-bottom: 0.8rem;
   font-size: 1.35rem;
   font-weight: 800;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1.8rem;
+  }
 `;
 
 export const MoveSignUpBtn = styled.button`
@@ -23,11 +33,16 @@ export const MoveSignUpBtn = styled.button`
   text-decoration: underline;
   text-decoration-color: #473f3f;
   text-underline-position: under;
+
+  &:hover {
+    color: var(--color-red);
+    text-decoration-color: var(--color-red);
+    cursor: pointer;
+  }
 `;
 // SignInContent;
 export const SignInContentWrap = styled.div`
-  flex: 6;
-
+  /* flex: 6; */
   form {
     display: flex;
     flex-direction: column;
@@ -37,20 +52,21 @@ export const SignInContentWrap = styled.div`
 
   form label {
     font-weight: 700;
-    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    margin-bottom: 1.7rem;
   }
 
   form label input {
     display: block;
     width: 100%;
-    height: 2rem;
+    height: 2.3rem;
     margin-top: 0.8rem;
     border-radius: 4px;
     border: 1px solid #dcd9d9;
   }
 
   input::placeholder {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
   }
 `;
 
@@ -60,11 +76,6 @@ export const SignInBtnWrap = styled.div`
   flex: 5;
   text-align: center;
 
-  span {
-    margin-bottom: 0.8rem;
-    font-size: 0.8rem;
-  }
-
   button {
     height: 4rem;
     font-size: 1.35rem;
@@ -73,7 +84,19 @@ export const SignInBtnWrap = styled.div`
     background-color: var(--color-black);
     border-radius: 4px;
     border: none;
+    transition: all 0.5s;
+
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+    }
   }
+`;
+
+export const SignInErrMessage = styled.span<{ err: string }>`
+  visibility: ${(props) => (props.err === 'nothing' ? 'hidden' : 'visible')};
+  margin-bottom: 0.8rem;
+  color: red;
 `;
 
 // SignInSocail
@@ -107,5 +130,10 @@ export const SignInSocialWrap = styled.ul`
     width: 80%;
     height: 80%;
     transform: translate(-50%, -50%);
+
+    &:hover {
+      color: var(--color-blue);
+      cursor: pointer;
+    }
   }
 `;

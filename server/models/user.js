@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
@@ -19,6 +20,7 @@ const userSchema = mongoose.Schema(
           '비밀번호 형식에 맞지않습니다',
         ],
       },
+      token: String,
     },
     google: {
       token: String,
@@ -63,13 +65,12 @@ const userSchema = mongoose.Schema(
   },
 );
 
-// eslint-disable-next-line func-names
 userSchema.methods.matchPassword = async function (enteredPassword) {
   const password = await bcrypt.compare(enteredPassword, this.general.password);
   return password;
 };
 
-userSchema.pre('save', async (next) => {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('general')) {
     next();
   }

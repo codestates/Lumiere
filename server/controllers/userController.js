@@ -1,7 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 import User from '../models/user.js';
-import generateToken from '../utils/generateToken.js';
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from '../utils/generateToken.js';
 
 // @desc   Check a email address
 // @route  POST /api/users/email
@@ -19,7 +23,7 @@ const checkEmail = asyncHandler(async (req, res) => {
 });
 
 // @desc   Register a new user
-// @route  POST /api/users
+// @route  POST /api/users/
 // @access Public
 const register = asyncHandler(async (req, res) => {
   console.log(req.body)
@@ -33,9 +37,7 @@ const register = asyncHandler(async (req, res) => {
     user.markModified('general');
     await user.save();
 
-    res.status(201).json({
-      message: '회원가입 성공',
-    });
+    res.status(201).json({ message: '회원가입 성공' });
   } else {
     res.status(400).json({ message: '모든 항목은 필수입니다' });
   }
@@ -46,6 +48,40 @@ const register = asyncHandler(async (req, res) => {
 // @access Public
 const generalLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  const user = await User.findOne({ 'general.email': email });
+
+  if (user && (await user.matchPassword(password))) {
+    const refreshToken = generateRefreshToken(user._id);
+    const newbe = await User.findByIdAndUpdate(
+      user._id,
+      { 'general.token': refreshToken },
+      { new: true, upsert: true },
+    );
+    console.log(newbe);
+    res
+      .cookie('refreshToken', refreshToken, {
+        sameSite: 'none',
+        // secure: true, 추후 변경
+        httpOnly: true,
+      })
+      .json({
+        _id: user._id,
+        name: user.name,
+        isAdmin: user.isAdmin,
+        accessToken: generateAccessToken(user._id),
+      });
+  } else {
+    res
+      .status(401)
+      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+  }
+});
+
+// @desc   Fetch token & userInfo from kakao
+// @route  GET /api/users/kakao
+// @access Public
+const kakaoUserInfo = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
   const user = await User.findOne({ 'general.email': email });
 
@@ -53,7 +89,49 @@ const generalLogin = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       name: user.name,
-      token: generateToken(user._id),
+      accessToken: generateAccessToken(user._id),
+    });
+  } else {
+    res
+      .status(401)
+      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+  }
+});
+
+// @desc   Fetch token & userInfo from naver
+// @route  GET /api/users/naver
+// @access Public
+const naverUserInfo = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ 'general.email': email });
+
+  if (user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      accessToken: generateAccessToken(user._id),
+    });
+  } else {
+    res
+      .status(401)
+      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+  }
+});
+
+// @desc   Fetch token & userInfo from google
+// @route  GET /api/users/google
+// @access Public
+const googleUserInfo = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ 'general.email': email });
+
+  if (user && (await user.matchPassword(password))) {
+    res.json({
+      _id: user._id,
+      name: user.name,
+      accessToken: generateAccessToken(user._id),
     });
   } else {
     res
@@ -72,12 +150,10 @@ const checkPwd = asyncHandler(async (req, res) => {
   // 일반, 소설 유저 구분
   if (!user.general) {
     res.status(401).json({ message: '소셜 유저는 변경이 불가합니다' });
+  } else if (await user.matchPassword(password)) {
+    res.json({ message: '비밀번호 일치' });
   } else {
-    if (await user.matchPassword(password)) {
-      res.json({ message: '비밀번호 일치' });
-    } else {
-      res.status(401).json({ message: '비밀번호 불일치' });
-    }
+    res.status(401).json({ message: '비밀번호 불일치' });
   }
 });
 
@@ -99,7 +175,7 @@ const updatePwd = asyncHandler(async (req, res) => {
     );
     res.status(200).json({
       message: '비밀번호가 성공적으로 변경되었습니다',
-      token: generateToken(updatedUser._id),
+      token: generateAccessToken(updatedUser._id),
     });
   }
   // 2. 로그아웃 시 마지막 접속 시간 수정
@@ -126,7 +202,7 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 // @desc   Delete user profile
-// @route  PATCH /api/users
+// @route  PATCH /api/users/
 // @access Private
 const dropout = asyncHandler(async (req, res) => {
   // 회원 탈퇴 요청
@@ -145,7 +221,7 @@ const dropout = asyncHandler(async (req, res) => {
 });
 
 // @desc   Get all users
-// @route  GET /api/users
+// @route  GET /api/users/
 // @access Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
   // Admin 관리자 유저만 이 정보에 대한 권한이 있다.
@@ -168,6 +244,9 @@ export {
   checkEmail,
   register,
   generalLogin,
+  kakaoUserInfo,
+  naverUserInfo,
+  googleUserInfo,
   checkPwd,
   updatePwd,
   logout,
