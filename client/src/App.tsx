@@ -7,7 +7,10 @@ import Artists from 'pages/ArtistsPage/Artists';
 import Cart from 'pages/CartPage/Cart';
 import MyPage from 'pages/MyPage/MyPage';
 import Zzim from 'pages/MyPage/ZzimPage/Zzim';
-import AdminOrderList from 'pages/AdminPage/AdminOrderList';
+import AdminOrder from 'pages/AdminOrderPage/AdminOrder';
+import AdminProduct from 'pages/AdminProductPage/AdminProduct';
+import AdminUser from 'pages/AdminUserPage/AdminUser';
+import AdminBanner from 'pages/AdminBannerPage/AdminBanner';
 import { GlobalStyle } from 'styles/global-style';
 
 function App() {
@@ -24,7 +27,10 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/zzim" element={<Zzim />} />
-          <Route path="/AdminOrderList" element={<AdminOrderList />} />
+          <Route path="/AdminOrder" element={<AdminOrder />} />
+          <Route path="/AdminProduct" element={<AdminProduct />} />
+          <Route path="/AdminUser" element={<AdminUser />} />
+          <Route path="/AdminBanner" element={<AdminBanner />} />
         </Routes>
       </Router>
     </>
