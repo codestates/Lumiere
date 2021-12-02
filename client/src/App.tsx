@@ -6,6 +6,7 @@ import ArtList from 'pages/ArtListPage/ArtList';
 import Artists from 'pages/ArtistsPage/Artists';
 import MyPage from 'pages/MyPage/MyPage';
 import Zzim from 'pages/MyPage/ZzimPage/Zzim';
+import Admin from 'pages/AdminPage/Admin';
 import { GlobalStyle } from 'styles/global-style';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/artists" element={<Artists />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/zzim" element={<Zzim />} />
+          <Route path="/AdminOrderList" element={<AdminOrderList />} />
         </Routes>
       </Router>
     </>

@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import Order from '../models/orderModel.js';
+import Order from '../models/order.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -29,6 +29,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
       taxPrice,
       shippingPrice,
       totalPrice,
+      deliver,
     });
 
     const createdOrder = await order.save();
