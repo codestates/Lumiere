@@ -1,4 +1,4 @@
-const banners = [
+const events = [
   {
     heading: '[Welcome to Lumiere]',
     content: '여기 루미에르에서 당신의 예술적 감성을 일깨워보세요',
@@ -24,4 +24,4 @@ const banners = [
   },
 ];
 
-export default banners;
+export default events;
