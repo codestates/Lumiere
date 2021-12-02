@@ -40,9 +40,7 @@ const SignInContent = () => {
       instance
         .post('/users/login', { ...signinInputInfo }, { withCredentials: true })
         .then((res) => {
-          console.log(res);
           const userInfo = res.data;
-          console.log(document.cookie);
           localStorage.setItem('lumierUserInfo', JSON.stringify(userInfo));
           signinStateHandler(true);
           history('/');
