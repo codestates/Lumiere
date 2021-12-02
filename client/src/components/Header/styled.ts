@@ -1,14 +1,24 @@
 import styled from 'styled-components/macro';
 
 export const HeaderContainer = styled.header`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  height: 3rem;
+  max-width: 1440px;
+  min-width: 320px;
+  width: 100vw;
+  height: 6vh;
+  margin: auto;
   padding: 0.6rem 1rem;
+  background-color: #ffffff;
   border-bottom: 1px solid #f2f2f2;
+
   > nav:nth-child(2) {
     display: none;
   }
+
   @media screen and (min-width: 768px) {
     > nav:nth-child(1) {
       display: none;
