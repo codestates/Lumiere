@@ -8,6 +8,7 @@ import {
   ServiceTitle,
   ServiceList,
   ServiceBox,
+  StartBtnBox,
 } from './styled';
 
 const Landing = () => {
@@ -47,6 +48,9 @@ const Landing = () => {
           </ServiceBox>
         </ServiceList>
       </ServiceSection>
+      <StartBtnBox>
+        <Link to="/artlist">작품 구경하기</Link>
+      </StartBtnBox>
       <Footer />
     </LandingContainer>
   );

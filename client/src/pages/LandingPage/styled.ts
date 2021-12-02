@@ -43,7 +43,7 @@ export const ServiceTitle = styled.div`
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      padding: 0.2rem 2.5rem;
+      padding: 0.3rem 3rem;
       background-color: #ffffff;
       border: 1px solid #e3d899;
       border-radius: 2rem;
@@ -85,5 +85,25 @@ export const ServiceBox = styled.li`
     &:nth-child(2) {
       margin: 0 1rem;
     }
+  }
+`;
+
+export const StartBtnBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 18vh;
+
+  a {
+    padding-bottom: 0.5rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+    border-bottom: 2px solid var(--color-black);
+    transition: all 0.5s;
+  }
+  a:hover,
+  a:focus {
+    font-size: 1.7rem;
+    border-bottom: 2px solid #eeeeee;
   }
 `;
