@@ -26,7 +26,7 @@ const checkEmail = asyncHandler(async (req, res) => {
 // @route  POST /api/users/
 // @access Public
 const register = asyncHandler(async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const { email, password, name } = req.body;
 
   if (email && password && name) {
@@ -60,9 +60,9 @@ const generalLogin = asyncHandler(async (req, res) => {
     console.log(newbe);
     res
       .cookie('refreshToken', refreshToken, {
-        sameSite: 'none',
+        // sameSite: 'none',
         // secure: true, 추후 변경
-        httpOnly: true,
+        // httpOnly: true,
       })
       .json({
         _id: user._id,

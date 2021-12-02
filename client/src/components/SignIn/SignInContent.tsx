@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import instance from 'util/axios';
-import { EmailValidate, PasswordValidate } from 'util/validate';
-import SignInSocial from './SignInSocail';
+import { emailValidate, passwordValidate } from 'util/validate';
+import { IsSigninState } from 'States/IsLoginState';
+import { useSetRecoilState } from 'recoil';
 import { SignInContentWrap, SignInBtnWrap, SignInErrMessage } from './styled';
+import SignInSocial from './SignInSocail';
 
 type SigninInput = {
   email: string;
@@ -18,6 +20,7 @@ const SignInContent = () => {
   const [errMessage, setErrMessage] = useState('nothing');
 
   const history = useNavigate();
+  const signinStateHandler = useSetRecoilState(IsSigninState);
 
   const inputValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.type === 'email') {
@@ -30,17 +33,19 @@ const SignInContent = () => {
   const signinHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
-      EmailValidate(signinInputInfo.email) &&
-      PasswordValidate(signinInputInfo.password)
+      emailValidate(signinInputInfo.email) &&
+      passwordValidate(signinInputInfo.password)
     ) {
       // axios 요청
       instance
-        .post('/users/login', { ...signinInputInfo })
+        .post('/users/login', { ...signinInputInfo }, { withCredentials: true })
         .then((res) => {
+          console.log(res);
           const userInfo = res.data;
+          console.log(document.cookie);
           localStorage.setItem('lumierUserInfo', JSON.stringify(userInfo));
+          signinStateHandler(true);
           history('/');
-          // 로그인 상태 true로 바꾸는 작업 추가 진행 필요
         })
         .catch((err) => {
           console.log(err);
@@ -48,6 +53,7 @@ const SignInContent = () => {
             `*아이디 또는 비밀번호가 잘못 입력 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요`,
           );
           setSigninInputInfo({ ...signinInputInfo, password: '' });
+          signinStateHandler(false);
         });
     } else {
       setErrMessage(
