@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import instance from 'util/axios';
-import { EmailValidate, PasswordValidate } from 'util/Validate';
+import { EmailValidate, PasswordValidate } from 'util/validate';
 import SignInSocial from './SignInSocail';
 import { SignInContentWrap, SignInBtnWrap, SignInErrMessage } from './styled';
 
