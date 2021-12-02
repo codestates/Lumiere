@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { NavContainer, NavInfoBox, UserInfoBox, NavButtonBox } from './styled';
 
 const Nav = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
 
   const logoutHandler = () => {
     setIsLogin(false);
