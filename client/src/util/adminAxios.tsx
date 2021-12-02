@@ -3,22 +3,23 @@ import axios from 'axios';
 const baseURL = 'http://localhost:5000/api';
 
 // Set config defaults when creating the instance
-const instance = axios.create({
+const adminInstance = axios.create({
   baseURL,
 });
 
 //  axios 요청을 할때 중간에서 가로챔
-instance.interceptors.request.use(
+adminInstance.interceptors.request.use(
   function setConfig(parameter) {
     const config = parameter;
-    const userInfo = localStorage.getItem('lumiereUserInfo');
+    const userInfo = localStorage.getItem('userInfo');
 
     config.headers = {
       'Content-Type': 'application/json',
     };
 
     if (userInfo) {
-      config.headers.Authorization = `Bearer ${JSON.parse(userInfo).token}`;
+      config.headers.Authorization =
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxYTQzOGYwOGY3MmUwNmFmZWQzYTMxOSIsImlhdCI6MTYzODE4NTI4MCwiZXhwIjoxNjQwNzc3MjgwfQ.CcQEwOdWP2S4YZdSsqOSbObc0HltV4-PNVd0kv-4bnQ';
     }
 
     // Do something before request is sent
@@ -30,4 +31,4 @@ instance.interceptors.request.use(
   },
 );
 
-export default instance;
+export default adminInstance;
