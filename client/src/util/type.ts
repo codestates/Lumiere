@@ -1,95 +1,99 @@
 export interface Users {
   general: {
-    email: String;
-    password: String;
+    email: string;
+    password: string;
   };
   google: {
-    uuid: String;
-    token: String;
-    email: String;
+    uuid: string;
+    token: string;
+    email: string;
   };
   naver: {
-    uuid: String;
-    token: String;
-    email: String;
+    uuid: string;
+    token: string;
+    email: string;
   };
   kakao: {
-    uuid: String;
-    token: String;
-    email: String;
+    uuid: string;
+    token: string;
+    email: string;
   };
-  name: String;
+  name: string;
   active: {
     lastAccessTime: Date;
-    isClosed: Boolean;
+    isClosed: boolean;
   };
-  isAdmin: Boolean;
+  isAdmin: boolean;
 }
 
 export interface Product {
-  artCode: String;
-  title: String;
-  image: String;
-  theme: String;
+  artCode: string;
+  title: string;
+  image: string;
+  theme: string;
   info: {
-    details: String;
-    size: String;
-    canvas: String;
-    createdAt: String;
+    details: string;
+    size: string;
+    canvas: string;
+    createdAt: string;
   };
-  price: Number;
-  count: Number;
-  inStock: Boolean;
+  price: number;
+  count: number;
+  inStock: boolean;
   updatedAt: Date;
 }
 
 export interface Artists {
-  code: String;
-  name: String;
-  aka: String;
-  record: String;
-  thumbnail: String;
+  code: string;
+  name: string;
+  aka: string;
+  record: string;
+  thumbnail: string;
   joinAt: Date;
-  countOfWorks: Number;
-  isActive: Boolean;
+  countOfWorks: number;
+  isActive: boolean;
 }
 
 export interface Order {
   orderItems: [
     {
-      image: String;
-      title: String;
-      artist: String;
-      size: String;
-      price: Number;
+      image: string;
+      title: string;
+      artist: string;
+      size: string;
+      price: number;
     },
   ];
   result: {
-    id: String;
+    id: string;
     paidAt: Date;
-    status: Number;
+    status: number;
     updatedAt: Date;
   };
   deliver: {
-    address: String;
-    receiver: String;
-    request: String;
+    address: string;
+    receiver: string;
+    request: string;
   };
   ordererInfo: {
-    name: String;
-    phoneNum: String;
-    email: String;
-    refundTerms: String;
+    name: string;
+    phoneNum: string;
+    email: string;
+    refundTerms: string;
   };
-  shippingPrice: Number;
-  totalPrice: Number;
-  deliveredAt: Date;
+  shippingPrice: number;
+  totalPrice: number;
+  // deliveredAt: Date;
+  user: {
+    name: string;
+    _id: string;
+  };
 }
 
 export interface Events {
-  heading: String;
-  content: String;
-  linkname: String;
-  link: String;
-  image: String;
+  heading: string;
+  content: string;
+  linkname: string;
+  link: string;
+  image: string;
 }
