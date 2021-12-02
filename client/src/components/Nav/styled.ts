@@ -41,42 +41,7 @@ export const NavContainer = styled.nav`
   }
 
   @media screen and (min-width: 768px) {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    padding: 5rem 3rem 0;
-    background: var(--color-black);
-    transition: all 0.5s;
-
-    h1 {
-      position: absolute;
-      top: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #ffffff;
-    }
-    li {
-      display: flex;
-      flex-direction: column;
-      padding: 1rem 0.5rem;
-    }
-    li:nth-child(1) {
-      border-bottom: 0.5px solid #666666;
-    }
-    li a {
-      padding: 1rem;
-      font-size: 1.1rem;
-      color: #ffffff;
-      border: 1px solid var(--color-black);
-      transition: all 0.5s;
-    }
-    li a:hover,
-    li a:focus {
-      border-radius: 2rem;
-      border: 1px solid #ffffff;
-    }
+    display: none;
   }
 `;
 
@@ -112,6 +77,28 @@ export const UserInfoBox = styled.div`
       font-weight: 700;
     }
   }
+
+  @media screen and (min-width: 768px) {
+    justify-content: space-between;
+
+    a {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.2rem;
+    }
+    a:nth-child(1) {
+      flex: 1;
+      margin-right: 0.5rem;
+      div {
+        margin-left: 1rem;
+        font-size: 1rem;
+      }
+    }
+    a:nth-child(2) {
+      justify-content: center;
+    }
+  }
 `;
 
 export const NavButtonBox = styled.div`
@@ -134,5 +121,25 @@ export const NavButtonBox = styled.div`
   a:focus {
     color: #ffffff;
     background: #888888;
+  }
+
+  @media screen and (min-width: 768px) {
+    justify-content: space-around;
+
+    > a {
+      flex: 0 0 auto;
+      margin: 0;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.9rem;
+      font-weight: normal;
+      color: #888888;
+      border: none;
+      box-shadow: none;
+      transition: all 0.5s;
+    }
+    a:hover,
+    a:focus {
+      font-weight: 700;
+    }
   }
 `;

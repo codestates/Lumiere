@@ -12,6 +12,7 @@ const Nav = () => {
   return (
     <NavContainer>
       <h1>LUMIERE</h1>
+      {/* Nav Menu */}
       <ul>
         <li>
           <Link to="/">홈</Link>
