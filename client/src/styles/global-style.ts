@@ -57,7 +57,7 @@ export const GlobalStyle = createGlobalStyle`
     --color-red: #b22222;
     --color-beige: #d2b69e;
     --color-blue: #567593;
-    --color-black: #473f3f;
+    --color-black: #3d3d3d;
     --box-padding: 3rem 0;
     /* z-index */
     --modal-index: 10;
