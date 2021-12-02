@@ -1,6 +1,14 @@
 import styled from 'styled-components/macro';
 
+export const AdminHeaderWrap = styled.div`
+  h1 {
+    margin-top: 6vh;
+    font-weight: bolder;
+    font-size: 2rem;
+  }
+`;
 export const TableWrap = styled.div`
+  margin-top: 1vh;
   border: 3px black solid;
   button {
     margin-bottom: 1rem;

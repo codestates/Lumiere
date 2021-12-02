@@ -5,15 +5,17 @@ import adminInstance from 'util/axios';
 import { Order } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma, convertDeliverStatus } from 'util/functions';
+import AdminHeader from 'components/Header/AdminHeader';
 import {
   Table,
   TableWrap,
   ProductInfoWrap,
   TitleSpan,
   ProductInfoWrap2,
+  AdminHeaderWrap,
 } from './styled';
 
-const AdminOrderList = () => {
+const AdminProduct = () => {
   const [orderList, setOrderList] = useState<Array<Order>>([]);
   useEffect(() => {
     adminInstance
@@ -74,10 +76,10 @@ const AdminOrderList = () => {
 
   console.log(orderList.map((el) => el));
   return (
-    <>
-      <h1>Admin</h1>
-      <Link to="/">메인으로</Link>
+    <AdminHeaderWrap>
+      <AdminHeader />
       {/* <Link to="/"></Link> */}
+      <h1>결제/배송관리</h1>
       <TableWrap>
         <Table>
           <tbody>
@@ -175,7 +177,7 @@ const AdminOrderList = () => {
           })}
         </Table>
       </TableWrap>
-    </>
+    </AdminHeaderWrap>
   );
 };
-export default AdminOrderList;
+export default AdminProduct;
