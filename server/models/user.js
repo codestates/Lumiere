@@ -21,17 +21,14 @@ const userSchema = mongoose.Schema(
       },
     },
     google: {
-      uuid: String,
       token: String,
       email: String,
     },
     naver: {
-      uuid: String,
       token: String,
       email: String,
     },
     kakao: {
-      uuid: String,
       token: String,
       email: String,
     },
@@ -66,8 +63,10 @@ const userSchema = mongoose.Schema(
   },
 );
 
-userSchema.methods.matchPassword = async (enteredPassword) => {
-  await bcrypt.compare(enteredPassword, this.general.password);
+// eslint-disable-next-line func-names
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  const password = await bcrypt.compare(enteredPassword, this.general.password);
+  return password;
 };
 
 userSchema.pre('save', async (next) => {
@@ -82,27 +81,3 @@ userSchema.pre('save', async (next) => {
 const User = mongoose.model('User', userSchema);
 
 export default User;
-
-// let userSchema = mongoose.Schema(
-//   {
-//     email: { type: String, unique: true },
-//     name: { type: String },
-//     password: { type: String },
-//     roles: [String],
-//     confirmation_code: String,
-//     confirmed: { type: Boolean, default: false },
-//     facebook: {
-//       id: String,
-//       token: String,
-//       email: String,
-//       name: String,
-//     },
-//     google: {
-//       id: String,
-//       token: String,
-//       email: String,
-//       name: String,
-//     },
-//   },
-//   { timestamps: true }
-// );
