@@ -21,14 +21,13 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
 
-      - name: go to client
-        run: cd client
-
       - name: Install Dependencies
         run: yarn
+        working-directory: ./client
 
       - name: Build
         run: yarn run build
+        working-directory: ./client
 
       - name: Deploy
         env:
