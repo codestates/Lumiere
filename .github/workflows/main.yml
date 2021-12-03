@@ -9,9 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
-      - name: go to client
-        run: cd client
-
       - name: Checkout source code
         uses: actions/checkout@master
 
@@ -23,6 +20,9 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
+
+      - name: go to client
+        run: cd client
 
       - name: Install Dependencies
         run: yarn
