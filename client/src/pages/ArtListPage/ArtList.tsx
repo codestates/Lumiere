@@ -1,9 +1,15 @@
+import Header from 'components/Header/Header';
+import Footer from 'components/Footer/Footer';
+import FilteringTab from 'components/FilteringTab/FilteringTab';
+import { ArtListContainer } from './styled';
+
 const ArtList = () => {
   return (
-    <>
-      <h1>ArtList</h1>
-      <span>hello</span>
-    </>
+    <ArtListContainer>
+      <Header />
+      <FilteringTab />
+      <Footer />
+    </ArtListContainer>
   );
 };
 export default ArtList;

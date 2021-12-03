@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
-import Header from '../../components/Header/Header';
-import Footer from '../../components/Footer/Footer';
+import Header from 'components/Header/Header';
+import Footer from 'components/Footer/Footer';
 import {
   LandingContainer,
   ServiceSection,
