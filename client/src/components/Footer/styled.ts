@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 export const FooterContainer = styled.footer`
   display: flex;
   padding: 1.5rem;
+  background-color: #ffffff;
   border-top: 1px solid #f2f2f2;
 `;
 

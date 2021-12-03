@@ -11,7 +11,7 @@ const adminInstance = axios.create({
 adminInstance.interceptors.request.use(
   function setConfig(parameter) {
     const config = parameter;
-    const userInfo = localStorage.getItem('lumierUserInfo');
+    const userInfo = localStorage.getItem('lumiereUserInfo');
 
     config.headers = {
       'Content-Type': 'application/json',

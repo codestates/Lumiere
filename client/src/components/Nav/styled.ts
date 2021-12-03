@@ -4,6 +4,7 @@ export const NavContainer = styled.nav`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: var(--button-index);
   width: 100vw;
   height: 100vh;
   padding: 5rem 3rem 0;
