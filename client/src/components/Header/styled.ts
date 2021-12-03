@@ -4,6 +4,7 @@ export const HeaderContainer = styled.header`
   position: fixed;
   top: 0;
   left: 50%;
+  z-index: var(--button-index);
   transform: translateX(-50%);
   display: flex;
   max-width: 1440px;
