@@ -22,11 +22,16 @@ jobs:
         run: CI='' npm run build
         working-directory: ./client
 
-      - name: test
+      - name: ls in client
         run: ls -la
+        working-directory: ./client
 
-      - name : test2
-        run : ls -la
+      - name: ls in build
+        run: ls -la
+        working-directory: ./client/build
+
+      - name: pwd in build
+        run: pwd
         working-directory: ./client/build
 
       - name: deploy
