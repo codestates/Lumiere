@@ -79,7 +79,7 @@ const AdminBanner = () => {
     <AdminHeaderWrap>
       <AdminHeader />
       {/* <Link to="/"></Link> */}
-      <h1>결제/배송관리</h1>
+      <h1>배너 관리</h1>
       <TableWrap>
         <Table>
           <tbody>
