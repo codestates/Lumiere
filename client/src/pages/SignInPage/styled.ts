@@ -1,24 +1,41 @@
 import styled from 'styled-components/macro';
 
 export const SignInContainer = styled.section`
-  /* 헤더크기만큼 padding-top을 줌 */
-  padding-top: 6vh;
+  height: 100vh;
+
+  Footer {
+    display: none;
+  }
+
+  @media only screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    height: auto;
+    padding: 0;
+
+    Footer {
+      display: flex;
+      width: 100%;
+    }
+  }
 `;
 
 export const SignInWrap = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2.5rem 2.5rem;
+  height: 100%;
+  width: 100%;
+  padding: 10vh 2.5rem 2rem;
 
   @media only screen and (min-width: 768px) {
-    padding: 3rem 2.5rem;
-  }
-`;
-
-export const FooterHandler = styled.div`
-  display: none;
-
-  @media only screen and (min-width: 768px) {
-    display: block;
+    flex: 0 0 82vh;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    width: 60%;
+    padding: 10vh 0 2rem;
   }
 `;
