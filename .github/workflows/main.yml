@@ -23,10 +23,11 @@ jobs:
         working-directory: ./client
 
       - name: deploy
-        working-directory: ./client/build
+        working-directory: ./client
         env:
           AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
           AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+        dependencies: build
         run: |
           aws s3 cp \
             --recursive \
