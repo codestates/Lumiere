@@ -1,33 +1,34 @@
 name: deploy-to-s3-example
 
-on: 
+on:
   push:
-    branches: [ dev ]
+    branches: [dev]
 
-jobs: 
-  build: 
+jobs:
+  build:
     runs-on: ubuntu-18.04
     steps:
       - name: git clone
         uses: actions/checkout@v2
 
       - name: npm install for eslint
-        run : npm install
+        run: npm install
 
       - name: npm install
-        run: npm install 
+        run: npm install
         working-directory: ./client
 
       - name: build
         run: CI='' npm run build
         working-directory: ./client
 
-      - name: deploy
-        env: 
-          AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-        run: |
-          aws s3 cp \
-            --recursive \
-            --region ap-northeast-2 \
-            dist s3://www.lumieregallery.site
+      - name: Transfer to S3 for serving static
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          AWS_S3_BUCKET: 'www.lumieregallery.site'
+          AWS_ACCESS_KEY_ID: ${{ secrets. AWS_IAM_MANAGER_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_IAM_MANAGER_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-northeast-2'
+          SOURCE_DIR: 'dist'
