@@ -30,8 +30,8 @@ jobs:
         run: ls -la
         working-directory: ./client/build
 
-      # - name: pwd in build
-      #   run: pwd
+      - name: pwd in build
+        run: pwd
         working-directory: ./client/build
 
       - name: deploy
