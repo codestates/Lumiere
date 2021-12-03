@@ -45,7 +45,7 @@ jobs:
       #     aws s3 cp \
       #       --recursive \
       #       --region ap-northeast-2 \
-      #       /home/runner/work/Lumiere/Lumiere/client/build s3://www.lumieregallery.site
+      # /home/runner/work/Lumiere/Lumiere/client/build s3://www.lumieregallery.site
       
       - name: Transfer to S3 for serving static
         uses: jakejarvis/s3-sync-action@master
