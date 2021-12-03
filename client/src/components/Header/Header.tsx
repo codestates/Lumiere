@@ -24,15 +24,12 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   const history = useNavigate();
+  const userInfo = localStorage.getItem('lumiereUserInfo');
 
   const logoutHandler = () => {
     // axios 요청
     instance
-      .patch(
-        '/users/logout',
-        { lastAccessTime: new Date() },
-        { withCredentials: true },
-      )
+      .patch('/users/logout', { lastAccessTime: new Date() })
       .then((res) => {
         console.log(res);
         localStorage.removeItem('lumiereUserInfo');
@@ -93,7 +90,7 @@ const Header = () => {
             <Link to="/mypage">
               <RiUserLine />
               <div>
-                <span>최소훈</span> 님
+                <span>{userInfo && JSON.parse(userInfo).name}</span>님
               </div>
             </Link>
             <Link to="/" onClick={logoutHandler}>

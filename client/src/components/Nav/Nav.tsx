@@ -9,6 +9,7 @@ const Nav = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
 
   const history = useNavigate();
+  const userInfo = localStorage.getItem('lumiereUserInfo');
 
   const logoutHandler = () => {
     // axios 요청
@@ -50,7 +51,7 @@ const Nav = () => {
           <UserInfoBox>
             <img src="/images/symbol.png" alt="루미에르 심볼 로고" />
             <div>
-              <span>최소훈</span>님 반갑습니다.
+              <span>{userInfo && JSON.parse(userInfo).name}</span>님 반갑습니다.
             </div>
           </UserInfoBox>
           <NavButtonBox>

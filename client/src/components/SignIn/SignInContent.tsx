@@ -38,7 +38,7 @@ const SignInContent = () => {
     ) {
       // axios 요청
       instance
-        .post('/users/login', { ...signinInputInfo }, { withCredentials: true })
+        .post('/users/login', { ...signinInputInfo })
         .then((res) => {
           const userInfo = res.data;
           localStorage.setItem('lumiereUserInfo', JSON.stringify(userInfo));
