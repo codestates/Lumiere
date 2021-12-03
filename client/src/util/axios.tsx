@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const baseURL =
-  'http://ec2-3-37-64-39.ap-northeast-2.compute.amazonaws.com/api';
+const baseURL = 'https://lumiereserver.online/api';
 
 // Set config defaults when creating the instance
 const instance = axios.create({
