@@ -1,4 +1,4 @@
-name: deploy-to-s3-example
+name: lumiere-s3-auto-deploy
 
 on: 
   push:
@@ -11,9 +11,12 @@ jobs:
       - name: git clone
         uses: actions/checkout@v2
 
+      - name : go to client
+        uses: cd client
+
       - name: npm install
         run: npm install 
-
+      
       - name: build
         run: npm run build
       
