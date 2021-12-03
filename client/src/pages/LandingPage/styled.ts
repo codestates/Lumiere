@@ -7,7 +7,7 @@ export const LandingContainer = styled.div`
 export const ServiceSection = styled.section`
   h1 {
     margin-bottom: 1rem;
-    padding: 2rem 0 0 2rem;
+    padding: 2.5rem 0 0 2rem;
     font-size: 1.3rem;
     font-weight: 800;
   }
@@ -31,6 +31,7 @@ export const ServiceTitle = styled.div`
   display: flex;
   align-items: center;
   position: relative;
+  z-index: -1;
   height: 2rem;
   padding: 0 2rem;
 
