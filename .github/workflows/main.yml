@@ -3,16 +3,19 @@ name: lumiere-s3-auto-deploy
 on:
   push:
     branches:
-      - dev    # dev 브랜치에서 push 이벤트가 일어났을 때 실행
+      - dev # dev 브랜치에서 push 이벤트가 일어났을 때 실행
 
 jobs:
   build:
     runs-on: ubuntu-18.04
     steps:
+      - name: go to client
+        run: cd client
+
       - name: Checkout source code
         uses: actions/checkout@master
 
-      - name: Cache node modules  # node modules 캐싱
+      - name: Cache node modules # node modules 캐싱
         uses: actions/cache@v1
         with:
           path: node_modules
