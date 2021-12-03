@@ -18,9 +18,7 @@ instance.interceptors.request.use(
     };
 
     if (userInfo) {
-      config.headers.Authorization = `Bearer ${
-        JSON.parse(userInfo).accessToken
-      }`;
+      config.headers.Authorization = `Bearer ${JSON.parse(userInfo).token}`;
     }
 
     // Do something before request is sent
