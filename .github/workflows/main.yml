@@ -22,12 +22,13 @@ jobs:
         run: CI='' npm run build
         working-directory: ./client
 
-      - name: deploy
+      - name: Transfer to S3 for serving static
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
-          AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
-        run: |
-          aws s3 cp \
-            --recursive \
-            --region ap-northeast-2 \
-            ./client/dist s3://www.lumieregallery.site
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_IAM_MANAGER_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_IAM_MANAGER_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
+          SOURCE_DIR: "dist"
