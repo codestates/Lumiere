@@ -3,11 +3,13 @@ import dotenv from 'dotenv';
 import colors from 'colors';
 import cors from 'cors';
 import connectDB from './config/db.js';
-import userRoutes from './routes/userRoutes.js';
-import artistRoutes from './routes/artistRoutes.js';
-import productRoutes from './routes/productRoutes.js';
-import orderRoutes from './routes/orderRoutes.js';
-import eventRoutes from './routes/eventRoutes.js';
+import {
+  userRoutes,
+  artistRoutes,
+  productRoutes,
+  orderRoutes,
+  eventRoutes,
+} from './routes/index.js';
 import { errHandler, notFound } from './middleware/error.js';
 
 dotenv.config();
@@ -19,8 +21,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ['http://localhost:3000'],
-    credentials: true,
+    origin: '*',
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   }),
 );

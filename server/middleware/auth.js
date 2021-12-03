@@ -7,10 +7,11 @@ import User from '../models/user.js';
 
 const protect = asyncHandler(async (req, res, next) => {
   let token;
-  const authorization = req.headers.authorization;
+  const { authorization } = req.headers;
 
   if (authorization && authorization.startsWith('Bearer')) {
     try {
+      // eslint-disable-next-line prefer-destructuring
       token = authorization.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
       // console.log(decoded);
