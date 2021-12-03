@@ -1,40 +1,30 @@
-name: lumiere-s3-auto-deploy
+name: deploy-to-s3-example
 
-on:
+on: 
   push:
-    branches:
-      - dev # dev 브랜치에서 push 이벤트가 일어났을 때 실행
+    branches: [ dev ]
 
-jobs:
-  build:
+jobs: 
+  build: 
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@master
+      - name: git clone
+        uses: actions/checkout@v2
 
-      - name: Cache node modules # node modules 캐싱
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-dev-build-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-
-      - name: Install Dependencies
-        run: yarn
+      - name: npm install
+        run: npm install 
         working-directory: ./client
 
-      - name: Build
-        run: yarn run build
+      - name: build
+        run: npm run build
         working-directory: ./client
 
-      - name: Deploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: deploy
+        env: 
+          AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
+          AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
         run: |
           aws s3 cp \
             --recursive \
             --region ap-northeast-2 \
-            dist s3://www.lumieregallery.site
+            dist www.lumieregallery.site
