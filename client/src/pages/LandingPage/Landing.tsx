@@ -49,7 +49,7 @@ const Landing = () => {
         </ServiceList>
       </ServiceSection>
       <StartBtnBox>
-        <Link to="/artlist">작품 구경하기</Link>
+        <Link to="/artlist">배포자동화 테스트하기!</Link>
       </StartBtnBox>
       <Footer />
     </LandingContainer>
