@@ -31,7 +31,7 @@ export const HambugerBtn = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: var(--nav-index);
   display: flex;
   justify-content: center;
   align-items: center;

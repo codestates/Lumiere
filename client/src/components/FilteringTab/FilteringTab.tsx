@@ -49,7 +49,7 @@ const FilteringTab = () => {
   ];
 
   const [currentTab, setCurrentTab] = useState(1);
-  const [currentMenu, setCurrentMenu] = useState(0);
+  const [currentMenu, setCurrentMenu] = useState(-1);
 
   const selectTabHandler = (id: number) => {
     setCurrentTab(id);

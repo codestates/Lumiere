@@ -1,12 +1,29 @@
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
+import instance from 'util/axios';
+import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { NavContainer, NavInfoBox, UserInfoBox, NavButtonBox } from './styled';
 
 const Nav = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
+
+  const history = useNavigate();
+  const userInfo = localStorage.getItem('lumiereUserInfo');
 
   const logoutHandler = () => {
-    setIsLogin(false);
+    // axios 요청
+    instance
+      .patch('/users/logout', { lastAccessTime: new Date() })
+      .then((res) => {
+        console.log(res);
+        localStorage.removeItem('lumiereUserInfo');
+        setIsLogin(false);
+        history('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -30,7 +47,7 @@ const Nav = () => {
           <UserInfoBox>
             <img src="/images/symbol.png" alt="루미에르 심볼 로고" />
             <div>
-              <span>최소훈</span>님 반갑습니다.
+              <span>{userInfo && JSON.parse(userInfo).name}</span>님 반갑습니다.
             </div>
           </UserInfoBox>
           <NavButtonBox>
