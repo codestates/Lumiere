@@ -22,8 +22,14 @@ jobs:
         run: CI='' npm run build
         working-directory: ./client
 
+      - name: test
+        run: ls -la
+
+      - name : test2
+        run : ls -la
+        working-directory: ./client/build
+
       - name: deploy
-        working-directory: ./
         env:
           AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
           AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
@@ -31,4 +37,4 @@ jobs:
           aws s3 cp \
             --recursive \
             --region ap-northeast-2 \
-            dist s3://www.lumieregallery.site
+            build s3://www.lumieregallery.site
