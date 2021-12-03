@@ -19,7 +19,7 @@ jobs:
         working-directory: ./client
 
       - name: build
-        run: npm run build
+        run: CI='' npm run build
         working-directory: ./client
 
       - name: deploy
