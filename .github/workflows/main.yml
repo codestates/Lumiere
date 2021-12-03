@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name : go to client
-        uses: cd client
+        run: cd client
 
       - name: npm install
         run: npm install 
