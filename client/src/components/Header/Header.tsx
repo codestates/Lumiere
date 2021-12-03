@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
+import instance from 'util/axios';
+import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { HiMenuAlt1 } from 'react-icons/hi';
 import { BiSearch, BiHeart } from 'react-icons/bi';
@@ -16,11 +20,28 @@ import { UserInfoBox, NavButtonBox } from '../Nav/styled';
 import Nav from '../Nav/Nav';
 
 const Header = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [showMenu, setShowMenu] = useState(false);
 
+  const history = useNavigate();
+
   const logoutHandler = () => {
-    setIsLogin(false);
+    // axios 요청
+    instance
+      .patch(
+        '/users/logout',
+        { lastAccessTime: new Date() },
+        { withCredentials: true },
+      )
+      .then((res) => {
+        console.log(res);
+        localStorage.removeItem('lumiereUserInfo');
+        setIsLogin(false);
+        history('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const showMenuBox = () => {

@@ -1,12 +1,32 @@
-import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
+import instance from 'util/axios';
+import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { NavContainer, NavInfoBox, UserInfoBox, NavButtonBox } from './styled';
 
 const Nav = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
+
+  const history = useNavigate();
 
   const logoutHandler = () => {
-    setIsLogin(false);
+    // axios 요청
+    instance
+      .patch(
+        '/users/logout',
+        { lastAccessTime: new Date() },
+        { withCredentials: true },
+      )
+      .then((res) => {
+        console.log(res);
+        localStorage.removeItem('lumiereUserInfo');
+        setIsLogin(false);
+        history('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
