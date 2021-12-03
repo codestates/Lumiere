@@ -20,7 +20,6 @@ const userSchema = mongoose.Schema(
           '비밀번호 형식에 맞지않습니다',
         ],
       },
-      token: String,
     },
     google: {
       token: String,

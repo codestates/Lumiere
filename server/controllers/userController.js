@@ -2,10 +2,7 @@
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
 import User from '../models/user.js';
-import {
-  generateAccessToken,
-  generateRefreshToken,
-} from '../utils/generateToken.js';
+import generateAccessToken from '../utils/generateToken.js';
 
 // @desc   Check a email address
 // @route  POST /api/users/email
@@ -26,7 +23,6 @@ const checkEmail = asyncHandler(async (req, res) => {
 // @route  POST /api/users/
 // @access Public
 const register = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { email, password, name } = req.body;
 
   if (email && password && name) {
@@ -51,25 +47,12 @@ const generalLogin = asyncHandler(async (req, res) => {
   const user = await User.findOne({ 'general.email': email });
 
   if (user && (await user.matchPassword(password))) {
-    const refreshToken = generateRefreshToken(user._id);
-    const newbe = await User.findByIdAndUpdate(
-      user._id,
-      { 'general.token': refreshToken },
-      { new: true, upsert: true },
-    );
-    console.log(newbe);
-    res
-      .cookie('refreshToken', refreshToken, {
-        // sameSite: 'none',
-        // secure: true, 추후 변경
-        // httpOnly: true,
-      })
-      .json({
-        _id: user._id,
-        name: user.name,
-        isAdmin: user.isAdmin,
-        accessToken: generateAccessToken(user._id),
-      });
+    res.json({
+      _id: user._id,
+      name: user.name,
+      isAdmin: user.isAdmin,
+      token: generateAccessToken(user._id),
+    });
   } else {
     res
       .status(401)
@@ -89,7 +72,7 @@ const kakaoUserInfo = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       name: user.name,
-      accessToken: generateAccessToken(user._id),
+      token: generateAccessToken(user._id),
     });
   } else {
     res
@@ -110,7 +93,7 @@ const naverUserInfo = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       name: user.name,
-      accessToken: generateAccessToken(user._id),
+      token: generateAccessToken(user._id),
     });
   } else {
     res
@@ -131,7 +114,7 @@ const googleUserInfo = asyncHandler(async (req, res) => {
     res.json({
       _id: user._id,
       name: user.name,
-      accessToken: generateAccessToken(user._id),
+      token: generateAccessToken(user._id),
     });
   } else {
     res
@@ -178,7 +161,6 @@ const updatePwd = asyncHandler(async (req, res) => {
       token: generateAccessToken(updatedUser._id),
     });
   }
-  // 2. 로그아웃 시 마지막 접속 시간 수정
 });
 
 // @desc   User logout
