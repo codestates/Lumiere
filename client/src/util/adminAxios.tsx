@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:5000/api';
+const baseURL =
+  'http://ec2-3-37-64-39.ap-northeast-2.compute.amazonaws.com/api';
 
 // Set config defaults when creating the instance
 const adminInstance = axios.create({
