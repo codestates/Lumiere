@@ -1,3 +1,4 @@
+/* eslint-disable */
 import styled from 'styled-components/macro';
 
 // SignUpTitle.tsx
@@ -60,17 +61,26 @@ export const SignUpInpuForm = styled.form`
     font-size: 1rem;
     position: relative;
   }
+`;
 
-  & > label input {
-    display: block;
-    width: 100%;
-    height: 2.3rem;
-    margin-top: 0.7rem;
-    border-radius: 4px;
-    border: 1px solid #dcd9d9;
-    padding: 0 0 0 0.5rem;
-  }
-  input::placeholder {
+export const SigunUpInputFormInput = styled.input<{
+  err: string;
+  errboolean: boolean;
+}>`
+  display: block;
+  width: 100%;
+  height: 2.3rem;
+  margin-top: 0.7rem;
+  border-radius: 4px;
+  padding: 0 0 0 0.5rem;
+  border: ${({ err, errboolean }) =>
+    !err && !errboolean
+      ? '1px solid #DCD9D9'
+      : err && !errboolean
+      ? '3px solid red'
+      : '3px solid green'};
+
+  &::placeholder {
     font-size: 0.9rem;
   }
 `;
@@ -79,15 +89,20 @@ export const SignUpErrImg = styled.div`
   position: absolute;
   top: 2rem;
   right: 0;
-  z-index: -1;
+  z-index: 0;
 
   svg {
     font-size: 1.6rem;
     color: red;
   }
+
+  .pass {
+    color: green;
+  }
 `;
 
-export const SignUpErrMessage = styled.span`
+export const SignUpErrMessage = styled.span<{ err: string }>`
+  visibility: ${({ err }) => (err ? 'visible' : 'hidden')};
   display: block;
   margin: 0.4rem 0 0.8rem 0;
   font-size: 0.6rem;
