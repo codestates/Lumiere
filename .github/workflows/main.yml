@@ -64,7 +64,7 @@ jobs:
       #       aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile www.lumieregallery.site
 
       - name: aws configure test
-        run: aws configure
+        run: aws configure list
 
       - name: 캐시 무효화
         run: aws cloudfront create-invalidation --distribution-id=E8FWNYKAA3DOV --paths "/*"
