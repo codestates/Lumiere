@@ -22,20 +22,20 @@ jobs:
         run: CI='' npm run build
         working-directory: ./client
 
-      - name: ls in client
-        run: ls -la
-        working-directory: ./client
+      # - name: ls in client
+      #   run: ls -la
+      #   working-directory: ./client
 
-      - name: ls in build
-        run: ls -la
-        working-directory: ./client/build
+      # - name: ls in build
+      #   run: ls -la
+      #   working-directory: ./client/build
 
-      - name: pwd in build
-        run: pwd
-        working-directory: ./client/build
+      # - name: pwd in build
+      #   run: pwd
+      #   working-directory: ./client/build
 
-      - name: test aws
-        run: aws configure list
+      # - name: test aws
+      #   run: aws configure list
 
       # - name: deploy
       #   env:
@@ -46,7 +46,7 @@ jobs:
       #       --recursive \
       #       --region ap-northeast-2 \
       # /home/runner/work/Lumiere/Lumiere/client/build s3://www.lumieregallery.site
-      
+
       - name: Transfer to S3 for serving static
         uses: jakejarvis/s3-sync-action@master
         with:
@@ -57,3 +57,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_IAM_MANAGER_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
           SOURCE_DIR: '/home/runner/work/Lumiere/Lumiere/client/build'
+
+      - name: 캐시 무효화
+        run: aws cloudfront create-invalidation --distribution-id $ --paths "/*"
