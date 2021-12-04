@@ -3,7 +3,7 @@ import User from '../models/user.js';
 import Product from '../models/product.js';
 
 // @desc   Create a product
-// @route  POST /api/products
+// @route  POST /api/products/
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
   const product = await Product.create(req.body);
@@ -11,7 +11,7 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch all products
-// @route  GET /api/products
+// @route  GET /api/products/
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find(
@@ -21,9 +21,11 @@ const getProducts = asyncHandler(async (req, res) => {
       title: 1,
       artist: 1,
       info: 1,
+      price: 1,
+      count: 1,
     },
   )
-    .populate('artist', ['name', 'aka'])
+    .populate('artist', ['name', 'aka', 'code'])
     .exec();
   res.json(products);
 });
@@ -89,25 +91,6 @@ const getLatestProducts = asyncHandler(async (req, res) => {
   if (products) res.json(products);
   else {
     res.status(404).json({ message: '상품이 존재하지 않습니다' });
-  }
-});
-
-// @desc   Check stock
-// @route  GET /api/products/stock
-// @access Public
-const getStock = asyncHandler(async (req, res) => {
-  // query로 필요 상품 고유아이디가 배열로 들어와야 함.
-  const { cartItemsId } = req.query;
-  const order = await Product.find({ _id: { $in: cartItemsId } })
-    .sort({
-      $natural: -1,
-    })
-    .limit(1);
-
-  if (order) {
-    res.json(order);
-  } else {
-    res.status(404).json({ message: '최근 주문 내역이 없습니다' });
   }
 });
 
