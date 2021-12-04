@@ -58,5 +58,24 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
           SOURCE_DIR: '/home/runner/work/Lumiere/Lumiere/client/build'
 
+      # - name: Add profile credentials to ~/.aws/credentials
+      #   run: |
+      #       aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile www.lumieregallery.site
+      #       aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile www.lumieregallery.site
+
+      - name: aws configure test
+        run: aws configure list
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_IAM_MANAGER_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_IAM_MANAGER_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
+
       - name: 캐시 무효화
-        run: aws cloudfront create-invalidation --distribution-id $ --paths "/*"
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_IAM_MANAGER_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_IAM_MANAGER_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
+        run: aws cloudfront create-invalidation --distribution-id=E8FWNYKAA3DOV --paths "/*"
+        # aws cloudfront create-invalidation --distribution-id distribution_ID --paths "/*"
