@@ -1,9 +1,11 @@
+/* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
+import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 import Product from '../models/product.js';
 
 // @desc   Create a product
-// @route  POST /api/products
+// @route  POST /api/products/
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
   const product = await Product.create(req.body);
@@ -11,19 +13,34 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch all products
-// @route  GET /api/products
+// @route  GET /api/products/
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find(
     {},
     {
-      image: 1,
-      title: 1,
-      artist: 1,
-      info: 1,
-    }
+      likes: 0,
+      user: 0,
+    },
   )
-    .populate('artist', ['name', 'aka'])
+    .populate('artist', ['name', 'aka', 'code'])
+    .exec();
+  res.json(products);
+});
+
+// @desc   Fetch filtered products
+// @route  GET /api/products/filter
+// @access Public
+const getProductsByFilter = asyncHandler(async (req, res) => {
+  const products = await Product.find(req.params, {
+    image: 1,
+    title: 1,
+    artist: 1,
+    info: 1,
+    price: 1,
+    count: 1,
+  })
+    .populate('artist', ['name', 'aka', 'code'])
     .exec();
   res.json(products);
 });
@@ -37,7 +54,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     req.body,
     {
       new: true,
-    }
+    },
   );
   res.json(updatedProduct);
 });
@@ -46,36 +63,57 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @route  GET /api/products/:id
 // @access Public
 const getProductById = asyncHandler(async (req, res) => {
-  // 조회수 올리기!!
-  const productDetail = await Product.findById(req.params.id, {
-    artCode: 1,
-    title: 1,
-    image: 1,
-    info: 1,
-    price: 1,
-    inStock: 1,
-  }).populate('artist', ['name']);
-
-  if (!productDetail) {
-    res.status(404).json({ message: '해당 상품이 존재하지 않습니다' });
-  } else {
-    const productsByArtist = await Product.find(
-      {
-        artist: productDetail.artist._id,
+  const productDetail = await Product.findByIdAndUpdate(
+    req.params.id,
+    { $inc: { count: 1 } }, // 조회수 올리기!!
+    {
+      projection: {
+        user: 0,
+        likes: 0,
+        count: 0,
+        updatedAt: 0,
       },
-      { image: 1 }
-    ).limit(4);
-    const productsByRandom = await Product.find({}, { image: 1 }).limit(8);
+      new: true,
+    },
+  ).populate('artist', ['name', 'code', 'aka', 'record']);
+  // console.log(productDetail);
 
-    if (req.query.userId) {
-      // 로그인 유저라면 찜 유무도 알려주기
-      let boolean;
-      const exist = await Product.findOne({ likes: req.query.userId });
-
-      exist ? (boolean = true) : (boolean = false);
-      res.json({ productDetail, like: boolean });
-    } else res.json({ productDetail });
-  }
+  const productsByArtist = await Product.aggregate([
+    { $match: { artist: productDetail.artist._id } },
+    { $sample: { size: 4 } },
+    { $project: { image: 1 } },
+  ]);
+  // console.log(productsByArtist);
+  const productsByRandom = await Product.aggregate([
+    { $match: { artist: { $ne: productDetail.artist._id } } },
+    { $sample: { size: 8 } },
+    { $project: { image: 1 } },
+  ]);
+  // console.log(productsByRandom);
+  const { authorization } = req.headers;
+  if (authorization && authorization.startsWith('Bearer')) {
+    // 로그인 유저 찜 유무
+    try {
+      // eslint-disable-next-line prefer-destructuring
+      const token = authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      req.user = await User.findById(decoded.id).select('-password');
+    } catch (error) {
+      console.error(error);
+      res.status(401);
+      throw new Error('Not authorized, token failed');
+    }
+    let boolean;
+    const exist = await Product.findOne({ likes: req.user._id });
+    // eslint-disable-next-line no-unused-expressions
+    exist ? (boolean = true) : (boolean = false);
+    res.json({
+      productDetail,
+      productsByArtist,
+      productsByRandom,
+      like: boolean,
+    });
+  } else res.json({ productDetail, productsByArtist, productsByRandom });
 });
 
 // @desc   Fetch latest products
@@ -84,7 +122,7 @@ const getProductById = asyncHandler(async (req, res) => {
 const getLatestProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({}, { image: 1 })
     .limit(6)
-    .sort({ updatedAt: 1 });
+    .sort({ updatedAt: -1 });
 
   if (products) res.json(products);
   else {

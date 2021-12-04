@@ -124,7 +124,7 @@ export const SignUpBtnWrap = styled.div`
 export const SignUpPrivacyWrap = styled.div`
   margin: 0.1rem 0 1rem 0;
 
-  form {
+  div {
     display: flex;
     flex-direction: column;
   }
