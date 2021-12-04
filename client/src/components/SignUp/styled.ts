@@ -1,6 +1,6 @@
 import styled from 'styled-components/macro';
 
-// SigninTitle.tsx
+// SignUpTitle.tsx
 export const SignUpTitleWrap = styled.div`
   text-align: center;
   span {
@@ -39,7 +39,7 @@ export const MoveSignInBtn = styled.button`
     cursor: pointer;
   }
 `;
-// SignInContent.tsx
+// SignUpContent.tsx
 export const SignUpContentWrap = styled.div`
   margin-top: 1rem;
 

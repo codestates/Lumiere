@@ -47,16 +47,12 @@ const SignInContent = () => {
         })
         .catch((err) => {
           console.log(err);
-          setErrMessage(
-            `*아이디 또는 비밀번호가 잘못 입력 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요`,
-          );
+          setErrMessage(`*아이디와 비밀번호를 정확히 입력해 주세요`);
           setSigninInputInfo({ ...signinInputInfo, password: '' });
           signinStateHandler(false);
         });
     } else {
-      setErrMessage(
-        `*아이디 또는 비밀번호가 잘못 입력 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요`,
-      );
+      setErrMessage(`*아이디와 비밀번호를 정확히 입력해 주세요`);
       setSigninInputInfo({ ...signinInputInfo, password: '' });
     }
   };
