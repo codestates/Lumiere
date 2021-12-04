@@ -104,20 +104,20 @@ export const IconBox = styled.div`
   color: #000;
 
   div,
-  a {
+  button {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 1.5rem;
   }
-  a:nth-child(3) {
+  div:nth-child(3) {
     display: none;
   }
   @media screen and (min-width: 768px) {
-    a {
+    div {
       width: 2rem;
     }
-    a:nth-child(3) {
+    div:nth-child(3) {
       display: flex;
     }
   }
