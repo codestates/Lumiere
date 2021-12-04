@@ -58,5 +58,11 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
           SOURCE_DIR: '/home/runner/work/Lumiere/Lumiere/client/build'
 
+      - name: Add profile credentials to ~/.aws/credentials 
+        run: |
+            aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile www.lumieregallery.site
+            aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile www.lumieregallery.site
+    
+
       - name: 캐시 무효화
         run: aws cloudfront create-invalidation --distribution-id $ --paths "/*"
