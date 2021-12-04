@@ -12,7 +12,7 @@ const router = express.Router();
 
 // endpoint => /api/products
 router.route('/').post(protect, admin, createProduct).get(getProducts);
-router.route('/:id').patch(protect, admin, updateProduct).get(getProductById);
 router.route('/latest').get(getLatestProducts);
+router.route('/:id').patch(protect, admin, updateProduct).get(getProductById);
 
 export default router;
