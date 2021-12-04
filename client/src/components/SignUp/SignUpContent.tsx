@@ -1,16 +1,18 @@
 /* eslint-disable */
-import { emailValidate } from 'util/validate';
+import React, { useState, useReducer, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import instance from 'util/axios';
-import React, { useState, useReducer } from 'react';
-import { errMessageState, errMessageReducer } from './reducer';
-import { VscPass, VscError } from 'react-icons/vsc';
 import SignUpPrivacy from './SignUpPrivacy';
+import { emailValidate } from 'util/validate';
+import { VscPass, VscError } from 'react-icons/vsc';
+import { errMessageState, errMessageReducer } from './reducer';
 import {
   SignUpContentWrap,
   SignUpBtnWrap,
   SignUpInpuForm,
   SignUpErrMessage,
   SignUpErrImg,
+  SigunUpInputFormInput,
 } from './styled';
 
 type SignupInfo = {
@@ -21,9 +23,9 @@ type SignupInfo = {
 };
 
 const SignUpContent = () => {
-  //Error Message reducer
+  // Error Message reducer
   const [state, dispatch] = useReducer(errMessageReducer, errMessageState);
-  //Value State
+  // Value State
   const [signupInputInfo, setSignupInputInfo] = useState<SignupInfo>({
     name: '',
     email: '',
@@ -31,7 +33,30 @@ const SignUpContent = () => {
     passwordCheck: '',
   });
 
-  //InputValue
+  // 로그인에 필요한 모든 상태 확인
+  const [validateAllCheck, setValidateAllCheck] = useState(false);
+
+  const history = useNavigate();
+
+  useEffect(() => {
+    if (
+      state.passwordValidata &&
+      state.emailValidata &&
+      state.nameValidata &&
+      state.passwordCheckValidata
+    ) {
+      setValidateAllCheck(true);
+    } else {
+      setValidateAllCheck(false);
+    }
+  }, [
+    state.emailValidata,
+    state.nameValidata,
+    state.passwordCheckValidata,
+    state.passwordValidata,
+  ]);
+
+  // InputValue
   const signupInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.id === 'signup-name') {
       setSignupInputInfo({ ...signupInputInfo, name: e.target.value });
@@ -56,7 +81,7 @@ const SignUpContent = () => {
     if (emailValidate(signupInputInfo.email)) {
       instance
         .post('users/email', { email: signupInputInfo.email })
-        .then((res) => {
+        .then(() => {
           dispatch({
             type: 'EMAIL',
             email: signupInputInfo.email,
@@ -83,10 +108,35 @@ const SignUpContent = () => {
       password: signupInputInfo.password,
     });
 
-  //Signup Handler Axios
+  // Signup Handler Axios
   const signupHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(123);
+    if (!validateAllCheck) {
+      setErrMessageName();
+      setErrMessageEmail();
+      setErrMessagePassword();
+      setErrMessagePasswordCheck();
+      setSignupInputInfo({
+        ...signupInputInfo,
+        password: '',
+        passwordCheck: '',
+      });
+    } else {
+      instance
+        .post('users', {
+          email: signupInputInfo.email,
+          password: signupInputInfo.password,
+          name: signupInputInfo.name,
+        })
+        .then((res) => {
+          console.log(res);
+          history('/');
+        })
+        .catch((err) => {
+          // 404페이지로 이동
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -95,63 +145,103 @@ const SignUpContent = () => {
         <label htmlFor="signup-name">
           이름
           <SignUpErrImg>
-            <VscPass />
+            {!state.nameErrMessage &&
+            !state.nameValidata ? null : state.nameErrMessage &&
+              !state.nameValidata ? (
+              <VscError />
+            ) : (
+              <VscPass className={'pass'} />
+            )}
           </SignUpErrImg>
-          <input
+          <SigunUpInputFormInput
             type="text"
             id="signup-name"
             placeholder="성함을 입력해주세요"
             value={signupInputInfo.name}
             onChange={signupInputChange}
             onBlur={setErrMessageName}
+            err={state.nameErrMessage}
+            errboolean={state.nameValidata}
           />
         </label>
-        <SignUpErrMessage>{state.nameErrMessage}.</SignUpErrMessage>
+        <SignUpErrMessage err={state.nameErrMessage}>
+          {state.nameErrMessage}.
+        </SignUpErrMessage>
         <label htmlFor="signup-email">
           이메일
           <SignUpErrImg>
-            <VscError />
+            {!state.emailErrMessage &&
+            !state.emailValidata ? null : state.emailErrMessage &&
+              !state.emailValidata ? (
+              <VscError />
+            ) : (
+              <VscPass className={'pass'} />
+            )}
           </SignUpErrImg>
-          <input
+          <SigunUpInputFormInput
             type="email"
             id="signup-email"
             placeholder="이메일을 입력해주세요"
             value={signupInputInfo.email}
             onChange={signupInputChange}
             onBlur={setErrMessageEmail}
+            err={state.emailErrMessage}
+            errboolean={state.emailValidata}
           />
         </label>
-        <SignUpErrMessage>{state.emailErrMessage}.</SignUpErrMessage>
+        <SignUpErrMessage err={state.emailErrMessage}>
+          {state.emailErrMessage}.
+        </SignUpErrMessage>
         <label htmlFor="signup-password">
           비밀번호
           <SignUpErrImg>
-            <VscPass />
+            {!state.passwordErrMessage &&
+            !state.passwordValidata ? null : state.passwordErrMessage &&
+              !state.passwordValidata ? (
+              <VscError />
+            ) : (
+              <VscPass className={'pass'} />
+            )}
           </SignUpErrImg>
-          <input
+          <SigunUpInputFormInput
             type="password"
             id="signup-password"
             placeholder="8~20자의 영문&숫자 조합만 사용 가능합니다"
             value={signupInputInfo.password}
             onChange={signupInputChange}
             onBlur={setErrMessagePassword}
+            err={state.passwordErrMessage}
+            errboolean={state.passwordValidata}
           />
         </label>
-        <SignUpErrMessage>{state.passwordErrMessage}.</SignUpErrMessage>
+        <SignUpErrMessage err={state.passwordErrMessage}>
+          {state.passwordErrMessage}.
+        </SignUpErrMessage>
         <label htmlFor="signup-passwordCheck">
           비밀번호 확인
           <SignUpErrImg>
-            <VscError />
+            {!state.passwordCheckMessage &&
+            !state.passwordCheckValidata ? null : state.passwordCheckMessage &&
+              !state.passwordCheckValidata ? (
+              <VscError />
+            ) : (
+              <VscPass className={'pass'} />
+            )}
           </SignUpErrImg>
-          <input
+          <SigunUpInputFormInput
             type="password"
             id="signup-passwordCheck"
             placeholder="비밀번호 확인"
             value={signupInputInfo.passwordCheck}
             onChange={signupInputChange}
             onBlur={setErrMessagePasswordCheck}
+            err={state.passwordCheckMessage}
+            errboolean={state.passwordCheckValidata}
           />
         </label>
-        <SignUpErrMessage>{state.passwordCheckMessage}.</SignUpErrMessage>
+        <SignUpErrMessage err={state.passwordCheckMessage}>
+          {state.passwordCheckMessage}.
+        </SignUpErrMessage>
         <SignUpPrivacy />
         <SignUpBtnWrap>
           <button type="submit">회원가입</button>
