@@ -65,7 +65,17 @@ jobs:
 
       - name: aws configure test
         run: aws configure list
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_IAM_MANAGER_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_IAM_MANAGER_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
 
       - name: 캐시 무효화
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_IAM_MANAGER_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_IAM_MANAGER_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_BUCKET_REGION }}
         run: aws cloudfront create-invalidation --distribution-id=E8FWNYKAA3DOV --paths "/*"
         # aws cloudfront create-invalidation --distribution-id distribution_ID --paths "/*"
