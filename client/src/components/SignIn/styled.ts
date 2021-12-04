@@ -2,13 +2,14 @@ import styled from 'styled-components/macro';
 
 // SigninTitle
 export const SignInTitleWrap = styled.div`
-  /* flex: 1; */
   text-align: center;
   span {
     font-size: 0.8rem;
   }
 
   @media only screen and (min-width: 768px) {
+    width: 100%;
+    margin-bottom: 3rem;
     span {
       font-size: 0.9rem;
     }
@@ -42,18 +43,27 @@ export const MoveSignUpBtn = styled.button`
 `;
 // SignInContent;
 export const SignInContentWrap = styled.div`
-  /* flex: 6; */
-  form {
+  flex: 5;
+  display: flex;
+  margin-top: 2.5rem;
+
+  @media only screen and (min-width: 768px) {
     display: flex;
-    flex-direction: column;
     width: 100%;
     height: 100%;
   }
 
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
   form label {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 1.7rem;
+    position: relative;
   }
 
   form label input {
@@ -63,6 +73,7 @@ export const SignInContentWrap = styled.div`
     margin-top: 0.8rem;
     border-radius: 4px;
     border: 1px solid #dcd9d9;
+    padding: 0 0 0 0.5rem;
   }
 
   input::placeholder {
@@ -71,10 +82,15 @@ export const SignInContentWrap = styled.div`
 `;
 
 export const SignInBtnWrap = styled.div`
+  flex: 2;
   display: flex;
   flex-direction: column;
-  flex: 5;
   text-align: center;
+
+  @media only screen and (min-width: 768px) {
+    flex: 3;
+    width: 100%;
+  }
 
   button {
     height: 4rem;
@@ -101,39 +117,39 @@ export const SignInErrMessage = styled.span<{ err: string }>`
 
 // SignInSocail
 export const SignInSocialWrap = styled.ul`
+  flex: 2;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 4;
   margin-bottom: 1rem;
 
   li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
-    border: 1px solid #ededed;
+    border: 1px solid #aaaaaa;
+    font-size: 2rem;
+    border-radius: 50%;
+    margin: 0 0.6rem;
+    padding: 0.2rem;
   }
 
-  li:nth-child(2) {
-    margin-left: 1rem;
+  li:nth-child(1) {
+    padding: 0;
+    font-size: 2.5rem;
   }
 
-  li:nth-child(3) {
-    margin-left: 1rem;
-  }
+  @media only screen and (min-width: 768px) {
+    li {
+      margin: 0 1rem;
+    }
 
-  li svg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    height: 80%;
-    transform: translate(-50%, -50%);
-
-    &:hover {
-      color: var(--color-blue);
-      cursor: pointer;
+    li svg {
+      font-size: 2.5rem;
     }
   }
 `;

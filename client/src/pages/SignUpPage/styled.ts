@@ -29,7 +29,7 @@ export const SignUpWrap = styled.div`
     flex: 0 0 82vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     width: 60%;
     padding: 10vh 0 2rem;
