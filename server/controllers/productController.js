@@ -21,7 +21,7 @@ const getProducts = asyncHandler(async (req, res) => {
       title: 1,
       artist: 1,
       info: 1,
-    }
+    },
   )
     .populate('artist', ['name', 'aka'])
     .exec();
@@ -37,7 +37,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     req.body,
     {
       new: true,
-    }
+    },
   );
   res.json(updatedProduct);
 });
@@ -63,7 +63,7 @@ const getProductById = asyncHandler(async (req, res) => {
       {
         artist: productDetail.artist._id,
       },
-      { image: 1 }
+      { image: 1 },
     ).limit(4);
     const productsByRandom = await Product.find({}, { image: 1 }).limit(8);
 
@@ -89,6 +89,25 @@ const getLatestProducts = asyncHandler(async (req, res) => {
   if (products) res.json(products);
   else {
     res.status(404).json({ message: '상품이 존재하지 않습니다' });
+  }
+});
+
+// @desc   Check stock
+// @route  GET /api/products/stock
+// @access Public
+const getStock = asyncHandler(async (req, res) => {
+  // query로 필요 상품 고유아이디가 배열로 들어와야 함.
+  const { cartItemsId } = req.query;
+  const order = await Product.find({ _id: { $in: cartItemsId } })
+    .sort({
+      $natural: -1,
+    })
+    .limit(1);
+
+  if (order) {
+    res.json(order);
+  } else {
+    res.status(404).json({ message: '최근 주문 내역이 없습니다' });
   }
 });
 

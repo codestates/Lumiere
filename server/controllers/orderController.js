@@ -1,14 +1,14 @@
+/* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import Order from '../models/order.js';
 
 // @desc    Create new order
-// @route   POST /api/orders
+// @route   POST /api/orders/
 // @access  Private
 const addOrderItems = asyncHandler(async (req, res) => {
   const { orderItems } = req.body;
-  if (orderItems && orderItems.length === 0) {
-    res.status(400);
-    throw new Error('No order items');
+  if (orderItems && !orderItems.length) {
+    res.status(400).json({ message: '주문하실 상품을 추가해주세요' });
   } else {
     const newOrder = await Order.create(req.body);
     res.status(201).json(newOrder);
@@ -19,16 +19,29 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    'user',
-    'name email',
-  );
+  const order = await Order.findById(req.params.id);
 
   if (order) {
     res.json(order);
   } else {
-    res.status(404);
-    throw new Error('Order not found');
+    res.status(404).json({ message: '해당 주문 내역이 없습니다' });
+  }
+});
+
+// @desc    Get latest order of user
+// @route   GET /api/orders/latest
+// @access  Private
+const getLatestOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById({ user: req.user._id })
+    .sort({
+      $natural: -1,
+    })
+    .limit(1);
+
+  if (order) {
+    res.json(order);
+  } else {
+    res.status(404).json({ message: '최근 주문 내역이 없습니다' });
   }
 });
 
@@ -95,6 +108,7 @@ const getOrders = asyncHandler(async (req, res) => {
 export {
   addOrderItems,
   getOrderById,
+  getLatestOrder,
   updateOrderToPaid,
   updateOrderToDelivered,
   getMyOrders,
