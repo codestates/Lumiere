@@ -62,6 +62,10 @@ jobs:
       #   run: |
       #       aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile www.lumieregallery.site
       #       aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --profile www.lumieregallery.site
+
+      - name: aws configure test
+        runt: aws configure
+
       - name: 캐시 무효화
-        run: aws cloudfront create-invalidation --distribution-id E8FWNYKAA3DOV --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id=E8FWNYKAA3DOV --paths "/*"
         # aws cloudfront create-invalidation --distribution-id distribution_ID --paths "/*"
