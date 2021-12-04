@@ -19,12 +19,8 @@ const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find(
     {},
     {
-      image: 1,
-      title: 1,
-      artist: 1,
-      info: 1,
-      price: 1,
-      count: 1,
+      likes: 0,
+      user: 0,
     },
   )
     .populate('artist', ['name', 'aka', 'code'])
@@ -35,19 +31,19 @@ const getProducts = asyncHandler(async (req, res) => {
 // @desc   Fetch filtered products
 // @route  GET /api/products/filter
 // @access Public
-// const getProductsByFilter = asyncHandler(async (req, res) => {
-//   const products = await Product.find(req.params, {
-//     image: 1,
-//     title: 1,
-//     artist: 1,
-//     info: 1,
-//     price: 1,
-//     count: 1,
-//   })
-//     .populate('artist', ['name', 'aka', 'code'])
-//     .exec();
-//   res.json(products);
-// });
+const getProductsByFilter = asyncHandler(async (req, res) => {
+  const products = await Product.find(req.params, {
+    image: 1,
+    title: 1,
+    artist: 1,
+    info: 1,
+    price: 1,
+    count: 1,
+  })
+    .populate('artist', ['name', 'aka', 'code'])
+    .exec();
+  res.json(products);
+});
 
 // @desc    Update a product
 // @route   PATCH /api/products/:id
