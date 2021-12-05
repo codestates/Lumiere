@@ -37,7 +37,7 @@ const Nav = () => {
           <Link to="/artists">작가</Link>
         </li>
         <li>
-          <Link to="/cart">장바구니</Link>
+          {isLogin && <Link to="/cart">장바구니</Link>}
           <Link to="/">1 : 1 문의하기</Link>
           <Link to="/">작가 신청</Link>
         </li>

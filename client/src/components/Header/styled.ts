@@ -103,6 +103,13 @@ export const IconBox = styled.div`
   font-size: 1.4rem;
   color: #000;
 
+  button {
+    margin: 0;
+    padding: 0;
+    font-size: 1.3rem;
+    background: none;
+    border: none;
+  }
   div,
   button {
     display: flex;
@@ -114,7 +121,8 @@ export const IconBox = styled.div`
     display: none;
   }
   @media screen and (min-width: 768px) {
-    div {
+    div,
+    button {
       width: 2rem;
     }
     div:nth-child(3) {
