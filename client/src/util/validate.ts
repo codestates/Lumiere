@@ -22,7 +22,7 @@ export const passwordValidate = (password: string) => {
 
 // 이름 유효성검사
 export const nameValidate = (name: string) => {
-  const validate = /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/;
+  const validate = /^[가-힣a-zA-Z]{2,10}$/;
 
   if (validate.test(name)) {
     return true;
