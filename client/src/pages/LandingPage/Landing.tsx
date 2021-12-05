@@ -1,7 +1,11 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import instance from 'util/axios';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
+import Slider from 'components/Slider/Slider';
+import { LandingService } from './dummy';
 import {
   LandingContainer,
   ServiceSection,
@@ -12,9 +16,25 @@ import {
 } from './styled';
 
 const Landing = () => {
+  const [banners, setBanners] = useState([]);
+
+  useEffect(() => {
+    // axios 요청
+    instance
+      .get('/events')
+      .then((res) => {
+        console.log(res.data);
+        setBanners(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <LandingContainer>
       <Header />
+      <Slider banners={banners} />
       <ServiceSection>
         <ServiceTitle>
           <div>
@@ -28,24 +48,16 @@ const Landing = () => {
           원하는 공간에 어울리는 작품을 구매해보세요!
         </p>
         <ServiceList>
-          <ServiceBox>
-            <Link to="/artlist">
-              <MdOutlineArrowForwardIos />
-              <span>판매작품 구경하기</span>
-            </Link>
-          </ServiceBox>
-          <ServiceBox>
-            <Link to="artists">
-              <MdOutlineArrowForwardIos />
-              <span>작가들의 포트폴리오 구경하기</span>
-            </Link>
-          </ServiceBox>
-          <ServiceBox>
-            <Link to="/signup">
-              <MdOutlineArrowForwardIos />
-              <span>회원가입하기</span>
-            </Link>
-          </ServiceBox>
+          {LandingService.map((service) => {
+            return (
+              <ServiceBox key={service.id}>
+                <Link to={service.link}>
+                  <MdOutlineArrowForwardIos />
+                  <span>{service.name}</span>
+                </Link>
+              </ServiceBox>
+            );
+          })}
         </ServiceList>
       </ServiceSection>
       <StartBtnBox>
