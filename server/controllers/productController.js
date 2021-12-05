@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
@@ -127,6 +126,11 @@ const getProductById = asyncHandler(async (req, res) => {
   ).populate('artist', ['name', 'code', 'aka', 'record']);
   // console.log(productDetail);
 
+  if (!productDetail) {
+    res.status(404).json({ message: '해당 상품이 존재하지 않습니다' });
+    return;
+  }
+
   const productsByArtist = await Product.aggregate([
     { $match: { artist: productDetail.artist._id } },
     { $sample: { size: 4 } },
@@ -210,30 +214,32 @@ const getTotalPrice = asyncHandler(async (req, res) => {
 const zzimProduct = asyncHandler(async (req, res) => {
   // 찜 해체 시에는 id가 배열로 올 수 있다. (선택삭제)
   const { productId, zzim } = req.body;
-  if (zzim === undefined) res.status(404).json({ message: 'true? of false?' });
-  else {
-    if (zzim === true) {
-      await Product.findByIdAndUpdate(
-        productId,
-        {
-          $addToSet: { likes: req.user._id },
-        },
-        { new: true, upsert: true },
-      ); // likes 배열에 유저 고유 아이디 넣기
+  if (zzim === undefined) {
+    res.status(404).json({ message: 'true? or false?' });
+    return;
+  }
 
-      res.json({ message: '해당 상품 찜 완료' });
-      return;
-    }
-    if (zzim === false) {
-      await Product.updateMany(
-        { _id: { $in: productId } },
-        {
-          $pull: { likes: req.user._id },
-        },
-        { multi: true },
-      );
-      res.json({ message: '해당 상품 찜 해제' });
-    }
+  if (zzim === true) {
+    await Product.findByIdAndUpdate(
+      productId,
+      {
+        $addToSet: { likes: req.user._id },
+      },
+      { new: true, upsert: true },
+    ); // likes 배열에 유저 고유 아이디 넣기
+
+    res.json({ message: '해당 상품 찜 완료' });
+    return;
+  }
+  if (zzim === false) {
+    await Product.updateMany(
+      { _id: { $in: productId } },
+      {
+        $pull: { likes: req.user._id },
+      },
+      { multi: true },
+    );
+    res.json({ message: '해당 상품 찜 해제' });
   }
 });
 
