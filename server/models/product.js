@@ -2,11 +2,6 @@ import mongoose from 'mongoose';
 
 const productSchema = mongoose.Schema(
   {
-    user: {
-      // 유저와 연결
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
     artist: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -52,8 +47,8 @@ const productSchema = mongoose.Schema(
         required: true,
       },
       canvas: {
-        // 20호
-        type: String,
+        // 20
+        type: Number,
         required: true,
       },
       createdAt: {
