@@ -152,6 +152,10 @@ export const SignUpPrivacyWrap = styled.div`
   input {
     margin-right: 0.8rem;
     vertical-align: middle;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   button {
@@ -160,6 +164,10 @@ export const SignUpPrivacyWrap = styled.div`
     font-size: 0.9rem;
     border: none;
     background: none;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   @media only screen and (min-width: 768px) {
@@ -172,5 +180,16 @@ export const SignUpPrivacyWrap = styled.div`
     input {
       vertical-align: text-top;
     }
+  }
+`;
+
+export const PrivacyMessage = styled.span<{ privacyErrState: boolean }>`
+  visibility: ${({ privacyErrState }) =>
+    privacyErrState ? 'visible' : 'hidden'};
+  color: red;
+  font-size: 0.8rem;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 0.85rem;
   }
 `;

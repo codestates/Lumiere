@@ -35,6 +35,10 @@ const SignUpContent = () => {
 
   // 로그인에 필요한 모든 상태 확인
   const [validateAllCheck, setValidateAllCheck] = useState(false);
+  // privacy 모든 상태
+  const [isAllChecked, setIsAllChecked] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [privacyErrState, setPrivacyErrState] = useState(false);
 
   const history = useNavigate();
 
@@ -43,7 +47,8 @@ const SignUpContent = () => {
       state.passwordValidata &&
       state.emailValidata &&
       state.nameValidata &&
-      state.passwordCheckValidata
+      state.passwordCheckValidata &&
+      isAllChecked
     ) {
       setValidateAllCheck(true);
     } else {
@@ -54,7 +59,18 @@ const SignUpContent = () => {
     state.nameValidata,
     state.passwordCheckValidata,
     state.passwordValidata,
+    isAllChecked,
   ]);
+
+  useEffect(() => {
+    if (checkedItems.length === 2) {
+      setIsAllChecked(true);
+    }
+
+    if (checkedItems.length !== 2) {
+      setIsAllChecked(false);
+    }
+  }, [checkedItems, isAllChecked]);
 
   // InputValue
   const signupInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,6 +132,7 @@ const SignUpContent = () => {
       setErrMessageEmail();
       setErrMessagePassword();
       setErrMessagePasswordCheck();
+      setPrivacyErrState(true);
       setSignupInputInfo({
         ...signupInputInfo,
         password: '',
@@ -242,7 +259,13 @@ const SignUpContent = () => {
         <SignUpErrMessage err={state.passwordCheckMessage}>
           {state.passwordCheckMessage}.
         </SignUpErrMessage>
-        <SignUpPrivacy />
+        <SignUpPrivacy
+          isAllChecked={isAllChecked}
+          setIsAllChecked={setIsAllChecked}
+          checkedItems={checkedItems}
+          setCheckedItems={setCheckedItems}
+          privacyErrState={privacyErrState}
+        />
         <SignUpBtnWrap>
           <button type="submit">회원가입</button>
         </SignUpBtnWrap>
