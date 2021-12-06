@@ -1,13 +1,15 @@
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import FilteringTab from 'components/FilteringTab/FilteringTab';
-import { ArtListContainer } from './styled';
+import { ArtListContainer, ArtListWrap } from './styled';
 
 const ArtList = () => {
   return (
     <ArtListContainer>
       <Header />
-      <FilteringTab />
+      <ArtListWrap>
+        <FilteringTab />
+      </ArtListWrap>
       <Footer />
     </ArtListContainer>
   );

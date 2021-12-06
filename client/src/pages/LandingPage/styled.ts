@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
-export const LandingContainer = styled.div`
-  margin-top: 6vh;
+export const LandingContainer = styled.div``;
+
+export const LandingWrap = styled.div`
+  max-width: 1152px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 6vh 0 0 0;
 `;
 
 export const ServiceSection = styled.section`
