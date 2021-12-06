@@ -8,6 +8,7 @@ import Slider from 'components/Slider/Slider';
 import { LandingService } from './dummy';
 import {
   LandingContainer,
+  LandingWrap,
   ServiceSection,
   ServiceTitle,
   ServiceList,
@@ -34,35 +35,37 @@ const Landing = () => {
   return (
     <LandingContainer>
       <Header />
-      <Slider banners={banners} />
-      <ServiceSection>
-        <ServiceTitle>
-          <div>
-            <span>SERVICE</span>
-          </div>
-        </ServiceTitle>
-        <h1>LUMIERE</h1>
-        <p>
-          신인 작가를 후원하고
-          <br />
-          원하는 공간에 어울리는 작품을 구매해보세요!
-        </p>
-        <ServiceList>
-          {LandingService.map((service) => {
-            return (
-              <ServiceBox key={service.id}>
-                <Link to={service.link}>
-                  <MdOutlineArrowForwardIos />
-                  <span>{service.name}</span>
-                </Link>
-              </ServiceBox>
-            );
-          })}
-        </ServiceList>
-      </ServiceSection>
-      <StartBtnBox>
-        <Link to="/artlist">작가 구경하기</Link>
-      </StartBtnBox>
+      <LandingWrap>
+        <Slider banners={banners} />
+        <ServiceSection>
+          <ServiceTitle>
+            <div>
+              <span>SERVICE</span>
+            </div>
+          </ServiceTitle>
+          <h1>LUMIERE</h1>
+          <p>
+            신인 작가를 후원하고
+            <br />
+            원하는 공간에 어울리는 작품을 구매해보세요!
+          </p>
+          <ServiceList>
+            {LandingService.map((service) => {
+              return (
+                <ServiceBox key={service.id}>
+                  <Link to={service.link}>
+                    <MdOutlineArrowForwardIos />
+                    <span>{service.name}</span>
+                  </Link>
+                </ServiceBox>
+              );
+            })}
+          </ServiceList>
+        </ServiceSection>
+        <StartBtnBox>
+          <Link to="/artlist">작가 구경하기</Link>
+        </StartBtnBox>
+      </LandingWrap>
       <Footer />
     </LandingContainer>
   );
