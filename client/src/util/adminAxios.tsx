@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const baseURL = 'https://lumiereserver.online/api';
+// const baseURL = 'https://lumiereserver.online/api';
+const baseURL = 'http://localhost:5000/api';
 
 // Set config defaults when creating the instance
 const adminInstance = axios.create({

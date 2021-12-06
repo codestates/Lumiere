@@ -126,8 +126,76 @@ export const YesNoModalWrap = styled.div`
   }
 `;
 
+export const AdminEditProductWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 60vw;
+  padding: 3rem;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  text-align: center;
+  img {
+    width: 5rem;
+  }
+
+  .leftMargin {
+    margin-left: 4.3rem;
+  }
+  .closeButton {
+    width: 3rem;
+    height: 3rem;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    color: #646464;
+    background: none;
+    font-weight: 700;
+    font-size: 1.5em;
+  }
+  .closeButton:hover {
+    cursor: pointer;
+  }
+`;
+
 export const YesNoTextWrap = styled.div`
   margin-bottom: 0.1rem;
+`;
+
+export const AdminEditProductTextWrap = styled.div`
+  span {
+    white-space: nowrap;
+    display: inline-block;
+    text-align: left;
+    width: 5rem;
+  }
+  input,
+  textarea {
+    margin-left: 1rem;
+    width: 20rem;
+    margin-bottom: 0.3rem;
+    /* margin-right: 2rem; */
+  }
+  .canvasSize {
+    margin-left: 1.5rem;
+    width: 3rem;
+    /* padding-right: 0rem; */
+  }
+  .checkbox {
+    width: 1rem;
+  }
+  .lesswidth {
+    width: 7rem;
+  }
+  .textright {
+    text-align: right;
+  }
+  .rightmargin {
+    margin-right: 5rem;
+  }
 `;
 
 export const ButtonWrap = styled.div`
@@ -161,4 +229,28 @@ export const ButtonWrap = styled.div`
   button:nth-child(1) {
     margin-right: 1.5em;
   }
+`;
+
+export const ModalBackDrop = styled.div`
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const IntroduceText = styled.textarea`
+  height: 5rem;
+`;
+
+export const TitleWrap = styled.div`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 `;

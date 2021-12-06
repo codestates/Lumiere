@@ -32,7 +32,6 @@ export const Table = styled.table`
     padding: 2rem;
     border-bottom: 1px solid black;
     border-right: 1px solid black;
-    vertical-align: middle;
     :last-child {
       border-right: 0;
     }
@@ -62,4 +61,8 @@ export const ProductInfoWrap2 = styled.div`
   div {
     margin-bottom: 1rem;
   }
+`;
+
+export const EnrollmentButton = styled.button`
+  margin-left: 85rem;
 `;
