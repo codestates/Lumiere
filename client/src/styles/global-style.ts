@@ -73,9 +73,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    max-width: 1440px;
     min-width: 320px;
-    margin: 0 auto;
     font-family: 'Nanum Gothic', sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue';
     -webkit-font-smoothing: antialiased;

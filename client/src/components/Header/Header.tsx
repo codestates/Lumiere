@@ -13,6 +13,7 @@ import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import Nav from '../Nav/Nav';
 import {
   HeaderContainer,
+  HeaderWrap,
   HambugerBtn,
   MainMenu,
   LogoBox,
@@ -60,9 +61,9 @@ const Header = () => {
   };
 
   return (
-    <>
+    <HeaderContainer>
       {clickModal && <LoginGuideModal clickModalHandler={clickModalHandler} />}
-      <HeaderContainer>
+      <HeaderWrap>
         <HambugerBtn onClick={showMenuBox}>
           <HiMenuAlt1 />
         </HambugerBtn>
@@ -123,8 +124,8 @@ const Header = () => {
             </NavButtonBox>
           </HeaderInfoBox>
         )}
-      </HeaderContainer>
-    </>
+      </HeaderWrap>
+    </HeaderContainer>
   );
 };
 export default Header;

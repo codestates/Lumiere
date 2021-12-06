@@ -1,20 +1,23 @@
 import styled from 'styled-components/macro';
 
-export const HeaderContainer = styled.header`
+export const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
-  left: 50%;
+  left: 0;
   z-index: var(--button-index);
-  transform: translateX(-50%);
-  display: flex;
-  max-width: 1440px;
-  min-width: 320px;
   width: 100vw;
-  height: 6vh;
-  margin: auto;
-  padding: 0.6rem 1rem;
   background-color: #ffffff;
   border-bottom: 1px solid #f2f2f2;
+`;
+
+export const HeaderWrap = styled.header`
+  display: flex;
+  max-width: 1200px;
+  min-width: 320px;
+  width: 100%;
+  height: 6vh;
+  margin: auto;
+  padding: 0.6rem 0.4rem 0.6rem 1rem;
 
   > nav:nth-child(2) {
     display: none;

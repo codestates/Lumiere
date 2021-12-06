@@ -10,7 +10,7 @@ export const TabContainer = styled.div`
   @media screen and (min-width: 768px) {
     flex-direction: row;
     height: 14rem;
-    margin: 2rem 0 4rem;
+    margin: 2rem 0.5rem 4rem;
     border-left: 2px solid var(--color-black);
     border-right: 1px solid #eeeeee;
   }
