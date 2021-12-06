@@ -47,9 +47,6 @@ const Slider = ({ banners }: Props) => {
   return (
     <SlideContainer>
       {banners.map((banner, idx) => {
-        const [title, content] = banner.heading.split(']');
-        const linkUrl = banner.link.split('/').slice(3).join('/');
-        console.log(linkUrl);
         return (
           <SlideWrap
             key={uuidv4()}
@@ -58,10 +55,10 @@ const Slider = ({ banners }: Props) => {
             <img src={banner.image} alt={banner.heading} />
             <SlideInfoBox>
               <div>
-                <h3>{title}&#93;</h3>
-                <p>{content}</p>
+                <h3>{banner.heading}</h3>
+                <p>{banner.content}</p>
               </div>
-              <Link to={linkUrl}>{banner.linkname}</Link>
+              <Link to={banner.link}>{banner.linkname}</Link>
             </SlideInfoBox>
           </SlideWrap>
         );
