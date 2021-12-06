@@ -1,32 +1,19 @@
 export interface Users {
   general: {
     email: string;
-    password: string;
-  };
-  google: {
-    uuid: string;
     token: string;
-    email: string;
   };
-  naver: {
-    uuid: string;
-    token: string;
-    email: string;
-  };
-  kakao: {
-    uuid: string;
-    token: string;
-    email: string;
-  };
-  name: string;
   active: {
-    lastAccessTime: Date;
     isClosed: boolean;
+    lastAccessTime: Date;
   };
-  isAdmin: boolean;
+  _id: string;
+  name: string;
+  createdAt: Date;
 }
 
 export interface Product {
+  artist: Artists;
   artCode: string;
   title: string;
   image: string;
@@ -41,6 +28,7 @@ export interface Product {
   count: number;
   inStock: boolean;
   updatedAt: Date;
+  _id: string;
 }
 
 export interface Artists {
