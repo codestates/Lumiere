@@ -1,7 +1,7 @@
 import SignupPrivacyModal from 'components/Modal/SignupPriavacyModal';
 import SignupTermsModal from 'components/Modal/SignupTermsModal';
 import React, { useState } from 'react';
-import { SignUpPrivacyWrap, PrivacyMessage } from './styled';
+import { SignUpPrivacyWrap, PrivacyMessage, PraivacyLabelWrap } from './styled';
 
 type IsAllCheckedProps = {
   isAllChecked: boolean;
@@ -61,23 +61,27 @@ const SignUpPrivacy = ({
         <SignupTermsModal clickModalHandler={clickModalHandler} />
       )}
       <div>
-        <label htmlFor="all-Check">
-          <input
-            type="checkbox"
-            id="all-Check"
-            onChange={allAgreeHandler}
-            checked={isAllChecked}
-          />
-          전체동의
-        </label>
-        <label htmlFor="personal-information-Check">
-          <input
-            type="checkbox"
-            id="personal-information-Check"
-            value="privacy"
-            onChange={agreeHandler}
-            checked={checkedItems.includes('privacy')}
-          />
+        <PraivacyLabelWrap>
+          <label htmlFor="all-Check">
+            <input
+              type="checkbox"
+              id="all-Check"
+              onChange={allAgreeHandler}
+              checked={isAllChecked}
+            />
+          </label>
+          <span>전체동의</span>
+        </PraivacyLabelWrap>
+        <PraivacyLabelWrap>
+          <label htmlFor="personal-information-Check">
+            <input
+              type="checkbox"
+              id="personal-information-Check"
+              value="privacy"
+              onChange={agreeHandler}
+              checked={checkedItems.includes('privacy')}
+            />
+          </label>
           개인정보 처리방침에 동의 (필수)
           <button
             type="button"
@@ -85,15 +89,17 @@ const SignUpPrivacy = ({
           >
             [자세히 보기]
           </button>
-        </label>
-        <label htmlFor="Terms-of-Use-Check">
-          <input
-            type="checkbox"
-            id="Terms-of-Use-Check"
-            value="terms"
-            onChange={agreeHandler}
-            checked={checkedItems.includes('terms')}
-          />
+        </PraivacyLabelWrap>
+        <PraivacyLabelWrap>
+          <label htmlFor="Terms-of-Use-Check">
+            <input
+              type="checkbox"
+              id="Terms-of-Use-Check"
+              value="terms"
+              onChange={agreeHandler}
+              checked={checkedItems.includes('terms')}
+            />
+          </label>
           이용약관에 동의 (필수)
           <button
             type="button"
@@ -101,7 +107,7 @@ const SignUpPrivacy = ({
           >
             [자세히 보기]
           </button>
-        </label>
+        </PraivacyLabelWrap>
         <PrivacyMessage privacyErrState={privacyErrState}>
           개인정보 처리방침 및 이용약관을 확인 해주세요
         </PrivacyMessage>
