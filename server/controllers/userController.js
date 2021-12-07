@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
+import { OAuth2Client } from 'google-auth-library';
 import User from '../models/user.js';
 import generateAccessToken from '../utils/generateToken.js';
 
@@ -103,24 +104,43 @@ const naverUserInfo = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch token & userInfo from google
-// @route  GET /api/users/google
+// @route  POST /api/users/google
 // @access Public
 const googleUserInfo = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  console.log(req.body.code);
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-  const user = await User.findOne({ 'general.email': email });
-
-  if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      token: generateAccessToken(user._id),
+  async function verify() {
+    const ticket = await client.verifyIdToken({
+      idToken: req.body.code,
     });
-  } else {
-    res
-      .status(401)
-      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+    const payload = ticket.getPayload();
+
+    // 디비에 연락 -> 기존 유저라면 토큰 업데이트, 신규 유저면 정보 저장
+    const user = await User.findOne({ 'google.uuid': payload.sub });
+    if (user) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        isAdmin: user.isAdmin,
+        token: generateAccessToken(user._id),
+      });
+    } else {
+      const newUser = await User.create({
+        'google.uuid': payload.sub,
+        'google.email': payload.email,
+        name: payload.name,
+      });
+      res.json({
+        _id: newUser._id,
+        name: newUser.name,
+        isAdmin: newUser.isAdmin,
+        token: generateAccessToken(newUser._id),
+      });
+    }
   }
+  verify().catch(console.error);
+  // 토큰 확인(해독)
 });
 
 // @desc   Check user password
@@ -185,21 +205,43 @@ const logout = asyncHandler(async (req, res) => {
 
 // @desc   Delete user profile
 // @route  PATCH /api/users/
-// @access Private
+// @access Private & Private/Admin
 const dropout = asyncHandler(async (req, res) => {
   // 회원 탈퇴 요청
-
-  await User.findByIdAndUpdate(
-    req.user._id,
-    { active: req.body },
-    {
-      new: true,
-      upsert: true,
-    },
-  );
-  res.status(200).json({
-    message: '탈퇴가 정상적으로 완료되었습니다',
-  });
+  // 유저 본인이 탈퇴 요청 / 관리자가 탈퇴 요청
+  if (req.user.isAdmin === true) {
+    const { userId } = req.query;
+    if (!userId) {
+      res.status(400).json({
+        message: '탈퇴할 유저를 기입해주세요',
+      });
+    } else {
+      await User.findByIdAndUpdate(
+        userId,
+        { active: req.body },
+        {
+          new: true,
+          upsert: true,
+        },
+      );
+      res.status(200).json({
+        message: '해당 유저를 정상적으로 탈퇴시켰습니다',
+      });
+    }
+  }
+  if (req.user.isAdmin === false) {
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { active: req.body },
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+    res.status(200).json({
+      message: '탈퇴가 정상적으로 완료되었습니다',
+    });
+  }
 });
 
 // @desc   Get all users
