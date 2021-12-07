@@ -1,5 +1,4 @@
 /* eslint no-underscore-dangle: 0 */
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import adminInstance from 'util/axios';
 import { Order } from 'util/type';
@@ -26,21 +25,21 @@ const AdminOrderList = () => {
   const cancleOrder = (id: string) => {
     adminInstance
       .patch(`/orders/${id}`, { status: 5, inStock: true })
-      .then((res) => {
+      .then(() => {
         alert('취소가 완료되었습니다.');
         window.location.reload();
       })
-      .catch((err) => alert('취소실패, 담당자에게 문의해주세요'));
+      .catch(() => alert('취소실패, 담당자에게 문의해주세요'));
   };
 
   const returnOrder = (id: string) => {
     adminInstance
       .patch(`/orders/${id}`, { status: 5, inStock: false })
-      .then((res) => {
+      .then(() => {
         alert('반품이 완료되었습니다.');
         window.location.reload();
       })
-      .catch((err) => alert('반품실패, 담당자에게 문의해주세요'));
+      .catch(() => alert('반품실패, 담당자에게 문의해주세요'));
   };
 
   const changeOrderStatus = (id: string, status: string) => {

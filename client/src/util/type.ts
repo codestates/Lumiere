@@ -21,14 +21,14 @@ export interface Product {
   info: {
     details: string;
     size: string;
-    canvas: string;
+    canvas: number;
     createdAt: string;
   };
   price: number;
   count: number;
   inStock: boolean;
   updatedAt: Date;
-  _id: string;
+  _id?: string;
 }
 
 export interface Artists {
@@ -40,6 +40,7 @@ export interface Artists {
   joinAt: Date;
   countOfWorks: number;
   isActive: boolean;
+  _id?: string;
 }
 
 export interface Order {
@@ -85,4 +86,26 @@ export interface Events {
   linkname: string;
   link: string;
   image: string;
+}
+
+export interface ArtistsProduct {
+  code: string;
+  name: string;
+  aka: string;
+  record: string;
+  thumbnail: string;
+  joinAt: Date;
+  countOfWorks: number;
+  isActive: boolean;
+  artCode: string;
+  title: string;
+  image: string;
+  theme: string;
+  info: {
+    details: string;
+    size: string;
+    canvas: number;
+    createdAt: string;
+  };
+  price: number;
 }

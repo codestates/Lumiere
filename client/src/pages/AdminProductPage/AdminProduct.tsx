@@ -32,7 +32,7 @@ const AdminProduct = () => {
     info: {
       details: '',
       size: '',
-      canvas: '',
+      canvas: 0,
       createdAt: '',
     },
     price: 0,

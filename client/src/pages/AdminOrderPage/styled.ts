@@ -2,7 +2,7 @@ import styled from 'styled-components/macro';
 
 export const AdminHeaderWrap = styled.div`
   h1 {
-    margin-top: 6vh;
+    margin-top: 10vh;
     font-weight: bolder;
     font-size: 2rem;
   }
@@ -13,6 +13,7 @@ export const TableWrap = styled.div`
   text-align: center;
   button {
     margin-bottom: 1rem;
+    margin-left: 1rem;
   }
 `;
 

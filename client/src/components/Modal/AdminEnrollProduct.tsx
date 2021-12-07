@@ -1,7 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
-import { Product } from 'util/type';
+import { Product, Artists } from 'util/type';
 import adminInstance from 'util/axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import S3 from 'react-aws-s3-typescript';
 import dotenv from 'dotenv';
 import { v4 as uuidv4 } from 'uuid';
@@ -17,12 +17,38 @@ dotenv.config();
 
 type GreetingProps = {
   NO: () => void;
-  el: Product;
+  el: Artists;
 };
 
-const AdminEditProduct = ({ NO, el }: GreetingProps) => {
-  const [productInfo, setProductInfo] = useState<Product>(el);
+const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
+  const [productInfo, setProductInfo] = useState<Product>({
+    artist: el,
+    artCode: '',
+    title: '',
+    image: '',
+    theme: '',
+    info: {
+      details: '',
+      size: '',
+      canvas: 0,
+      createdAt: '',
+    },
+    price: 0,
+    count: 0,
+    inStock: true,
+    updatedAt: new Date(),
+  });
+  useEffect(() => console.log(productInfo));
+  useEffect(
+    () =>
+      setProductInfo({
+        ...productInfo,
+        artCode: makeDigit(el.countOfWorks + 1).toString(),
+      }),
+    [],
+  );
   const [editImage, setEditImage] = useState(productInfo.image);
+  const [isThumbnail, setIsThumbNail] = useState<boolean>(false);
   const productInfoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.className === 'productTitle') {
       setProductInfo({ ...productInfo, title: e.target.value });
@@ -48,7 +74,7 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
     if (e.target.className === 'lesswidth textright') {
       setProductInfo({
         ...productInfo,
-        info: { ...productInfo.info, canvas: e.target.value },
+        info: { ...productInfo.info, canvas: +e.target.value },
       });
     }
     if (e.target.className === 'createdAt') {
@@ -65,13 +91,25 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
     }
   };
 
+  const makeDigit = (num: number) => {
+    if (num >= 0 && num <= 9) return `000${num}`;
+    if (num >= 10 && num <= 99) return `00${num}`;
+    if (num >= 100 && num <= 999) return `0${num}`;
+    if (num >= 1000 && num <= 9999) return num;
+    return '1만을 넘음 관리자 문의';
+  };
+
   const editHandler = () => {
-    // console.log(productInfo);
+    if (isThumbnail)
+      adminInstance.patch(`/artists/${el._id}`, { thumbnail: editImage });
     adminInstance
-      .patch(`/products/${el._id}`, {
+      .post('/products', {
         ...productInfo,
       })
-      .then(() => window.location.reload())
+      .then(() => {
+        alert('작품이 등록되었습니다.');
+        window.location.reload();
+      })
       .catch((err) => {
         console.log(err);
         alert('오류발생 담당자에게 문의바랍니다.');
@@ -90,13 +128,21 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
     const file = e.target.files[0];
     ReactS3Client.uploadFile(file, uuidv4()).then((data) => {
       setEditImage(data.location);
+      setProductInfo({
+        ...productInfo,
+        image: data.location,
+      });
     });
   };
 
   const setImageProductInfo = () => {
+    setIsThumbNail(!isThumbnail);
+  };
+
+  const themeHandler = (e: string) => {
     setProductInfo({
       ...productInfo,
-      image: editImage,
+      theme: e,
     });
   };
 
@@ -109,26 +155,26 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
         <TitleWrap>작가 정보</TitleWrap>
         <div>
           <span>고유번호</span>
-          <input type="text" value={`A${el.artist.code}`} disabled />
+          <input type="text" value={`A${el.code}`} disabled />
         </div>
         <div>
           <span>작가명</span>
-          <input type="text" value={el.artist.name} disabled />
+          <input type="text" value={el.name} disabled />
         </div>
         <div>
           <span>활동명(영문)</span>
-          <input type="text" value={el.artist.aka} disabled />
+          <input type="text" value={el.aka} disabled />
         </div>
         <div>
           <span>작가소개</span>
-          <IntroduceText value={el.artist.record} disabled />
+          <IntroduceText value={el.record} disabled />
         </div>
-        <TitleWrap>작품 수정</TitleWrap>
+        <TitleWrap>작품 등록</TitleWrap>
         <div>
           <span>작품 코드</span>
           <input
             type="text"
-            value={`A${el.artist.code}-${el.artCode}`}
+            value={`A${el.code}-${makeDigit(el.countOfWorks + 1)}`}
             disabled
           />
         </div>
@@ -149,6 +195,31 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
             onChange={productInfoHandler}
             className="productDetails"
           />
+        </div>
+        <div>
+          <span>작품테마</span>
+          <button
+            type="button"
+            onClick={() => themeHandler('인물')}
+            className="test"
+          >
+            인물
+          </button>
+          <button type="button" onClick={() => themeHandler('풍경')}>
+            풍경
+          </button>
+          <button type="button" onClick={() => themeHandler('정물')}>
+            정물
+          </button>
+          <button type="button" onClick={() => themeHandler('동물')}>
+            동물
+          </button>
+          <button type="button" onClick={() => themeHandler('상상')}>
+            상상
+          </button>
+          <button type="button" onClick={() => themeHandler('추상')}>
+            추상
+          </button>
         </div>
         <div>
           <span className="leftMargin">작품 사이즈</span>
@@ -216,4 +287,4 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
   );
 };
 
-export default AdminEditProduct;
+export default AdminEnrollProduct;
