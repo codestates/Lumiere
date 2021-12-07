@@ -3,14 +3,15 @@ import styled from 'styled-components';
 export const TabContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 1152px;
   height: 10rem;
-  margin: 1rem 0;
+  margin: 1rem auto;
   border-bottom: 1px solid #eeeeee;
 
   @media screen and (min-width: 768px) {
     flex-direction: row;
     height: 14rem;
-    margin: 2rem 0.5rem 4rem;
+    margin: 2rem auto 4rem;
     border-left: 2px solid var(--color-black);
     border-right: 1px solid #eeeeee;
   }

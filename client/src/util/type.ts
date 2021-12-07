@@ -31,66 +31,30 @@ export interface Product {
   _id: string;
 }
 
-// export interface ProductDetail {
-//   productDetail: {
-//     _id: string;
-//     artCode: string;
-//     title: string;
-//     image: string;
-//     theme: string;
-//     artist: {
-//       _id: string;
-//       code: string;
-//       name: string;
-//       aka: string;
-//       record: string;
-//     };
-//     info: {
-//       details: string;
-//       size: string;
-//       canvas: string;
-//       createdAt: string;
-//     };
-//     likes: [string];
-//     price: number;
-//     inStock: boolean;
-//   };
-//   productsByArtist: [
-//     {
-//       _id: string;
-//       image: string;
-//     },
-//   ];
-//   productsByRandom: [
-//     {
-//       _id: string;
-//       image: string;
-//     },
-//   ];
-// }
-
 export interface ProductDetail {
-  _id: string;
-  artCode: string;
-  title: string;
-  image: string;
-  theme: string;
-  artist: {
+  productDetail: {
     _id: string;
-    code: string;
-    name: string;
-    aka: string;
-    record: string;
+    artCode: string;
+    title: string;
+    image: string;
+    theme: string;
+    artist: {
+      _id: string;
+      code: string;
+      name: string;
+      aka: string;
+      record: string;
+    };
+    info: {
+      details: string;
+      size: string;
+      canvas: string;
+      createdAt: string;
+    };
+    likes: [string];
+    price: number;
+    inStock: boolean;
   };
-  info: {
-    details: string;
-    size: string;
-    canvas: string;
-    createdAt: string;
-  };
-  likes: [string];
-  price: number;
-  inStock: boolean;
   productsByArtist: [
     {
       _id: string;
@@ -103,16 +67,6 @@ export interface ProductDetail {
       image: string;
     },
   ];
-}
-
-export interface ProductsByArtist {
-  _id: string;
-  image: string;
-}
-
-export interface ProductsByRandom {
-  _id: string;
-  image: string;
 }
 
 export interface Artists {

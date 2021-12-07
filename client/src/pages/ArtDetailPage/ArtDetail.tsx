@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import instance from 'util/axios';
-// import { ProductDetail, ProductsByArtist, ProductsByRandom } from 'util/type';
+import { ProductDetail } from 'util/type';
 import { ArtDetailContainer } from './styled';
 
 const ArtDetail = () => {
-  const [productDetail, setProductDetail] = useState({});
+  const [productDetail, setProductDetail] = useState<Array<ProductDetail>>([]);
   // const [artListByArtist, setArtListByArtist] = useState([]);
   // const [productsByRandom, setProductsByRandom] = useState([]);
   // const [title, setTitle] = useState('');
@@ -17,51 +17,28 @@ const ArtDetail = () => {
       instance
         .get(`/products/${location.state.id}`)
         .then((res) => {
-          const {
-            artCode,
-            artist,
-            image,
-            inStock,
-            info,
-            likes,
-            price,
-            theme,
-            title,
-            _id,
-          } = res.data.productDetail;
-          // console.log('detail: ', productDetail);
-          // console.log('artist: ', productsByArtist);
-          // console.log('random: ', productsByRandom);
-          // console.log(JSON.parse(res.data));
-          // setProductDetail();
-          // setArtListByArtist(productsByArtist);
-          setProductDetail({
-            code: artCode,
-            artistInfo: artist,
-            url: image,
-            inStockValue: inStock,
-            infoText: info,
-            likesArr: likes,
-            priceNum: price,
-            themeText: theme,
-            id: _id,
-            titleText: title,
-          });
-          // setTitle(title);
+          console.log(res.data);
+          setProductDetail([res.data].flat());
         })
         .catch((err) => {
           console.log(err);
         });
     }
   }, []);
-  console.log(productDetail);
+  // console.log(productDetail[0].productDetail.artCode);
   return (
     <ArtDetailContainer>
       <h1>ArtDetail</h1>
       <span>hello</span>
-      {/* <div>{artListByArtist.length ? artListByArtist : ''}</div> */}
-      {/* <div>{title}</div> */}
-      {/* <div>{productDetail.priceNum ? productDetail.priceNum : ''}</div> */}
+      {productDetail[0] && (
+        <div>
+          {productDetail[0].productDetail.title}
+          <img
+            src={productDetail[0].productDetail.image}
+            alt={productDetail[0].productDetail.title}
+          />
+        </div>
+      )}
     </ArtDetailContainer>
   );
 };
