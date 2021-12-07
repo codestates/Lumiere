@@ -143,6 +143,10 @@ export const SignInSocialWrap = styled.ul`
     font-size: 2.5rem;
   }
 
+  svg {
+    pointer-events: none;
+  }
+
   @media only screen and (min-width: 768px) {
     li {
       margin: 0 1rem;
@@ -152,4 +156,10 @@ export const SignInSocialWrap = styled.ul`
       font-size: 2.5rem;
     }
   }
+`;
+export const SocailBtn = styled.button`
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none; ;
 `;

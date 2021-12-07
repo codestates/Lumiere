@@ -1,4 +1,4 @@
-const Artists = () => {
+const ArtistList = () => {
   return (
     <>
       <h1>Artists</h1>
@@ -6,4 +6,4 @@ const Artists = () => {
     </>
   );
 };
-export default Artists;
+export default ArtistList;

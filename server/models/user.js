@@ -22,6 +22,7 @@ const userSchema = mongoose.Schema(
       },
     },
     google: {
+      uuid: String,
       token: String,
       email: String,
     },
