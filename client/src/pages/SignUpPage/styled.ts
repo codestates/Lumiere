@@ -1,6 +1,9 @@
 import styled from 'styled-components/macro';
 
 export const SignUpContainer = styled.section`
+  max-width: 1200px;
+  margin: 0 auto;
+
   Footer {
     display: none;
   }

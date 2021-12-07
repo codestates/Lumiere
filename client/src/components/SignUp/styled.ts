@@ -139,23 +139,17 @@ export const SignUpBtnWrap = styled.div`
 export const SignUpPrivacyWrap = styled.div`
   margin: 0.1rem 0 1rem 0;
 
-  div {
+  > div {
     display: flex;
     flex-direction: column;
   }
 
   label {
-    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
     height: 2rem;
-  }
-
-  input {
-    margin-right: 0.8rem;
-    vertical-align: middle;
-
-    &:hover {
-      cursor: pointer;
-    }
   }
 
   button {
@@ -192,4 +186,12 @@ export const PrivacyMessage = styled.span<{ privacyErrState: boolean }>`
   @media only screen and (min-width: 768px) {
     font-size: 0.85rem;
   }
+`;
+
+export const PraivacyLabelWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
 `;
