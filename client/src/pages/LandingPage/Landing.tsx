@@ -7,6 +7,7 @@ import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Slider from 'components/Slider/Slider';
+import QuickBtns from 'components/QuickBtns/QuickBtns';
 import { LandingService } from './dummy';
 import {
   LandingContainer,
@@ -101,6 +102,7 @@ const Landing = () => {
           <Link to="/artlist">작가 구경하기</Link>
         </StartBtnBox>
       </LandingWrap>
+      <QuickBtns />
       <Footer />
     </LandingContainer>
   );

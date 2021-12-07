@@ -1,19 +1,19 @@
 import styled from 'styled-components';
 
-export const LandingContainer = styled.div`
-  h1 {
-    margin: 2.5rem 0 1.5rem;
-    font-size: 1.3rem;
-    font-weight: 800;
-    text-align: center;
-  }
-`;
+export const LandingContainer = styled.div``;
 
 export const LandingWrap = styled.div`
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
   padding: 6vh 0 0 0;
+
+  h1 {
+    margin: 2.5rem 0 1.5rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+    text-align: center;
+  }
 `;
 
 export const LatestSection = styled.section`

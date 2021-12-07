@@ -4,6 +4,7 @@ import Masonry from 'react-masonry-css';
 import { AiOutlineHeart } from 'react-icons/ai';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
+import QuickBtns from 'components/QuickBtns/QuickBtns';
 import FilteringTab from 'components/FilteringTab/FilteringTab';
 import { ArtListContainer, ArtListWrap, ArtWrap, ArtInfoBox } from './styled';
 
@@ -60,6 +61,7 @@ const ArtList = () => {
           })}
         </Masonry>
       </ArtListWrap>
+      <QuickBtns />
       <Footer />
     </ArtListContainer>
   );
