@@ -3,7 +3,7 @@ import styled from 'styled-components';
 // CartMenu
 
 export const CartMenuWrap = styled.div`
-  flex: 0 0 8vh;
+  flex: 0 0 5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13,11 +13,18 @@ export const CartMenuWrap = styled.div`
   button {
     border: none;
     background: none;
-    color: #c8c8c8;
+    color: #888888;
+    transition: all 0.5s;
   }
 
   button:hover {
     cursor: pointer;
+    transform: scale(1.05);
+    font-weight: 800;
+  }
+
+  button:active {
+    background-color: #a9a9a9;
   }
 
   svg {
@@ -32,8 +39,10 @@ export const CartMenuWrap = styled.div`
 `;
 
 export const AllSelectBtnWrap = styled.div`
-  display: flex;
-  flex-direction: row;
+  button {
+    display: flex;
+    align-items: center;
+  }
 
   div {
     margin-top: 0.3rem;
@@ -42,6 +51,7 @@ export const AllSelectBtnWrap = styled.div`
   svg {
     pointer-events: none;
     font-size: 1.3rem;
+    margin-right: 0.2rem;
   }
 
   @media screen and (min-width: 768px) {
@@ -58,7 +68,12 @@ export const SelectBtnWrap = styled.div`
 `;
 
 // CartList
-export const CartListWrap = styled.div``;
+export const CartListWrap = styled.div`
+  background-color: #ffffff;
+  flex: 1;
+  @media screen and (min-width: 768px) {
+  }
+`;
 
 //  Cartpay
 export const CartPayWrap = styled.div`
@@ -79,9 +94,9 @@ export const CartPayContentWrap = styled.div`
 
   @media screen and (min-width: 768px) {
     display: flex;
-    background-color: #ffffff;
-    margin-top: 3.8rem;
+    margin-top: 5rem;
     margin-left: 1rem;
+    background-color: #ffffff;
   }
 `;
 
@@ -169,6 +184,18 @@ export const CartPayClickBtn = styled.button`
   color: #ffffff;
   font-size: 1.3rem;
   height: 6vh;
+  transition: all 0.5s;
+  font-weight: 700;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    font-weight: 800;
+  }
+
+  &:active {
+    background-color: #c8c8c8;
+  }
 
   @media screen and (min-width: 768px) {
     font-size: 1.4rem;

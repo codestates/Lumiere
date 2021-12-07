@@ -47,18 +47,21 @@ export const CartContentWrap = styled.div`
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
-  background-color: #ffffff;
 
   @media screen and (min-width: 768px) {
     display: flex;
+    min-height: 500px;
     flex: 1;
     flex-direction: row;
-    margin-bottom: 3rem;
-    min-height: 500px;
+    padding: 0 1rem 1rem;
   }
 `;
 
 export const CartContentLeftWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
   @media screen and (min-width: 768px) {
     flex: 7;
   }

@@ -5,10 +5,12 @@ export const CartMenu = () => {
   return (
     <CartMenuWrap>
       <AllSelectBtnWrap>
-        <div>
-          <VscPass />
-        </div>
-        <button type="button">전체선택</button>
+        <button type="button">
+          <div>
+            <VscPass />
+          </div>
+          전체선택
+        </button>
       </AllSelectBtnWrap>
       <SelectBtnWrap>
         <button type="button">품절상품삭제</button>
