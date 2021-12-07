@@ -3,6 +3,7 @@ import SignIn from 'pages/SignInPage/SignIn';
 import SignUp from 'pages/SignUpPage/SignUp';
 import Landing from 'pages/LandingPage/Landing';
 import ArtList from 'pages/ArtListPage/ArtList';
+import ArtDetail from 'pages/ArtDetailPage/ArtDetail';
 import Artists from 'pages/ArtistListPage/ArtistList';
 import Cart from 'pages/CartPage/Cart';
 import MyPage from 'pages/MyPage/MyPage';
@@ -24,6 +25,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/artlist" element={<ArtList />} />
+          <Route path="/artdetail/:id" element={<ArtDetail />} />
           <Route path="/artists" element={<Artists />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/mypage" element={<MyPage />} />
