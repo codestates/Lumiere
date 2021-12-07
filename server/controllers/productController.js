@@ -2,13 +2,43 @@
 import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
 import Product from '../models/product.js';
+import Artist from '../models/artist.js';
+
+const { ObjectId } = mongoose.Types;
 
 // @desc   Create a product
 // @route  POST /api/products/
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  const product = await Product.create(req.body);
-  res.status(201).json(product);
+  // !!!!! 작가 작품수 올려주기
+  const {
+    artist,
+    artCode,
+    title,
+    image,
+    theme,
+    price,
+    info: { details, size, canvas, createdAt },
+  } = req.body;
+
+  if (
+    artist &&
+    artCode &&
+    title &&
+    theme &&
+    price &&
+    image &&
+    details &&
+    size &&
+    canvas &&
+    createdAt
+  ) {
+    await Artist.updateOne({ _id: artist }, { $inc: { countOfWorks: 1 } });
+    const product = await Product.create(req.body);
+    res.status(201).json(product);
+  } else {
+    res.status(400).json({ message: '상품 정보를 모두 입력해주세요' });
+  }
 });
 
 // @desc   Fetch all products
@@ -98,7 +128,8 @@ const updateProduct = asyncHandler(async (req, res) => {
 const deleteProduct = asyncHandler(async (req, res) => {
   // 재고 있을 시 상품 삭제 가능
   const { productId } = req.query;
-  const product = await Product.findByIdAndDelete(productId, {
+  const product = await Product.findOneAndDelete({
+    _id: productId,
     inStock: true,
   });
 
@@ -188,7 +219,6 @@ const getCartItems = asyncHandler(async (req, res) => {
 const getTotalPrice = asyncHandler(async (req, res) => {
   // 결제로 넘어갈 시 총 상품 금액
   let { productId } = req.query;
-  const { ObjectId } = mongoose.Types;
 
   if (!Array.isArray(productId)) {
     productId = [new ObjectId(productId)];

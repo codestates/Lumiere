@@ -8,11 +8,38 @@ import Product from '../models/product.js';
 // @access Private/Admin
 const createArtist = asyncHandler(async (req, res) => {
   // 작가 등록 시, 작품 하나 필수 등록
-  const { artist, product } = req.body;
-  const newArtist = await Artist.create(artist);
-  if (newArtist) {
+
+  const {
+    artist: { code, name, aka, record },
+    product: {
+      artCode,
+      title,
+      image,
+      theme,
+      price,
+      info: { details, size, canvas, createdAt },
+    },
+  } = req.body;
+
+  if (
+    code &&
+    name &&
+    aka &&
+    record &&
+    artCode &&
+    title &&
+    image &&
+    theme &&
+    price &&
+    details &&
+    size &&
+    canvas &&
+    createdAt
+  ) {
+    const newArtist = await Artist.create(req.body.artist);
+
     await Product.create({
-      ...product,
+      ...req.body.product,
       artist: newArtist._id,
     });
     res.status(201).json({
@@ -24,6 +51,8 @@ const createArtist = asyncHandler(async (req, res) => {
       joinAt: newArtist.joinAt,
       countOfWorks: newArtist.countOfWorks,
     });
+  } else {
+    res.status(400).json({ message: '내용을 모두 입력해주세요' });
   }
 });
 
@@ -51,6 +80,7 @@ const updateArtist = asyncHandler(async (req, res) => {
     name: updatedArtist.name,
     aka: updatedArtist.aka,
     record: updatedArtist.record,
+    thumbnail: updatedArtist.thumbnail,
     joinAt: updatedArtist.joinAt,
     countOfWorks: updatedArtist.countOfWorks,
   });
