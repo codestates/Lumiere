@@ -23,6 +23,7 @@ type GreetingProps = {
 const AdminEditProduct = ({ NO, el }: GreetingProps) => {
   const [productInfo, setProductInfo] = useState<Product>(el);
   const [editImage, setEditImage] = useState(productInfo.image);
+  const [isThumbnail, setIsThumbNail] = useState<boolean>(false);
   const productInfoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.className === 'productTitle') {
       setProductInfo({ ...productInfo, title: e.target.value });
@@ -48,7 +49,7 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
     if (e.target.className === 'lesswidth textright') {
       setProductInfo({
         ...productInfo,
-        info: { ...productInfo.info, canvas: e.target.value },
+        info: { ...productInfo.info, canvas: Number(e.target.value) },
       });
     }
     if (e.target.className === 'createdAt') {
@@ -66,7 +67,10 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
   };
 
   const editHandler = () => {
-    // console.log(productInfo);
+    if (isThumbnail)
+      adminInstance.patch(`/artists/${el.artist._id}`, {
+        thumbnail: editImage,
+      });
     adminInstance
       .patch(`/products/${el._id}`, {
         ...productInfo,
@@ -90,14 +94,15 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
     const file = e.target.files[0];
     ReactS3Client.uploadFile(file, uuidv4()).then((data) => {
       setEditImage(data.location);
+      setProductInfo({
+        ...productInfo,
+        image: data.location,
+      });
     });
   };
 
   const setImageProductInfo = () => {
-    setProductInfo({
-      ...productInfo,
-      image: editImage,
-    });
+    setIsThumbNail(!isThumbnail);
   };
 
   return (

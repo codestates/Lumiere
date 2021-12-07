@@ -172,6 +172,9 @@ export const AdminEditProductTextWrap = styled.div`
     text-align: left;
     width: 5rem;
   }
+  button {
+    margin: 0.5rem 1rem 0.5rem 0rem;
+  }
   input,
   textarea {
     margin-left: 1rem;
@@ -195,6 +198,9 @@ export const AdminEditProductTextWrap = styled.div`
   }
   .rightmargin {
     margin-right: 5rem;
+  }
+  .titleTheme {
+    margin-left: 0rem;
   }
 `;
 

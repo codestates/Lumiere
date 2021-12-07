@@ -2,7 +2,7 @@ import styled from 'styled-components/macro';
 
 export const AdminHeaderWrap = styled.div`
   h1 {
-    margin-top: 6vh;
+    margin-top: 10vh;
     font-weight: bolder;
     font-size: 2rem;
   }
@@ -32,6 +32,7 @@ export const Table = styled.table`
     padding: 2rem;
     border-bottom: 1px solid black;
     border-right: 1px solid black;
+    vertical-align: middle;
     :last-child {
       border-right: 0;
     }
@@ -64,5 +65,5 @@ export const ProductInfoWrap2 = styled.div`
 `;
 
 export const EnrollmentButton = styled.button`
-  margin-left: 85rem;
+  margin-left: 115rem;
 `;

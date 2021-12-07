@@ -130,8 +130,8 @@ const AdminUser = () => {
           <YesNoModal
             NO={isResignHandler}
             YES={resignHandler}
-            MESSAGE="선택하신항목을 목록에서"
-            MESSAGE2="삭제하시겠습니까?"
+            MESSAGE="해당 유저를"
+            MESSAGE2="탈퇴시키겠습니까?"
           />
         </ModalBackDrop>
       )}

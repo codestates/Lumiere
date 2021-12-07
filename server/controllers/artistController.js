@@ -13,12 +13,13 @@ const createArtist = asyncHandler(async (req, res) => {
   if (newArtist) {
     await Product.create({
       ...product,
-      artist: { id: newArtist._id },
+      artist: newArtist._id,
     });
     res.status(201).json({
       code: newArtist.code,
       name: newArtist.name,
       aka: newArtist.aka,
+      thumbnail: newArtist.thumbnail,
       record: newArtist.record,
       joinAt: newArtist.joinAt,
       countOfWorks: newArtist.countOfWorks,
