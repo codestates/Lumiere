@@ -41,15 +41,18 @@ const AdminUser = () => {
 
   const resignHandler = () => {
     adminInstance
-      .patch('/users/', {
-        ...clickResign,
-        active: {
-          ...clickResign.active,
+      .patch(
+        '/users/',
+        {
           isClosed: true,
           lastAccessTime: new Date(),
         },
+        { params: { userId: clickResign._id } },
+      )
+      .then(() => {
+        alert('탈퇴완료');
+        window.location.reload();
       })
-      .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
   return (
@@ -66,6 +69,7 @@ const AdminUser = () => {
               <td>이름</td>
               <td>가입일</td>
               <td>마지막 접속일</td>
+              <td>탈퇴 여부</td>
               <td>관리</td>
             </tr>
           </tbody>
@@ -106,6 +110,7 @@ const AdminUser = () => {
                           .slice(0, -5)
                       : el.active.lastAccessTime}
                   </td>
+                  <td>{el.active.isClosed ? 'O' : ''}</td>
                   <td>
                     <button
                       type="button"
