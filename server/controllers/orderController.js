@@ -1,18 +1,42 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import Order from '../models/order.js';
+import Product from '../models/product.js';
 
 // @desc    Create new order
 // @route   POST /api/orders/
 // @access  Private
-const addOrderItems = asyncHandler(async (req, res) => {
+const createOrder = asyncHandler(async (req, res) => {
   const { orderItems } = req.body;
   if (orderItems && !orderItems.length) {
     res.status(400).json({ message: '주문하실 상품을 추가해주세요' });
-  } else {
-    const newOrder = await Order.create(req.body);
-    res.status(201).json(newOrder);
+    return;
   }
+  const itemsId = orderItems.map((item) => item.product);
+
+  // 주문 생선 전, 해당 상품들 재고 파악
+  const purchasable = await Product.find({
+    _id: { $in: itemsId },
+    inStock: true,
+  });
+
+  if (purchasable.length !== itemsId.length) {
+    res
+      .status(400)
+      .json({ message: '주문하실 상품 중 품절된 상품이 존재합니다' });
+    return;
+  }
+  // 주문 생성 전, 상품 재고 0으로 수정
+  await Product.updateMany(
+    {
+      _id: { $in: itemsId },
+    },
+    { inStock: false },
+    { multi: true },
+  );
+  // 주문 생성
+  const newOrder = await Order.create({ user: req.user._id, ...req.body });
+  res.status(201).json(newOrder);
 });
 
 // @desc    Get order by ID
@@ -32,7 +56,13 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/latest
 // @access  Private
 const getLatestOrder = asyncHandler(async (req, res) => {
-  const order = await Order.findById({ user: req.user._id })
+  const order = await Order.findOne(
+    { user: req.user._id },
+    {
+      deliver: 1,
+      ordererInfo: 1,
+    },
+  )
     .sort({
       $natural: -1,
     })
@@ -45,48 +75,35 @@ const getLatestOrder = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Update order to paid
-// @route   GET /api/orders/:id/pay
+// @desc    Update order status
+// @route   GET /api/orders/:id
 // @access  Private
-const updateOrderToPaid = asyncHandler(async (req, res) => {
+const updateOrderStatus = asyncHandler(async (req, res) => {
+  // 취소 및 반품
+  // 주문 진행단계 변경
+  const { status, inStock } = req.body;
   const order = await Order.findById(req.params.id);
 
-  if (order) {
-    order.isPaid = true;
-    order.paidAt = Date.now();
-    order.paymentResult = {
-      id: req.body.id,
-      status: req.body.status,
-      update_time: req.body.update_time,
-      email_address: req.body.payer.email_address,
-    };
-
-    const updatedOrder = await order.save();
-
-    res.json(updatedOrder);
-  } else {
-    res.status(404);
-    throw new Error('Order not found');
+  if (!order) {
+    res.status(404).json({ message: '해당 주문내역이 존재하지 않습니다' });
+    return;
   }
-});
 
-// @desc    Update order to delivered
-// @route   GET /api/orders/:id/deliver
-// @access  Private/Admin
-const updateOrderToDelivered = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
-
-  if (order) {
-    order.isDelivered = true;
-    order.deliveredAt = Date.now();
-
-    const updatedOrder = await order.save();
-
-    res.json(updatedOrder);
-  } else {
-    res.status(404);
-    throw new Error('Order not found');
-  }
+  // if (req.user.isAdmin === true) {
+  //   switch (status) {
+  //     case 3:
+  //       alert('비교하려는 값보다 작습니다.');
+  //       break;
+  //     case 4:
+  //       alert('비교하려는 값과 일치합니다.');
+  //       break;
+  //     case 5:
+  //       alert('비교하려는 값보다 큽니다.');
+  //       break;
+  //     default:
+  //       res.status(404).json({ message: '해당 주문내역이 존재하지 않습니다' });
+  //   }
+  // }
 });
 
 // @desc    Get logged in user orders
@@ -106,11 +123,10 @@ const getOrders = asyncHandler(async (req, res) => {
 });
 
 export {
-  addOrderItems,
+  createOrder,
+  updateOrderStatus,
   getOrderById,
   getLatestOrder,
-  updateOrderToPaid,
-  updateOrderToDelivered,
   getMyOrders,
   getOrders,
 };

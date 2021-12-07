@@ -39,14 +39,13 @@ const orderSchema = mongoose.Schema(
     },
     ordererInfo: {
       // 주문자 정보
-      name: { type: String },
-      phoneNum: { type: String }, // 연락처
-      email: { type: String }, // 결제내역 알림을 위한 이메일 주소
-      refundTerms: { type: String }, // 품절 시 환불 내용
+      name: { type: String, required: true },
+      phoneNum: { type: String, required: true }, // 연락처
+      email: { type: String, required: true }, // 결제내역 알림을 위한 이메일 주소
+      refundTerms: { type: String, required: true }, // 품절 시 환불 내용
     },
     shippingPrice: { type: Number, required: true, default: 0 },
     totalPrice: { type: Number, required: true, default: 0 },
-    deliveredAt: { type: Date },
   },
   {
     versionKey: false,

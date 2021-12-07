@@ -22,10 +22,10 @@ router
   .get(getProducts)
   .post(protect, admin, createProduct)
   .delete(protect, admin, deleteProduct);
-router.route('/totalPrice').get(protect, getTotalPrice);
+router.route('/total-price').get(protect, getTotalPrice);
 router.route('/filter').get(getProductsByFilter);
 router.route('/latest').get(getLatestProducts);
-router.route('/cartItems').get(getCartItems);
+router.route('/cart-items').get(getCartItems);
 router.route('/zzim').patch(protect, zzimProduct).get(protect, getZzimProducts);
 router.route('/:id').patch(protect, admin, updateProduct).get(getProductById);
 
