@@ -1,14 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
+// import { v4 as uuidv4 } from 'uuid';
+import Masonry from 'react-masonry-css';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Slider from 'components/Slider/Slider';
+import QuickBtns from 'components/QuickBtns/QuickBtns';
 import { LandingService } from './dummy';
 import {
   LandingContainer,
   LandingWrap,
+  LatestSection,
   ServiceSection,
   ServiceTitle,
   ServiceList,
@@ -18,6 +22,7 @@ import {
 
 const Landing = () => {
   const [banners, setBanners] = useState([]);
+  const [latestArtList, setLatestArtList] = useState([]);
 
   useEffect(() => {
     // axios 요청
@@ -26,6 +31,16 @@ const Landing = () => {
       .then((res) => {
         console.log(res.data);
         setBanners(res.data);
+        instance
+          .get('/products/latest')
+          .then((res) => {
+            console.log(res);
+            setLatestArtList(res.data);
+          })
+          .catch((res) => {
+            // const message = res.message;
+            console.log(res.message);
+          });
       })
       .catch((err) => {
         console.log(err);
@@ -37,6 +52,27 @@ const Landing = () => {
       <Header />
       <LandingWrap>
         <Slider banners={banners} />
+        <LatestSection>
+          <h1>최신작 소개</h1>
+          <Masonry
+            breakpointCols={3}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column"
+          >
+            {/* array of JSX items */}
+
+            {latestArtList.map((art, idx) => {
+              const { id, image } = art;
+              return (
+                <div key={id} className="my-masonry-grid_column">
+                  {/* <div> */}
+                  <img src={image} alt={`최신작 ${idx}`} />
+                  {/* </div> */}
+                </div>
+              );
+            })}
+          </Masonry>
+        </LatestSection>
         <ServiceSection>
           <ServiceTitle>
             <div>
@@ -66,6 +102,7 @@ const Landing = () => {
           <Link to="/artlist">작가 구경하기</Link>
         </StartBtnBox>
       </LandingWrap>
+      <QuickBtns />
       <Footer />
     </LandingContainer>
   );

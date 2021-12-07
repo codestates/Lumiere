@@ -10,6 +10,7 @@ export const AdminHeaderWrap = styled.div`
 export const TableWrap = styled.div`
   margin-top: 1vh;
   border: 3px black solid;
+  text-align: center;
   button {
     margin-bottom: 1rem;
   }

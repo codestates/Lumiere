@@ -68,7 +68,10 @@ const AdminHeader = () => {
             <Link to="/AdminProduct">작품 관리</Link>
           </li>
           <li>
-            <Link to="/AdminUser">유저/작가 관리</Link>
+            <Link to="/AdminUser">유저 관리</Link>
+          </li>
+          <li>
+            <Link to="/AdminArtist">작가 관리</Link>
           </li>
           <li>
             <Link to="/AdminBanner">배너 관리</Link>

@@ -150,6 +150,14 @@ export const SignUpPrivacyWrap = styled.div`
     align-items: center;
     width: 2rem;
     height: 2rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  input:hover {
+    cursor: pointer;
   }
 
   button {

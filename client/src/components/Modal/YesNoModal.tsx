@@ -10,19 +10,21 @@ type GreetingProps = {
 const YesNoModal = ({ NO, YES, MESSAGE, MESSAGE2 }: GreetingProps) => {
   return (
     <YesNoModalWrap onClick={(e) => e.stopPropagation()}>
-      <button onClick={NO} className={'closeButton'}>
+      <button type="button" onClick={NO} className="closeButton">
         &times;
       </button>
       <YesNoTextWrap>
         <div>
           {MESSAGE}
           <br />
-          <strong>{MESSAGE2}</strong>
+          {MESSAGE2}
         </div>
       </YesNoTextWrap>
       <ButtonWrap>
-        <button onClick={YES}>확인</button>
-        <button onClick={NO} className="nobutton">
+        <button type="button" onClick={YES}>
+          확인
+        </button>
+        <button type="button" onClick={NO} className="nobutton">
           아니요
         </button>
       </ButtonWrap>

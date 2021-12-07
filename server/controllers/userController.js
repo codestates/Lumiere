@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
+import { OAuth2Client } from 'google-auth-library';
 import User from '../models/user.js';
 import generateAccessToken from '../utils/generateToken.js';
 
@@ -45,6 +46,11 @@ const register = asyncHandler(async (req, res) => {
 const generalLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ 'general.email': email });
+
+  if (user.active.isClosed === true && !user.general.password) {
+    res.status(401).json({ message: '이미 탈퇴한 회원입니다' });
+    return;
+  }
 
   if (user && (await user.matchPassword(password))) {
     res.json({
@@ -103,24 +109,43 @@ const naverUserInfo = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch token & userInfo from google
-// @route  GET /api/users/google
+// @route  POST /api/users/google
 // @access Public
 const googleUserInfo = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  console.log(req.body.code);
+  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-  const user = await User.findOne({ 'general.email': email });
-
-  if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      token: generateAccessToken(user._id),
+  async function verify() {
+    const ticket = await client.verifyIdToken({
+      idToken: req.body.code,
     });
-  } else {
-    res
-      .status(401)
-      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+    const payload = ticket.getPayload();
+
+    // 디비에 연락 -> 기존 유저라면 토큰 업데이트, 신규 유저면 정보 저장
+    const user = await User.findOne({ 'google.uuid': payload.sub });
+    if (user) {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        isAdmin: user.isAdmin,
+        token: generateAccessToken(user._id),
+      });
+    } else {
+      const newUser = await User.create({
+        'google.uuid': payload.sub,
+        'google.email': payload.email,
+        name: payload.name,
+      });
+      res.json({
+        _id: newUser._id,
+        name: newUser.name,
+        isAdmin: newUser.isAdmin,
+        token: generateAccessToken(newUser._id),
+      });
+    }
   }
+  verify().catch(console.error);
+  // 토큰 확인(해독)
 });
 
 // @desc   Check user password
@@ -145,8 +170,9 @@ const checkPwd = asyncHandler(async (req, res) => {
 // @access Private
 const updatePwd = asyncHandler(async (req, res) => {
   // checkUserPwd을 통해 일반 유저인지 확인했음
-  if (req.body.password) {
-    let { password } = req.body;
+  let { password } = req.body;
+
+  if (password) {
     password = await bcrypt.hash(password, 10);
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -160,6 +186,10 @@ const updatePwd = asyncHandler(async (req, res) => {
       message: '비밀번호가 성공적으로 변경되었습니다',
       token: generateAccessToken(updatedUser._id),
     });
+  } else {
+    res.status(400).json({
+      message: '새 비밀번호를 입력해주세요',
+    });
   }
 });
 
@@ -168,8 +198,8 @@ const updatePwd = asyncHandler(async (req, res) => {
 // @access Private
 const logout = asyncHandler(async (req, res) => {
   // 로그아웃 시간 저장 -> 추후 휴먼 계정 전환 가능
-
   const { lastAccessTime } = req.body;
+
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
     { 'active.lastAccessTime': lastAccessTime },
@@ -185,21 +215,42 @@ const logout = asyncHandler(async (req, res) => {
 
 // @desc   Delete user profile
 // @route  PATCH /api/users/
-// @access Private
+// @access Private & Private/Admin
 const dropout = asyncHandler(async (req, res) => {
-  // 회원 탈퇴 요청
-
-  await User.findByIdAndUpdate(
-    req.user._id,
-    { active: req.body },
-    {
-      new: true,
-      upsert: true,
-    },
-  );
-  res.status(200).json({
-    message: '탈퇴가 정상적으로 완료되었습니다',
-  });
+  // 유저 본인이 탈퇴 요청 / 관리자가 탈퇴 요청
+  if (req.user.isAdmin === true) {
+    const { userId } = req.query;
+    if (!userId) {
+      res.status(400).json({
+        message: '탈퇴시킬 회원을 기입해주세요',
+      });
+      return;
+    }
+    await User.findByIdAndUpdate(
+      userId,
+      { active: req.body, $unset: { 'general.password': 1 } },
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+    res.status(200).json({
+      message: '해당 유저를 정상적으로 탈퇴시켰습니다',
+    });
+  }
+  if (req.user.isAdmin === false) {
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { active: req.body, $unset: { 'general.password': 1 } },
+      {
+        new: true,
+        upsert: true,
+      },
+    );
+    res.status(200).json({
+      message: '탈퇴가 정상적으로 완료되었습니다',
+    });
+  }
 });
 
 // @desc   Get all users
