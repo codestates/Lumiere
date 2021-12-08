@@ -33,7 +33,7 @@ const artistSchema = mongoose.Schema(
       // 작가 등록일
       type: Date,
       required: true,
-      default: Date.now,
+      default: () => Date.now() + 9 * 60 * 60 * 1000,
     },
     countOfWorks: {
       // 작가와 연결된 상품이 등록될 떄마다 카운트 올려주기

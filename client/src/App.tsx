@@ -28,11 +28,11 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/zzim" element={<Zzim />} />
-          <Route path="/AdminOrder" element={<AdminOrder />} />
-          <Route path="/AdminProduct" element={<AdminProduct />} />
-          <Route path="/AdminUser" element={<AdminUser />} />
-          <Route path="/AdminArtist" element={<AdminArtist />} />
-          <Route path="/AdminBanner" element={<AdminBanner />} />
+          <Route path="/admin/order" element={<AdminOrder />} />
+          <Route path="/admin/product" element={<AdminProduct />} />
+          <Route path="/admin/user" element={<AdminUser />} />
+          <Route path="/admin/artist" element={<AdminArtist />} />
+          <Route path="/admin/banner" element={<AdminBanner />} />
         </Routes>
       </Router>
     </>

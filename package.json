@@ -25,7 +25,6 @@
   "homepage": "https://github.com/codestates/Lumiere#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
-    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -33,7 +32,6 @@
     "express-async-handler": "^1.2.0",
     "google-auth-library": "^7.10.3",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.1",
     "mongoose": "^6.0.13",
     "validator": "^13.7.0"
   },

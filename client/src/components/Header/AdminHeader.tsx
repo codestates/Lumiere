@@ -62,19 +62,19 @@ const AdminHeader = () => {
             <Link to="/">홈</Link>
           </li>
           <li>
-            <Link to="/AdminOrder">결제/배송 관리</Link>
+            <Link to="/admin/order">결제/배송 관리</Link>
           </li>
           <li>
-            <Link to="/AdminProduct">작품 관리</Link>
+            <Link to="/admin/product">작품 관리</Link>
           </li>
           <li>
-            <Link to="/AdminUser">유저 관리</Link>
+            <Link to="/admin/user">유저 관리</Link>
           </li>
           <li>
-            <Link to="/AdminArtist">작가 관리</Link>
+            <Link to="/admin/artist">작가 관리</Link>
           </li>
           <li>
-            <Link to="/AdminBanner">배너 관리</Link>
+            <Link to="/admin/banner">배너 관리</Link>
           </li>
         </ul>
       </MainMenu>
