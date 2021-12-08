@@ -16,6 +16,7 @@ import {
   HeaderWrap,
   HambugerBtn,
   MainMenu,
+  AdminMenu,
   LogoBox,
   IconBox,
   HeaderInfoBox,
@@ -89,6 +90,28 @@ const Header = () => {
             <li>
               <Link to="/">작가 신청</Link>
             </li>
+            {isLogin && userInfo && JSON.parse(userInfo).isAdmin ? (
+              <AdminMenu>
+                <Link to="/admin/product">어드민페이지</Link>
+                <ul>
+                  <li>
+                    <Link to="/admin/order">결제/배송 관리</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/product">작품 관리</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/user">유저 관리</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/artist">작가 관리</Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/banner">배너 관리</Link>
+                  </li>
+                </ul>
+              </AdminMenu>
+            ) : null}
           </ul>
         </MainMenu>
         <IconBox>
