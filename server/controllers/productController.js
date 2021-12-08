@@ -10,7 +10,6 @@ const { ObjectId } = mongoose.Types;
 // @route  POST /api/products/
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  // !!!!! 작가 작품수 올려주기
   const {
     artist,
     artCode,
@@ -48,6 +47,7 @@ const getProducts = asyncHandler(async (req, res) => {
   // 관리자 페이지에 필요한 데이터까지 추가
   const products = await Product.find({})
     .populate('artist', ['name', 'aka', 'code', 'record'])
+    .sort({ _id: -1 })
     .exec();
 
   res.json(products);
@@ -69,7 +69,9 @@ const getProductsByFilter = asyncHandler(async (req, res) => {
         'info.details': 0,
         'info.createdAt': 0,
       },
-    ).populate('artist', ['name']);
+    )
+      .populate('artist', ['name'])
+      .sort({ _id: -1 });
   }
   if (sizeMin && sizeMax) {
     products = await Product.find(
@@ -86,7 +88,9 @@ const getProductsByFilter = asyncHandler(async (req, res) => {
         'info.details': 0,
         'info.createdAt': 0,
       },
-    ).populate('artist', ['name']);
+    )
+      .populate('artist', ['name'])
+      .sort({ _id: -1 });
   }
   if (priceMin && priceMax) {
     products = await Product.find(
@@ -103,7 +107,9 @@ const getProductsByFilter = asyncHandler(async (req, res) => {
         'info.details': 0,
         'info.createdAt': 0,
       },
-    ).populate('artist', ['name']);
+    )
+      .populate('artist', ['name'])
+      .sort({ _id: -1 });
   }
   res.json(products);
 });
@@ -183,7 +189,7 @@ const getProductById = asyncHandler(async (req, res) => {
 const getLatestProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({}, { image: 1 })
     .limit(6)
-    .sort({ updatedAt: -1 });
+    .sort({ _id: -1 });
 
   if (products) res.json(products);
   else {
@@ -192,7 +198,7 @@ const getLatestProducts = asyncHandler(async (req, res) => {
 });
 
 // @desc   Check stock of cartItems
-// @route  GET /api/products/cartItems
+// @route  GET /api/products/cart-items
 // @access Public
 const getCartItems = asyncHandler(async (req, res) => {
   // 장바구니 상품 재고 확인 차 요청
@@ -214,7 +220,7 @@ const getCartItems = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch cartItems totalprice
-// @route  GET /api/products/totalPrice
+// @route  GET /api/products/total-price
 // @access Private
 const getTotalPrice = asyncHandler(async (req, res) => {
   // 결제로 넘어갈 시 총 상품 금액

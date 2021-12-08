@@ -6,7 +6,7 @@ import {
   updateEvent,
   deleteEvent,
 } from '../controllers/eventController.js';
-import { protect, admin } from '../middleware/auth.js'; // for private routes
+import { protect, admin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -18,6 +18,4 @@ router
   .patch(protect, admin, updateEvent)
   .delete(protect, admin, deleteEvent);
 
-// 이벤트 추가, 수정, 삭제
-// 모든 이벤트, 해당 이벤트 get
 export default router;

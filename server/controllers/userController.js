@@ -47,12 +47,17 @@ const generalLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ 'general.email': email });
 
+  if (!user) {
+    res.status(401).json({ message: '이메일을 다시 확인해주세요' });
+    return;
+  }
+
   if (user.active.isClosed === true && !user.general.password) {
     res.status(401).json({ message: '이미 탈퇴한 회원입니다' });
     return;
   }
 
-  if (user && (await user.matchPassword(password))) {
+  if (await user.matchPassword(password)) {
     res.json({
       _id: user._id,
       name: user.name,
@@ -60,9 +65,7 @@ const generalLogin = asyncHandler(async (req, res) => {
       token: generateAccessToken(user._id),
     });
   } else {
-    res
-      .status(401)
-      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+    res.status(401).json({ message: '비밀번호를 다시 확인해주세요' });
   }
 });
 

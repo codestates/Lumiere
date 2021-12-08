@@ -12,7 +12,7 @@ import {
   dropout,
   getUsers,
 } from '../controllers/userController.js';
-import { protect, admin } from '../middleware/auth.js'; // for private routes
+import { protect, admin } from '../middleware/auth.js';
 
 const router = express.Router();
 
