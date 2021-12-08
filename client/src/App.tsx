@@ -14,6 +14,7 @@ import AdminUser from 'pages/AdminUserPage/AdminUser';
 import AdminArtist from 'pages/AdminArtist/AdminArtist';
 import AdminBanner from 'pages/AdminBannerPage/AdminBanner';
 import ArtistDetail from 'pages/ArtistDetailPage/ArtistDetail';
+import Error from 'pages/ErrorPage/Error';
 import { GlobalStyle } from 'styles/global-style';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/admin/user" element={<AdminUser />} />
           <Route path="/admin/artist" element={<AdminArtist />} />
           <Route path="/admin/banner" element={<AdminBanner />} />
+          <Route path="/error" element={<Error />} />
         </Routes>
       </Router>
     </>
