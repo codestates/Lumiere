@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /home/ubuntu/Lumiere/server
-npm install
+sudo npm install
 npm install pm2@latest -g
 sudo apt-get update
 sudo apt-get install authbind

@@ -79,7 +79,7 @@ const productSchema = mongoose.Schema(
       // 상품 등록 일
       type: Date,
       required: true,
-      default: Date.now,
+      default: () => Date.now() + 9 * 60 * 60 * 1000,
     },
   },
   { versionKey: false },

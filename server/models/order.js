@@ -27,9 +27,17 @@ const orderSchema = mongoose.Schema(
     ],
     result: {
       id: { type: String, required: true }, // 주문번호 YYYYMMDD + 6자리 총 12자리
-      paidAt: { type: Date, required: true, default: Date.now }, // 결제일자
+      paidAt: {
+        type: Date,
+        required: true,
+        default: () => Date.now() + 9 * 60 * 60 * 1000,
+      }, // 결제일자
       status: { type: Number, required: true, default: 0 }, //  상태 (결제완료 0, 발송준비중 1, 배송중 2, 배송완료 3, 반품요청중 4, 결제취소 5)
-      updatedAt: { type: Date, required: true, default: Date.now }, // status 업데이트 일자
+      updatedAt: {
+        type: Date,
+        required: true,
+        default: () => Date.now() + 9 * 60 * 60 * 1000,
+      }, // status 업데이트 일자
     },
     deliver: {
       // 배송 정보 (주소, 받는이 정보, 요청사항)

@@ -58,9 +58,13 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
+    createdAt: {
+      type: Date,
+      required: true,
+      default: () => Date.now() + 9 * 60 * 60 * 1000,
+    },
   },
   {
-    timestamps: true,
     versionKey: false,
   },
 );
