@@ -36,6 +36,7 @@ export const GlobalStyle = createGlobalStyle`
     display: block;
   }
   body {
+    letter-spacing: -0.9px;
     line-height: 1;
     /* 스크롤바 제거 */
     -ms-overflow-style: none;
