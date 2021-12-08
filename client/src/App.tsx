@@ -13,6 +13,7 @@ import AdminProduct from 'pages/AdminProductPage/AdminProduct';
 import AdminUser from 'pages/AdminUserPage/AdminUser';
 import AdminArtist from 'pages/AdminArtist/AdminArtist';
 import AdminBanner from 'pages/AdminBannerPage/AdminBanner';
+import ArtistDetail from 'pages/ArtistDetailPage/ArtistDetail';
 import { GlobalStyle } from 'styles/global-style';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/artlist" element={<ArtList />} />
           <Route path="/artdetail/:id" element={<ArtDetail />} />
           <Route path="/artists" element={<Artists />} />
+          <Route path="/artistdetail/:id" element={<ArtistDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/zzim" element={<Zzim />} />
