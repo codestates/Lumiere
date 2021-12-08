@@ -13,7 +13,7 @@ const addEvent = asyncHandler(async (req, res) => {
 // @route  GET /api/events
 // @access Public
 const getEvents = asyncHandler(async (req, res) => {
-  const events = await Event.find({});
+  const events = await Event.find({}).sort({ _id: -1 });
   res.json(events);
 });
 
@@ -25,8 +25,7 @@ const getEventById = asyncHandler(async (req, res) => {
 
   if (event) res.json(event);
   else {
-    res.status(404); // 설정 안하면 500
-    throw new Error('Product not found');
+    res.status(404).json({ message: '해당 배너가 존재하지 않습니다' });
   }
 });
 
@@ -44,7 +43,7 @@ const updateEvent = asyncHandler(async (req, res) => {
 // @route  DELETE /api/events/:id
 // @access Private/Admin
 const deleteEvent = asyncHandler(async (req, res) => {
-  const event = await Event.findByIdAndDelete(req.params.id);
+  await Event.findByIdAndDelete(req.params.id);
   res.status(200).json({ messsage: '해당 배너가 정상적으로 삭제되었습니다' });
 });
 

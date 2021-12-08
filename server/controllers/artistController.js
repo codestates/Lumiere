@@ -60,7 +60,7 @@ const createArtist = asyncHandler(async (req, res) => {
 // @route  GET /api/artists/
 // @access Public
 const getArtists = asyncHandler(async (req, res) => {
-  const artists = await Artist.find({}, { likes: 0 });
+  const artists = await (await Artist.find({}, { likes: 0 })).sort({ _id: -1 });
   res.json(artists);
 });
 
@@ -131,7 +131,7 @@ const getArtistById = asyncHandler(async (req, res) => {
   const products = await Product.find(
     { artist: req.params.id },
     { image: 1, inStock: 1 },
-  ).sort({ updatedAt: -1 });
+  ).sort({ _id: -1 });
 
   res.json({ artistDetail, products });
 });
