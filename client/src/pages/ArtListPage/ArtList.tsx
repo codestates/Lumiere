@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
 import { AiOutlineHeart } from 'react-icons/ai';
@@ -40,22 +41,24 @@ const ArtList = () => {
           columnClassName="my-masonry-grid_column"
         >
           {artList.map((art, idx) => {
-            const { id, title, image, artist, info } = art;
+            const { _id, title, image, artist, info } = art;
             const { name } = artist;
             const { size } = info;
-            console.log(art);
+            console.log(_id);
             return (
-              <ArtWrap key={id} className="my-masonry-grid_column">
-                <img src={image} alt={`최신작 ${idx}`} />
-                <ArtInfoBox>
-                  <h4>{title}</h4>
-                  <p>
-                    {name}
-                    <br />
-                    {size}
-                  </p>
-                  <AiOutlineHeart />
-                </ArtInfoBox>
+              <ArtWrap key={_id} className="my-masonry-grid_column">
+                <Link to={`/artdetail/${_id}`} state={{ id: _id }}>
+                  <img src={image} alt={`최신작 ${idx}`} />
+                  <ArtInfoBox>
+                    <h4>{title}</h4>
+                    <p>
+                      {name}
+                      <br />
+                      {size}
+                    </p>
+                    <AiOutlineHeart />
+                  </ArtInfoBox>
+                </Link>
               </ArtWrap>
             );
           })}

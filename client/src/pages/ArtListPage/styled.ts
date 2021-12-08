@@ -1,15 +1,19 @@
 import styled from 'styled-components';
 
 export const ArtListContainer = styled.div`
-  padding-top: 6vh;
+  padding: 6vh 0 0;
+
+  @media screen and (min-width: 768px) {
+    padding: 6vh 1rem 0;
+  }
 `;
 
 export const ArtListWrap = styled.div`
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
-  margin-bottom: 1.5rem;
   padding: 0 1rem;
+  margin-bottom: 1.5rem;
 
   /* font-size: 1.3rem; */
   .my-masonry-grid {
@@ -18,6 +22,10 @@ export const ArtListWrap = styled.div`
     display: flex;
     width: auto;
     margin-left: -1rem; /* gutter size offset */
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 0;
   }
 `;
 
