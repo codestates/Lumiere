@@ -7,10 +7,11 @@ import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import FilteringTab from 'components/FilteringTab/FilteringTab';
+import { Product } from '../../util/type';
 import { ArtListContainer, ArtListWrap, ArtWrap, ArtInfoBox } from './styled';
 
 const ArtList = () => {
-  const [artList, setArtList] = useState([]);
+  const [artList, setArtList] = useState<Array<Product>>([]);
   const breakpointColumnsObj = {
     default: 4,
     1100: 3,
@@ -20,10 +21,10 @@ const ArtList = () => {
   useEffect(() => {
     // axios 요청
     instance
-      .get('/products')
+      .get<Product>('/products')
       .then((res) => {
         console.log(res.data);
-        setArtList(res.data);
+        setArtList([res.data].flat());
       })
       .catch((err) => {
         console.log(err);
