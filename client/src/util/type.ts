@@ -69,7 +69,7 @@ export interface ProductDetail {
   ];
 }
 
-export interface ArtistDetail {
+export interface ArtistDetailType {
   artistDetail: {
     _id: string;
     likes: [string];

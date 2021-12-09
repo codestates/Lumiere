@@ -18,7 +18,6 @@ const ArtistList = () => {
   const [artistList, setArtistList] = useState<Array<Artists>>([]);
 
   useEffect(() => {
-    // axios 요청
     instance
       .get<Artists>('/artists')
       .then((res) => {
