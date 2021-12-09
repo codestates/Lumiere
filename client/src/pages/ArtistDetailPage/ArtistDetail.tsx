@@ -10,8 +10,8 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import { ArtistDetailType } from '../../util/type';
 import {
-  ArtistListContainer,
-  ArtistListWrap,
+  ArtistDeatilContainer,
+  ArtListWrap,
   ArtistWrap,
   ArtistRecordWrap,
   HeadWrap,
@@ -55,12 +55,6 @@ const ArtistDetail = () => {
         .filter((el) => el.inStock)
         .concat(artistInfo[0].products.filter((el) => !el.inStock)),
     );
-
-    setIsLiked(
-      !!artistInfo[0].artistDetail.likes.find(
-        (el) => el === '61a438f08f72e06afed3a3192',
-      ),
-    );
   };
 
   const openLoginModalHandler = () => {
@@ -80,7 +74,7 @@ const ArtistDetail = () => {
       .then(() => setIsLiked(!isLiked));
   };
   return (
-    <ArtistListContainer>
+    <ArtistDeatilContainer>
       {console.log(artistInfo)}
       <Header />
       <HeadWrap>
@@ -96,7 +90,7 @@ const ArtistDetail = () => {
           <div className="buttonswrap">
             <FiShare2 />
             {isLiked ? (
-              <AiFillHeart onClick={likedHandler} className="likeit"/>
+              <AiFillHeart onClick={likedHandler} className="likeit" />
             ) : (
               <AiOutlineHeart onClick={likedHandler} />
             )}
@@ -124,7 +118,7 @@ const ArtistDetail = () => {
       <NumberOfWorksWrap>
         {artistInfo[0] && artistInfo[0].products.length}개의 작품
       </NumberOfWorksWrap>
-      <ArtistListWrap>
+      <ArtListWrap>
         {artistInfo[0] &&
           (isClickCheckbox ? productFilter : artistInfo[0].products).map(
             (art, idx) => {
@@ -144,14 +138,14 @@ const ArtistDetail = () => {
               );
             },
           )}
-      </ArtistListWrap>
+      </ArtListWrap>
       <QuickBtns />
       <Footer />
       {/* Modal */}
       {isOpenLoginModal && (
         <LoginGuideModal clickModalHandler={openLoginModalHandler} />
       )}
-    </ArtistListContainer>
+    </ArtistDeatilContainer>
   );
 };
 export default ArtistDetail;

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-export const ArtistListContainer = styled.div`
+export const ArtistDeatilContainer = styled.div`
   padding: 6vh 1rem;
   @media screen and (min-width: 768px) {
     padding: 6vh 1rem 6vh 1rem;
   }
 `;
 
-export const ArtistListWrap = styled.div`
+export const ArtListWrap = styled.div`
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
