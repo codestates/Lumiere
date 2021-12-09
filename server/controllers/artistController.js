@@ -1,7 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
+import User from '../models/user.js';
 import Artist from '../models/artist.js';
 import Product from '../models/product.js';
+import isAuthorized from '../utils/isAuthorized.js';
 
 // @desc   Create a Artist
 // @route  POST /api/artists/
@@ -10,7 +12,7 @@ const createArtist = asyncHandler(async (req, res) => {
   // 작가 등록 시, 작품 하나 필수 등록
 
   const {
-    artist: { code, name, aka, record },
+    artist: { code, name, aka, record, thumbnail },
     product: {
       artCode,
       title,
@@ -26,6 +28,7 @@ const createArtist = asyncHandler(async (req, res) => {
     name &&
     aka &&
     record &&
+    thumbnail &&
     artCode &&
     title &&
     image &&
@@ -37,11 +40,8 @@ const createArtist = asyncHandler(async (req, res) => {
     createdAt
   ) {
     const newArtist = await Artist.create(req.body.artist);
+    await Product.create({ ...req.body.product, artist: newArtist._id });
 
-    await Product.create({
-      ...req.body.product,
-      artist: newArtist._id,
-    });
     res.status(201).json({
       code: newArtist.code,
       name: newArtist.name,
@@ -60,8 +60,39 @@ const createArtist = asyncHandler(async (req, res) => {
 // @route  GET /api/artists/
 // @access Public
 const getArtists = asyncHandler(async (req, res) => {
-  const artists = await (await Artist.find({}, { likes: 0 })).sort({ _id: -1 });
-  res.json(artists);
+  // 관리자 권한일 때와 분기 나눠 주기
+
+  const page = Number(req.query.pageNumber) || 1;
+  const pageSize = 9;
+  let count;
+  let artists;
+
+  const decodedData = isAuthorized(req);
+  if (decodedData) {
+    req.user = await User.findById(decodedData.id).select('-general.password');
+    if (req.user.isAdmin === true) {
+      count = await Artist.countDocuments({});
+      artists = await Artist.find({}, { likes: 0 })
+        .sort({ _id: -1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+        .exec();
+
+      res.json({ artists, page, pages: Math.ceil(count / pageSize) });
+      return;
+    } // 관리자
+  }
+  count = await Artist.countDocuments({ isActive: true });
+  artists = await Artist.find(
+    { isActive: true },
+    { name: 1, aka: 1, thumbnail: 1, countOfWorks: 1 },
+  )
+    .sort({ _id: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .exec();
+
+  res.json({ artists, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Update a Artist
@@ -100,9 +131,7 @@ const inActivateArtist = asyncHandler(async (req, res) => {
   const updatedArtist = await Artist.findByIdAndUpdate(
     artistId,
     { isActive },
-    {
-      new: true,
-    },
+    { new: true },
   );
 
   if (updatedArtist.isActive === true) {
@@ -117,7 +146,6 @@ const inActivateArtist = asyncHandler(async (req, res) => {
 // @access Public & private
 const getArtistById = asyncHandler(async (req, res) => {
   const artistDetail = await Artist.findById(req.params.id, {
-    code: 1,
     name: 1,
     aka: 1,
     record: 1,
@@ -147,14 +175,13 @@ const zzimArtist = asyncHandler(async (req, res) => {
     return;
   }
   if (zzim === true) {
-    await Artist.findByIdAndUpdate(
+    await Artist.updateOne(
       artistId,
       {
         $addToSet: { likes: req.user._id },
       },
-      { new: true, upsert: true },
+      { upsert: true },
     ); // likes 배열에 유저 고유 아이디 넣기
-
     res.json({ message: '해당 작가 찜 완료' });
     return;
   }
@@ -166,7 +193,6 @@ const zzimArtist = asyncHandler(async (req, res) => {
       },
       { multi: true },
     ); // likes 배열에 유저 고유 아이디 제거
-
     res.json({ message: '해당 작가 찜 해제' });
   }
 });

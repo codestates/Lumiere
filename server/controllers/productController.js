@@ -1,8 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
+import User from '../models/user.js';
 import Product from '../models/product.js';
 import Artist from '../models/artist.js';
+import isAuthorized from '../utils/isAuthorized.js';
 
 const { ObjectId } = mongoose.Types;
 
@@ -34,6 +36,7 @@ const createProduct = asyncHandler(async (req, res) => {
   ) {
     await Artist.updateOne({ _id: artist }, { $inc: { countOfWorks: 1 } });
     const product = await Product.create(req.body);
+
     res.status(201).json(product);
   } else {
     res.status(400).json({ message: '상품 정보를 모두 입력해주세요' });
@@ -44,13 +47,51 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route  GET /api/products/
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
-  // 관리자 페이지에 필요한 데이터까지 추가
-  const products = await Product.find({})
-    .populate('artist', ['name', 'aka', 'code', 'record'])
+  // 관리자 권한일 때와 분기 나눠 주기
+
+  const page = Number(req.query.pageNumber) || 1;
+
+  let pageSize;
+  let count;
+  let products;
+
+  const decodedData = isAuthorized(req);
+  if (decodedData) {
+    req.user = await User.findById(decodedData.id).select('-general.password');
+    if (req.user.isAdmin === true) {
+      pageSize = 10;
+      count = await Product.countDocuments({});
+      products = await Product.find({})
+        .populate('artist', ['name', 'aka', 'code', 'record'])
+        .sort({ _id: -1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+        .exec();
+
+      res.json({ products, page, pages: Math.ceil(count / pageSize) });
+      return;
+    } // 관리자
+  }
+
+  pageSize = 28;
+  count = await Product.countDocuments({ inStock: true });
+  products = await Product.find(
+    { inStock: true },
+    {
+      artCode: 0,
+      'info.details': 0,
+      'info.createdAt': 0,
+      theme: 0,
+      inStock: 0,
+    },
+  )
+    .populate('artist', ['name'])
     .sort({ _id: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
     .exec();
 
-  res.json(products);
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc   Fetch filtered products
@@ -58,60 +99,47 @@ const getProducts = asyncHandler(async (req, res) => {
 // @access Public
 const getProductsByFilter = asyncHandler(async (req, res) => {
   // 품절 제외
-  let products;
   const { theme, sizeMin, sizeMax, priceMin, priceMax } = req.query;
+  let filter;
+  let filtered;
 
   if (theme) {
-    products = await Product.find(
-      { theme, inStock: true },
-      {
-        artCode: 0,
-        'info.details': 0,
-        'info.createdAt': 0,
-      },
-    )
-      .populate('artist', ['name'])
-      .sort({ _id: -1 });
+    filter = { theme };
+    filtered = '테마';
+  } else if (sizeMin && sizeMax) {
+    filter = { 'info.canvas': { $gte: sizeMin, $lte: sizeMax } };
+    filtered = '사이즈';
+  } else if (priceMin && priceMax) {
+    filter = { price: { $gte: priceMin, $lte: priceMax } };
+    filtered = '가격';
+  } else if (priceMin) {
+    filter = { price: { $gte: priceMin } };
+    filtered = '가격';
+  } else {
+    res.status(400).json({ message: '필터할 정보가 명확하지 않습니다' });
+    return;
   }
-  if (sizeMin && sizeMax) {
-    products = await Product.find(
-      {
-        'info.canvas': {
-          $gte: sizeMin,
-          $lte: sizeMax,
-        },
-        inStock: true,
-      },
-      {
-        artCode: 0,
-        theme: 0,
-        'info.details': 0,
-        'info.createdAt': 0,
-      },
-    )
-      .populate('artist', ['name'])
-      .sort({ _id: -1 });
-  }
-  if (priceMin && priceMax) {
-    products = await Product.find(
-      {
-        price: {
-          $gte: priceMin,
-          $lte: priceMax,
-        },
-        inStock: true,
-      },
-      {
-        artCode: 0,
-        theme: 0,
-        'info.details': 0,
-        'info.createdAt': 0,
-      },
-    )
-      .populate('artist', ['name'])
-      .sort({ _id: -1 });
-  }
-  res.json(products);
+
+  const pageSize = 28;
+  const page = Number(req.query.pageNumber) || 1;
+
+  const projection = {
+    artCode: 0,
+    theme: 0,
+    'info.details': 0,
+    'info.createdAt': 0,
+    inStock: 0,
+  };
+
+  const count = await Product.countDocuments({ ...filter, inStock: true });
+  const products = await Product.find({ ...filter, inStock: true }, projection)
+    .populate('artist', ['name'])
+    .sort({ _id: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .exec();
+
+  res.json({ products, filtered, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Update a product
@@ -134,6 +162,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 const deleteProduct = asyncHandler(async (req, res) => {
   // 재고 있을 시 상품 삭제 가능
   const { productId } = req.query;
+
   const product = await Product.findOneAndDelete({
     _id: productId,
     inStock: true,
@@ -192,9 +221,7 @@ const getLatestProducts = asyncHandler(async (req, res) => {
     .sort({ _id: -1 });
 
   if (products) res.json(products);
-  else {
-    res.status(404).json({ message: '상품이 존재하지 않습니다' });
-  }
+  else res.status(404).json({ message: '상품이 존재하지 않습니다' });
 });
 
 // @desc   Check stock of cartItems
@@ -226,9 +253,8 @@ const getTotalPrice = asyncHandler(async (req, res) => {
   // 결제로 넘어갈 시 총 상품 금액
   let { productId } = req.query;
 
-  if (!Array.isArray(productId)) {
-    productId = [new ObjectId(productId)];
-  } else productId = productId.map((id) => new ObjectId(id));
+  if (!Array.isArray(productId)) productId = [new ObjectId(productId)];
+  else productId = productId.map((id) => new ObjectId(id));
 
   const totalPrice = await Product.aggregate([
     {
@@ -250,20 +276,20 @@ const getTotalPrice = asyncHandler(async (req, res) => {
 const zzimProduct = asyncHandler(async (req, res) => {
   // 찜 해체 시에는 id가 배열로 올 수 있다. (선택삭제)
   const { productId, zzim } = req.body;
+
   if (zzim === undefined) {
     res.status(404).json({ message: 'true? or false?' });
     return;
   }
 
   if (zzim === true) {
-    await Product.findByIdAndUpdate(
+    await Product.updateOne(
       productId,
       {
         $addToSet: { likes: req.user._id },
       },
-      { new: true, upsert: true },
+      { upsert: true },
     ); // likes 배열에 유저 고유 아이디 넣기
-
     res.json({ message: '해당 상품 찜 완료' });
     return;
   }
