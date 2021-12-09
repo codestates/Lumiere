@@ -69,6 +69,24 @@ export interface ProductDetail {
   ];
 }
 
+export interface ArtistDetail {
+  artistDetail: {
+    _id: string;
+    likes: [string];
+    code: string;
+    name: string;
+    aka: string;
+    record: string;
+  };
+  products: [
+    {
+      image: string;
+      inStock: boolean;
+      _id: string;
+    },
+  ];
+}
+
 export interface Artists {
   code: string;
   name: string;
