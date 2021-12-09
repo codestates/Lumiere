@@ -37,6 +37,9 @@ const AdminHeader = () => {
       })
       .catch((err) => {
         console.log(err);
+        localStorage.removeItem('lumiereUserInfo');
+        setIsLogin(false);
+        history('/');
       });
   };
 
