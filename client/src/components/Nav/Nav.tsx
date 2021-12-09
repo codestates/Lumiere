@@ -40,6 +40,9 @@ const Nav = () => {
           {isLogin && <Link to="/cart">장바구니</Link>}
           <Link to="/">1 : 1 문의하기</Link>
           <Link to="/">작가 신청</Link>
+          {isLogin && userInfo && JSON.parse(userInfo).isAdmin ? (
+            <Link to="/admin/product">어드민페이지</Link>
+          ) : null}
         </li>
       </ul>
       {isLogin ? (

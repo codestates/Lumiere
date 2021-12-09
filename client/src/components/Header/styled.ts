@@ -75,26 +75,63 @@ export const MainMenu = styled.nav`
     flex: 4;
     display: block;
 
-    ul {
+    > ul {
       display: flex;
       align-items: center;
       height: 100%;
       margin-left: 2rem;
-      li {
+      > li {
         margin: 0 0.2rem;
       }
-      li a {
+      > li a {
         padding: 0.2rem 0.4rem;
         font-weight: 700;
         color: #888888;
         border-bottom: 2px solid #ffffff;
         transition: all 0.5s;
       }
-      li a:hover {
+      > li a:hover {
         color: var(--color-black);
         border-bottom: 2px solid #eeeeee;
       }
     }
+  }
+`;
+
+export const AdminMenu = styled.li`
+  position: relative;
+  > ul {
+    display: none;
+  }
+  &:hover {
+    > ul {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding-top: 2.3rem;
+
+      > li {
+        display: flex;
+        width: 8rem;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+      > li a {
+        width: 100%;
+        padding: 0.4rem 0;
+        font-size: 0.9rem;
+        text-align: center;
+        border-bottom: 1px solid #eeeeee;
+      }
+      > li a:hover {
+        color: #ffffff;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+  > a {
+    padding-bottom: 3rem;
   }
 `;
 
