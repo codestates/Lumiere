@@ -34,7 +34,7 @@ export const CartTitleWrap = styled.div`
 export const CartTitle = styled.h1`
   @media screen and (min-width: 768px) {
     display: block;
-    font-size: 1.9rem;
+    font-size: 1.8rem;
     font-weight: 700;
     margin: 0 auto;
   }

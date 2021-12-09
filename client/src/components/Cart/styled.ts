@@ -56,7 +56,7 @@ export const AllSelectBtnWrap = styled.div`
 
   @media screen and (min-width: 768px) {
     button {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
     }
   }
 `;
@@ -125,7 +125,7 @@ export const CartPayCountWrap = styled.dl`
     flex-direction: column;
     justify-content: center;
     height: 15vh;
-    padding: 0.2rem 2.2rem;
+    padding: 0.2rem 1rem;
 
     & dt {
       margin-bottom: 0;
@@ -137,7 +137,7 @@ export const CartPayCountWrap = styled.dl`
 
     & div:nth-child(1) dt,
     & div:nth-child(1) dd {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 800;
     }
 
@@ -148,7 +148,7 @@ export const CartPayCountWrap = styled.dl`
     & div:nth-child(3) dt,
     & div:nth-child(3) dd {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 0.9rem;
     }
 
     & div:nth-child(3) {
@@ -157,7 +157,7 @@ export const CartPayCountWrap = styled.dl`
 
     & div:nth-child(5) dt,
     & div:nth-child(5) dd {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 800;
     }
 
@@ -179,13 +179,13 @@ export const CartPayDescriptionWrap = styled.div`
 
 export const CartPayClickBtn = styled.button`
   border: none;
+  font-size: 1.3rem;
+  font-weight: 700;
   background: none;
+  height: 6vh;
   background-color: var(--color-black);
   color: #ffffff;
-  font-size: 1.3rem;
-  height: 6vh;
   transition: all 0.5s;
-  font-weight: 700;
 
   &:hover {
     cursor: pointer;
@@ -199,7 +199,7 @@ export const CartPayClickBtn = styled.button`
 
   @media screen and (min-width: 768px) {
     font-size: 1.4rem;
-    height: 4vh;
+    height: 5vh;
     margin: 1rem;
   }
 `;
