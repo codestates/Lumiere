@@ -9,6 +9,7 @@ import Product from '../models/product.js';
 const createOrder = asyncHandler(async (req, res) => {
   // 결제 후 주문 생성 단계
   const { orderItems } = req.body;
+
   if (orderItems && !orderItems.length) {
     res.status(400).json({ message: '주문하실 상품을 추가해주세요' });
     return;
@@ -53,9 +54,7 @@ const getLatestOrder = asyncHandler(async (req, res) => {
       ordererInfo: 1,
     },
   )
-    .sort({
-      $natural: -1,
-    })
+    .sort({ $natural: -1 })
     .limit(1);
 
   if (order) {
@@ -97,6 +96,7 @@ const cancelOrder = asyncHandler(async (req, res) => {
     return;
   }
   const updatedAt = () => Date.now() + 9 * 60 * 60 * 1000;
+
   await Order.updateOne(
     { _id: orderId },
     { 'result.status': status, 'result.updatedAt': updatedAt() },
@@ -128,6 +128,7 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   }
 
   const updatedAt = () => Date.now() + 9 * 60 * 60 * 1000;
+
   await Order.updateOne(
     { _id: req.params.id },
     { 'result.status': status, 'result.updatedAt': updatedAt() },
@@ -157,8 +158,8 @@ const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find(
     {},
     {
-      ordererInfo: 0,
       deliver: 0,
+      ordererInfo: 0,
       shippingPrice: 0,
     },
   ).populate('user', [
