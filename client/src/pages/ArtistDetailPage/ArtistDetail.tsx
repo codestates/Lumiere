@@ -28,13 +28,14 @@ const ArtistDetail = () => {
   const [isClickCheckbox, setIsClickCheckbox] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
-  const location = useLocation();
 
   useEffect(() => {
     // axios 요청
     const userInfo = localStorage.getItem('lumiereUserInfo');
     instance
-      .get<ArtistDetailType>(`/artists/${location.state.id}`)
+      .get<ArtistDetailType>(
+        `/artists/${window.location.href.split('artistdetail/')[1]}`,
+      )
       .then((res) => {
         setArtistInfo([res.data].flat());
         setIsLiked(

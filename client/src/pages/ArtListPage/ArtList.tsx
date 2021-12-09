@@ -48,7 +48,7 @@ const ArtList = () => {
             console.log(_id);
             return (
               <ArtWrap key={_id} className="my-masonry-grid_column">
-                <Link to={`/artdetail/${_id}`} state={{ id: _id }}>
+                <Link to={`/artdetail/${_id}`}>
                   <img src={image} alt={`최신작 ${idx}`} />
                   <ArtInfoBox>
                     <h4>{title}</h4>

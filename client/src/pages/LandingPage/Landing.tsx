@@ -1,7 +1,8 @@
+/* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
-// import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Masonry from 'react-masonry-css';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import Header from 'components/Header/Header';
@@ -62,12 +63,18 @@ const Landing = () => {
             {/* array of JSX items */}
 
             {latestArtList.map((art, idx) => {
-              const { id, image } = art;
+              const { _id, image } = art;
+              console.log(art);
               return (
-                <div key={id} className="my-masonry-grid_column">
-                  {/* <div> */}
+                <div
+                  role="button"
+                  tabIndex={0}
+                  key={uuidv4()}
+                  className="my-masonry-grid_column"
+                  onClick={() => window.location.replace(`/artdetail/${_id}`)}
+                  onKeyDown={() => window.location.replace(`/artdetail/${_id}`)}
+                >
                   <img src={image} alt={`최신작 ${idx}`} />
-                  {/* </div> */}
                 </div>
               );
             })}
@@ -99,7 +106,7 @@ const Landing = () => {
           </ServiceList>
         </ServiceSection>
         <StartBtnBox>
-          <Link to="/artlist">작가 구경하기</Link>
+          <Link to="/artists">작가 구경하기</Link>
         </StartBtnBox>
       </LandingWrap>
       <QuickBtns />
