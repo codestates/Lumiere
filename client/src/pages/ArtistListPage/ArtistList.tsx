@@ -39,7 +39,7 @@ const ArtistList = () => {
           // const { name } = artist;
           return (
             <ArtistWrap key={_id} className="artistWrapBorder">
-              <Link to={`/artistdetail/${_id}`} state={{ id: _id }}>
+              <Link to={`/artistdetail/${_id}`}>
                 <div className="imageDiv">
                   <img src={thumbnail} alt={`최신작 ${idx}`} />
                 </div>
