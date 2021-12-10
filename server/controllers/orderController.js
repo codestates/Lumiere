@@ -167,6 +167,7 @@ const getOrders = asyncHandler(async (req, res) => {
     'google.email',
     'naver.email',
     'kakao.email',
+    'name',
   ]);
   res.json(orders);
 });
