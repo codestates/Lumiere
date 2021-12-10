@@ -1,7 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import { useEffect, useState } from 'react';
-import adminInstance from 'util/axios';
-import { Artists, ArtistsProduct, Product } from 'util/type';
+import instance from 'util/axios';
+import { Artists, ArtistsProduct } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { ModalBackDrop } from 'components/Modal/styled';
 import AdminEnrollArtist from 'components/Modal/AdminEnrollArtist';
@@ -48,7 +48,7 @@ const AdminArtist = () => {
     _id: '',
   });
   useEffect(() => {
-    adminInstance
+    instance
       .get<Artists>('/artists')
       .then((res) => setArtistList([res.data].flat()));
   }, []);
@@ -76,7 +76,7 @@ const AdminArtist = () => {
   };
 
   const discontinuanceHandler = (el: Artists) => {
-    adminInstance
+    instance
       .patch('/artists', { artistId: el._id, isActive: !el.isActive })
       .then(() => {
         alert(el.isActive ? '비활성화 완료' : '활성화 완료');

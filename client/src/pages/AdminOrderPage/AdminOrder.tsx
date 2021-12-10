@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { useEffect, useState } from 'react';
-import adminInstance from 'util/axios';
+import instance from 'util/axios';
 import { Order } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma, convertDeliverStatus } from 'util/functions';
@@ -52,14 +52,13 @@ const AdminOrderList = () => {
     pages: 0,
   });
   useEffect(() => {
-    adminInstance.get<Order>('/orders/').then((res) => {
-      console.log(res.data);
+    instance.get<Order>('/orders/').then((res) => {
       setOrderList(res.data);
     });
   }, []);
 
   const cancleOrder = (id: string) => {
-    adminInstance
+    instance
       .patch('/orders', { status: 5, orderId: id })
       .then(() => {
         alert('취소가 완료되었습니다.');
@@ -69,7 +68,7 @@ const AdminOrderList = () => {
   };
 
   const returnOrder = (id: string) => {
-    adminInstance
+    instance
       .patch('/orders', { status: 5, orderId: id })
       .then(() => {
         alert('반품이 완료되었습니다.');
@@ -81,7 +80,7 @@ const AdminOrderList = () => {
   const changeOrderStatus = (id: string, status: string) => {
     switch (status) {
       case '준비중':
-        return adminInstance
+        return instance
           .patch(`/orders/${id}`, { status: 1 })
           .then((res) => {
             alert('배송상태가 준비중으로 변경되었습니다.');
@@ -89,7 +88,7 @@ const AdminOrderList = () => {
           })
           .catch((err) => alert('변경실패, 담당자에게 문의해주세요'));
       case '배송중':
-        return adminInstance
+        return instance
           .patch(`/orders/${id}`, { status: 2 })
           .then((res) => {
             alert('배송상태가 준비중으로 변경되었습니다.');
@@ -97,7 +96,7 @@ const AdminOrderList = () => {
           })
           .catch((err) => alert('변경실패, 담당자에게 문의해주세요'));
       case '완료':
-        return adminInstance
+        return instance
           .patch(`/orders/${id}`, { status: 3 })
           .then((res) => {
             alert('배송상태가 준비중으로 변경되었습니다.');
@@ -109,12 +108,9 @@ const AdminOrderList = () => {
     }
   };
 
-  // console.log(orderList.map((el) => el));
-  console.log(orderList);
   return (
     <AdminHeaderWrap>
       <AdminHeader />
-      {/* <Link to="/"></Link> */}
       <h1>결제/배송 관리</h1>
       <TableWrap>
         <Table>

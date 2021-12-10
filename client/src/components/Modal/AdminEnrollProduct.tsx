@@ -34,7 +34,7 @@ const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
       createdAt: '',
     },
     price: 0,
-    count: 0,
+    view: 0,
     inStock: true,
     updatedAt: new Date(),
   });
