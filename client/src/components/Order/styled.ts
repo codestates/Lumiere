@@ -313,9 +313,13 @@ export const ImgWrap = styled.div`
   background-color: #ebebeb;
   width: 7rem;
   height: 9rem;
+  padding: 0 0.5rem;
 
   img {
     background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 

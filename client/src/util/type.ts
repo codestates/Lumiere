@@ -184,25 +184,47 @@ export interface ArtistsProduct {
   price: number;
 }
 
-// Order Page
+// Order Page 배송지
 export interface OrderDeliver {
-  deliver: {
-    address: string;
-    receiver: string;
-    request: string;
-  };
+  address: string;
+  detailedAddress: string;
+  receiver: string;
+  contactNum: string;
 }
-// Order Page
+
+// Order Page 주문자 정보
 export interface OrdererUserInfo {
-  ordererInfo: {
-    name: string;
-    phoneNum: string;
-    email: string;
-    refundTerms: string;
-  };
+  name: string;
+  phoneNum: string;
+  email: string;
+  refundTerms: string;
 }
-// Order Page
+
+// Order page 배송 요청사항
+export interface OrderDelierDetail {
+  receiveAt: string;
+  requestedTerms: string;
+}
+
+// Order Page 결제 예정 금액
 export interface OrderPrice {
   shippingPrice: number;
   totalPrice: number;
+}
+
+// Order Page 주문작품
+export interface OrderProducts {
+  artist: {
+    _id: string;
+    name: string;
+  };
+  info: {
+    size: string;
+    canvas: number;
+  };
+  image: string;
+  inStock: boolean;
+  price: number;
+  title: string;
+  _id: string;
 }

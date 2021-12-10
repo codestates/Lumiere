@@ -1,3 +1,4 @@
+import { useComma } from 'util/functions';
 import {
   OrderContentContainer,
   ContentWrap,
@@ -8,7 +9,14 @@ import {
   ClickBtnSpan,
 } from './styled';
 
-export const OrderPay = () => {
+type PriceProps = {
+  priceState: {
+    shippingPrice: number;
+    totalPrice: number;
+  };
+};
+
+export const OrderPay = ({ priceState }: PriceProps) => {
   return (
     <OrderContentContainer>
       <ContentWrap>
@@ -16,15 +24,15 @@ export const OrderPay = () => {
         <CountWrap>
           <DescriptionWrap>
             <dt>주문금액</dt>
-            <dd>80,000원</dd>
+            <dd>{`${useComma(priceState.shippingPrice)} 원`}</dd>
           </DescriptionWrap>
           <DescriptionWrap>
             <dt>배송비</dt>
-            <dd>10,000원</dd>
+            <dd>10,000 원</dd>
           </DescriptionWrap>
           <DescriptionWrap>
             <dt>총 결제 예정금액</dt>
-            <dd>90,000원</dd>
+            <dd>{`${useComma(priceState.totalPrice)} 원`}</dd>
           </DescriptionWrap>
         </CountWrap>
         <ClickBtn type="button">

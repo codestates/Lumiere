@@ -5,23 +5,20 @@ import { ModalBackdrop, AddWrap } from './styled';
 
 type Props = {
   clickModalHandler: () => void;
-  setDeliverInfo: (data: OrderDeliver) => void;
-  deliverInfo: {
-    deliver: {
-      address: string;
-      receiver: string;
-      request: string;
-    };
+  shippingState: {
+    address: string;
+    detailedAddress: string;
+    receiver: string;
+    contactNum: string;
   };
+  setShippingState: (data: OrderDeliver) => void;
 };
 
 const AddressModal = ({
   clickModalHandler,
-  setDeliverInfo,
-  deliverInfo,
+  shippingState,
+  setShippingState,
 }: Props) => {
-  const postCodeStyle: object = {};
-
   const onCompletePost = (data: any) => {
     let fullAddr = data.address;
     let zonecode = data.zonecode;
@@ -39,14 +36,7 @@ const AddressModal = ({
       fullAddr += extraAddr !== '' ? ` (${extraAddr})` : '';
     }
     result = `[${zonecode}] ${fullAddr}`;
-    setDeliverInfo({
-      deliver: {
-        address: result,
-        receiver: deliverInfo.deliver.receiver,
-        request: deliverInfo.deliver.request,
-      },
-    });
-
+    setShippingState({ ...shippingState, address: result });
     clickModalHandler();
   };
 

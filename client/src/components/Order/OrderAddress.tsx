@@ -10,25 +10,40 @@ import {
   OrderUserInfo,
 } from './styled';
 
-type orderDeliverProps = {
-  deliverInfo: {
-    deliver: {
-      address: string;
-      receiver: string;
-      request: string;
-    };
+type OrderAddressProps = {
+  shippingState: {
+    address: string;
+    detailedAddress: string;
+    receiver: string;
+    contactNum: string;
   };
-  setDeliverInfo: (data: OrderDeliver) => void;
+  setShippingState: (data: OrderDeliver) => void;
 };
 
 export const OrderAddress = ({
-  deliverInfo,
-  setDeliverInfo,
-}: orderDeliverProps) => {
+  shippingState,
+  setShippingState,
+}: OrderAddressProps) => {
   // 주소 모달 on / off
   const [isAddModal, setIsAddModal] = useState(false);
   const clickModalHandler = () => {
     setIsAddModal(!isAddModal);
+  };
+
+  // 배송지 변경 핸들러
+  const shippingChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id } = e.target;
+    if (id === 'shipping-detail-address') {
+      setShippingState({ ...shippingState, detailedAddress: e.target.value });
+    }
+
+    if (id === 'shipping-user') {
+      setShippingState({ ...shippingState, receiver: e.target.value });
+    }
+
+    if (id === 'shipping-user-phone') {
+      setShippingState({ ...shippingState, contactNum: e.target.value });
+    }
   };
 
   return (
@@ -36,8 +51,8 @@ export const OrderAddress = ({
       {isAddModal && (
         <AddressModal
           clickModalHandler={clickModalHandler}
-          setDeliverInfo={setDeliverInfo}
-          deliverInfo={deliverInfo}
+          shippingState={shippingState}
+          setShippingState={setShippingState}
         />
       )}
       <Title>배송지</Title>
@@ -45,29 +60,45 @@ export const OrderAddress = ({
         주소찾기
       </FindAddressBtn>
       <AllContentWrap>
-        <AddressContent>
-          {deliverInfo.deliver.address ? (
-            deliverInfo.deliver.address
+        <AddressContent onClick={clickModalHandler}>
+          {shippingState.address ? (
+            shippingState.address
           ) : (
             <span>주소를 입력해주세요</span>
-          )}
+          )}{' '}
         </AddressContent>
         <OrderUserInfo>
-          <label htmlFor="order-user">
+          <label htmlFor="shipping-detail-address">
             <input
               type="text"
-              id="oder-user"
+              id="shipping-detail-address"
               placeholder="상세 주소를 입력해주세요"
+              value={shippingState.detailedAddress}
+              onChange={shippingChangeHandler}
             />
           </label>
         </OrderUserInfo>
         <br />
         <OrderUserInfo>
-          <label htmlFor="order-user">
+          <label htmlFor="shipping-user">
             <input
               type="text"
-              id="oder-user"
-              placeholder="주문자 정보를 입력해주세요"
+              id="shipping-user"
+              placeholder="주문자를 입력해주세요"
+              value={shippingState.receiver}
+              onChange={shippingChangeHandler}
+            />
+          </label>
+        </OrderUserInfo>
+        <br />
+        <OrderUserInfo>
+          <label htmlFor="shipping-user-phone">
+            <input
+              type="text"
+              id="shipping-user-phone"
+              placeholder="연락처를 적어주세요"
+              value={shippingState.contactNum}
+              onChange={shippingChangeHandler}
             />
           </label>
         </OrderUserInfo>
