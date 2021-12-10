@@ -39,11 +39,15 @@ const orderSchema = mongoose.Schema(
         default: () => Date.now() + 9 * 60 * 60 * 1000,
       }, // status 업데이트 일자
     },
-    deliver: {
-      // 배송 정보 (주소, 받는이 정보, 요청사항)
+    deliveryInfo: {
       address: { type: String, required: true },
-      receiver: { type: String, required: true }, // 김로또 / 010-7777-7777
-      request: { type: String, required: true }, // 문 앞에 놓아주세요 / 도착 시 문자주세요
+      detailedAddress: { type: String, required: true }, // 상세 주소
+      receiver: { type: String, required: true }, // 김로또
+      contactNum: { type: String, required: true }, // 010-7777-7777
+    },
+    deliveryDetails: {
+      receiveAt: { type: String, required: true }, // 수령위치
+      requestedTerms: { type: String, required: true }, // 요청사항
     },
     ordererInfo: {
       // 주문자 정보

@@ -63,7 +63,7 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    count: {
+    views: {
       // 조회수
       type: Number,
       required: true,

@@ -1,23 +1,24 @@
 /* eslint-disable func-names */
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
-import validator from 'validator';
 
 const userSchema = mongoose.Schema(
   {
     general: {
       email: {
         type: String,
-        lowercase: true,
         unique: true,
-        validate: [validator.isEmail, '이메일 형식에 맞게 작성해주세요'],
+        match: [
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+          '이메일 형식에 맞지 않습니다',
+        ],
       },
       password: {
         type: String,
         minlength: [8, '비밀번호를 8자 이상 입력해주세요'],
         match: [
           /^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]{8,20}$/,
-          '비밀번호 형식에 맞지않습니다',
+          '비밀번호 형식에 맞지 않습니다',
         ],
       },
     },
