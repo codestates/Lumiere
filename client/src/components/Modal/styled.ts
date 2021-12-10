@@ -260,3 +260,16 @@ export const TitleWrap = styled.div`
   margin-bottom: 0.5rem;
   margin-top: 0.5rem;
 `;
+
+// AddressModal
+export const AddWrap = styled.div`
+  @media screen and (min-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 50vw;
+    padding: 1.4rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+  }
+`;
