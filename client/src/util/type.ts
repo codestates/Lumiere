@@ -99,41 +99,42 @@ export interface Artists {
   _id?: string;
 }
 
+// Admin Order
 export interface Order {
-  orderItems: [
+  orders: [
     {
-      image: string;
-      title: string;
-      artist: string;
-      size: string;
-      price: number;
+      orderItems: [
+        {
+          artist: string;
+          image: string;
+          price: number;
+          product: string;
+          size: string;
+          title: string;
+        },
+      ];
+      result: {
+        id: string;
+        paidAt: string;
+        status: number;
+        updatedAt: string;
+      };
+      totalPrice: number;
+      user: {
+        general: {
+          email: string;
+        };
+        kakao?: string;
+        naver?: string;
+        google?: string;
+        name: string;
+        _id: string;
+      };
+      _id: string;
     },
   ];
-  result: {
-    id: string;
-    paidAt: Date;
-    status: number;
-    updatedAt: Date;
-  };
-  deliver: {
-    address: string;
-    receiver: string;
-    request: string;
-  };
-  ordererInfo: {
-    name: string;
-    phoneNum: string;
-    email: string;
-    refundTerms: string;
-  };
-  shippingPrice: number;
-  totalPrice: number;
-  // deliveredAt: Date;
-  user: {
-    name: string;
-    _id: string;
-  };
-  _id: string;
+  page: number;
+  pages: number;
 }
 
 export interface Events {
