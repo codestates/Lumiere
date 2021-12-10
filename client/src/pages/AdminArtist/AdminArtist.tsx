@@ -1,7 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import { useEffect, useState } from 'react';
 import instance from 'util/axios';
-import { Artists, ArtistsProduct } from 'util/type';
+import { Artists, ArtistsProduct, AdminArtistsType } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { ModalBackDrop } from 'components/Modal/styled';
 import AdminEnrollArtist from 'components/Modal/AdminEnrollArtist';
@@ -11,7 +11,23 @@ import AdminEnrollProduct from 'components/Modal/AdminEnrollProduct';
 import { Table, TableWrap, EnrollmentButton, AdminHeaderWrap } from './styled';
 
 const AdminArtist = () => {
-  const [artistList, setArtistList] = useState<Array<Artists>>([]);
+  const [artistList, setArtistList] = useState<AdminArtistsType>({
+    artists: [
+      {
+        code: '',
+        name: '',
+        aka: '',
+        record: '',
+        thumbnail: '',
+        joinAt: new Date(),
+        countOfWorks: 0,
+        isActive: true,
+        _id: '',
+      },
+    ],
+    page: 0,
+    pages: 0,
+  });
   const [isEnrollArtist, setIsEnrollArtist] = useState<boolean>(false);
   const [isEnrollProduct, setIsEnrollProduct] = useState<boolean>(false);
   const [isEditArtist, setIsEditArtist] = useState<boolean>(false);
@@ -48,9 +64,10 @@ const AdminArtist = () => {
     _id: '',
   });
   useEffect(() => {
-    instance
-      .get<Artists>('/artists')
-      .then((res) => setArtistList([res.data].flat()));
+    instance.get<AdminArtistsType>('/artists').then((res) => {
+      console.log(res.data);
+      setArtistList(res.data);
+    });
   }, []);
 
   const isEnrollArtistHandler = () => {
@@ -91,7 +108,6 @@ const AdminArtist = () => {
   return (
     <AdminHeaderWrap>
       <AdminHeader />
-      {/* <Link to="/"></Link> */}
       <h1>작가 관리</h1>
       <EnrollmentButton type="button" onClick={isEnrollArtistHandler}>
         작가등록
@@ -111,7 +127,7 @@ const AdminArtist = () => {
               <td>관리</td>
             </tr>
           </tbody>
-          {artistList.map((el) => {
+          {artistList.artists.map((el) => {
             return (
               <tbody key={uuidv4()}>
                 <tr>
@@ -180,7 +196,7 @@ const AdminArtist = () => {
           <AdminEnrollArtist
             NO={isEnrollArtistHandler}
             el={clickArtist}
-            HowManyArtists={artistList.length + 1}
+            HowManyArtists={artistList.artists.length + 1}
           />
         </ModalBackDrop>
       )}
