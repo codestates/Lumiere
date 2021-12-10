@@ -9,9 +9,7 @@
     "server": "nodemon server/index",
     "client": "npm start --prefix client",
     "predev": "kill -9 $(lsof -i :5000 | grep -i -E -o '\\s[0-9]+\\s') || true",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "data:import": "node server/seeder",
-    "data:destroy": "node server/seeder -d"
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -32,8 +30,7 @@
     "express-async-handler": "^1.2.0",
     "google-auth-library": "^7.10.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.13",
-    "validator": "^13.7.0"
+    "mongoose": "^6.0.13"
   },
   "devDependencies": {
     "concurrently": "^6.4.0",
