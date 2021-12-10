@@ -1,7 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import { useEffect, useState } from 'react';
-import adminInstance from 'util/axios';
-import { Product } from 'util/type';
+import instance from 'util/axios';
+import { AdminProductsType, Product } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma } from 'util/functions';
 import AdminHeader from 'components/Header/AdminHeader';
@@ -11,7 +11,39 @@ import AdminEditProduct from 'components/Modal/AdminEditProduct';
 import { Table, TableWrap, AdminHeaderWrap } from './styled';
 
 const AdminProduct = () => {
-  const [productList, setProductList] = useState<Array<Product>>([]);
+  const [productList, setProductList] = useState<AdminProductsType>({
+    products: [
+      {
+        artist: {
+          code: '',
+          name: '',
+          aka: '',
+          record: '',
+          thumbnail: '',
+          joinAt: new Date(),
+          countOfWorks: 0,
+          isActive: false,
+        },
+        artCode: '',
+        title: '',
+        image: '',
+        theme: '',
+        info: {
+          details: '',
+          size: '',
+          canvas: 0,
+          createdAt: '',
+        },
+        price: 0,
+        view: 0,
+        inStock: false,
+        updatedAt: new Date(),
+        _id: '',
+      },
+    ],
+    page: 0,
+    pagegs: 0,
+  });
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [clickProduct, setClickProduct] = useState<Product>({
@@ -36,16 +68,15 @@ const AdminProduct = () => {
       createdAt: '',
     },
     price: 0,
-    count: 0,
+    view: 0,
     inStock: false,
     updatedAt: new Date(),
     _id: '',
   });
   useEffect(() => {
-    adminInstance
-      .get<Product>('/products')
-      .then((res) => setProductList([res.data].flat()));
-    // .then((res) => console.log(res.data));
+    instance.get<AdminProductsType>('/products').then((res) => {
+      setProductList(res.data);
+    });
   }, []);
 
   const isInStock = (param: boolean) => {
@@ -72,7 +103,7 @@ const AdminProduct = () => {
   };
 
   const deleteProductHandler = () => {
-    adminInstance
+    instance
       .delete('/products/', { params: { productId: clickProduct._id } })
       .then(() => {
         window.location.reload();
@@ -105,7 +136,7 @@ const AdminProduct = () => {
               <td>관리</td>
             </tr>
           </tbody>
-          {productList.map((el) => {
+          {productList.products.map((el) => {
             return (
               <tbody key={uuidv4()}>
                 <tr>

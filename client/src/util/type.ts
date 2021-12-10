@@ -25,10 +25,16 @@ export interface Product {
     createdAt: string;
   };
   price: number;
-  count: number;
+  view: number;
   inStock: boolean;
   updatedAt: Date;
   _id?: string;
+}
+
+export interface AdminProductsType {
+  products: [Product];
+  page: number;
+  pagegs: number;
 }
 
 export interface ProductDetail {
