@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { useEffect, useState } from 'react';
-import adminInstance from 'util/axios';
+import instance from 'util/axios';
 import { Users } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import AdminHeader from 'components/Header/AdminHeader';
@@ -25,9 +25,7 @@ const AdminUser = () => {
     createdAt: new Date(),
   });
   useEffect(() => {
-    adminInstance
-      .get<Users>('/users')
-      .then((res) => setUserList([res.data].flat()));
+    instance.get<Users>('/users').then((res) => setUserList([res.data].flat()));
   }, []);
 
   const isResignHandler = () => {
@@ -40,7 +38,7 @@ const AdminUser = () => {
   };
 
   const resignHandler = () => {
-    adminInstance
+    instance
       .patch(
         '/users/',
         {

@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { useEffect, useState } from 'react';
-import adminInstance from 'util/axios';
+import instance from 'util/axios';
 import { Order } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma, convertDeliverStatus } from 'util/functions';
@@ -15,16 +15,51 @@ import {
 } from './styled';
 
 const AdminOrderList = () => {
-  const [orderList, setOrderList] = useState<Array<Order>>([]);
+  const [orderList, setOrderList] = useState<Order>({
+    orders: [
+      {
+        orderItems: [
+          {
+            artist: '',
+            image: '',
+            price: 0,
+            product: '',
+            size: '',
+            title: '',
+          },
+        ],
+        result: {
+          id: '',
+          paidAt: '',
+          status: 0,
+          updatedAt: '',
+        },
+        totalPrice: 0,
+        user: {
+          general: {
+            email: '',
+          },
+          kakao: '',
+          naver: '',
+          google: '',
+          name: '',
+          _id: '',
+        },
+        _id: '',
+      },
+    ],
+    page: 0,
+    pages: 0,
+  });
   useEffect(() => {
-    adminInstance
-      .get<Order>('/orders')
-      .then((res) => setOrderList([res.data].flat()));
+    instance.get<Order>('/orders/').then((res) => {
+      setOrderList(res.data);
+    });
   }, []);
 
   const cancleOrder = (id: string) => {
-    adminInstance
-      .patch(`/orders/${id}`, { status: 5, inStock: true })
+    instance
+      .patch('/orders', { status: 5, orderId: id })
       .then(() => {
         alert('취소가 완료되었습니다.');
         window.location.reload();
@@ -33,8 +68,8 @@ const AdminOrderList = () => {
   };
 
   const returnOrder = (id: string) => {
-    adminInstance
-      .patch(`/orders/${id}`, { status: 5, inStock: false })
+    instance
+      .patch('/orders', { status: 5, orderId: id })
       .then(() => {
         alert('반품이 완료되었습니다.');
         window.location.reload();
@@ -45,7 +80,7 @@ const AdminOrderList = () => {
   const changeOrderStatus = (id: string, status: string) => {
     switch (status) {
       case '준비중':
-        return adminInstance
+        return instance
           .patch(`/orders/${id}`, { status: 1 })
           .then((res) => {
             alert('배송상태가 준비중으로 변경되었습니다.');
@@ -53,7 +88,7 @@ const AdminOrderList = () => {
           })
           .catch((err) => alert('변경실패, 담당자에게 문의해주세요'));
       case '배송중':
-        return adminInstance
+        return instance
           .patch(`/orders/${id}`, { status: 2 })
           .then((res) => {
             alert('배송상태가 준비중으로 변경되었습니다.');
@@ -61,7 +96,7 @@ const AdminOrderList = () => {
           })
           .catch((err) => alert('변경실패, 담당자에게 문의해주세요'));
       case '완료':
-        return adminInstance
+        return instance
           .patch(`/orders/${id}`, { status: 3 })
           .then((res) => {
             alert('배송상태가 준비중으로 변경되었습니다.');
@@ -73,11 +108,9 @@ const AdminOrderList = () => {
     }
   };
 
-  console.log(orderList.map((el) => el));
   return (
     <AdminHeaderWrap>
       <AdminHeader />
-      {/* <Link to="/"></Link> */}
       <h1>결제/배송 관리</h1>
       <TableWrap>
         <Table>
@@ -92,17 +125,17 @@ const AdminOrderList = () => {
               <td>배송관리</td>
             </tr>
           </tbody>
-          {orderList.map((el) => {
+          {orderList.orders.map((el) => {
             return (
               <tbody key={uuidv4()}>
                 <tr>
-                  <td rowSpan={el.orderItems.length}>
+                  <td>
+                    <div>{el.result.id}</div>
+                    <div>{el.user.general.email}</div>
                     <div>{el.user.name}</div>
-                    <div>{el.ordererInfo.email}</div>
-                    <div>{el.ordererInfo.phoneNum}</div>
-                    <div>({el.user._id})</div>
+                    <div>{el.user._id}</div>
                   </td>
-                  <td rowSpan={el.orderItems.length}>
+                  <td>
                     <div>
                       {el.result.paidAt
                         .toString()
@@ -113,7 +146,7 @@ const AdminOrderList = () => {
                         .slice(2)
                         .slice(0, -5)}
                     </div>
-                    <div>{el.result.id}</div>
+                    <div>주문번호: {el.result.id}</div>
                   </td>
                   <td>
                     {el.orderItems.map((el) => {
