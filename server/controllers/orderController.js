@@ -141,6 +141,10 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/mine
 // @access  Private
 const getMyOrders = asyncHandler(async (req, res) => {
+  const pageSize = 3;
+  const page = Number(req.query.pageNumber) || 1;
+
+  const count = await Order.countDocuments({ user: req.user._id });
   const orders = await Order.find(
     { user: req.user._id },
     {
@@ -149,14 +153,23 @@ const getMyOrders = asyncHandler(async (req, res) => {
       ordererInfo: 0,
       shippingPrice: 0,
     },
-  ).sort({ _id: -1 });
-  res.json(orders);
+  )
+    .sort({ _id: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .exec();
+
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Get all orders
 // @route   GET /api/orders
 // @access  Private/Admin
 const getOrders = asyncHandler(async (req, res) => {
+  const pageSize = 10;
+  const page = Number(req.query.pageNumber) || 1;
+
+  const count = await Order.countDocuments({});
   const orders = await Order.find(
     {},
     {
@@ -165,14 +178,20 @@ const getOrders = asyncHandler(async (req, res) => {
       ordererInfo: 0,
       shippingPrice: 0,
     },
-  ).populate('user', [
-    'general.email',
-    'google.email',
-    'naver.email',
-    'kakao.email',
-    'name',
-  ]);
-  res.json(orders);
+  )
+    .populate('user', [
+      'general.email',
+      'google.email',
+      'naver.email',
+      'kakao.email',
+      'name',
+    ])
+    .sort({ _id: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .exec();
+
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) });
 });
 
 export {
