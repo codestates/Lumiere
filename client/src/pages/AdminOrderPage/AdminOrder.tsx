@@ -15,16 +15,52 @@ import {
 } from './styled';
 
 const AdminOrderList = () => {
-  const [orderList, setOrderList] = useState<Array<Order>>([]);
+  const [orderList, setOrderList] = useState<Order>({
+    orders: [
+      {
+        orderItems: [
+          {
+            artist: '',
+            image: '',
+            price: 0,
+            product: '',
+            size: '',
+            title: '',
+          },
+        ],
+        result: {
+          id: '',
+          paidAt: '',
+          status: 0,
+          updatedAt: '',
+        },
+        totalPrice: 0,
+        user: {
+          general: {
+            email: '',
+          },
+          kakao: '',
+          naver: '',
+          google: '',
+          name: '',
+          _id: '',
+        },
+        _id: '',
+      },
+    ],
+    page: 0,
+    pages: 0,
+  });
   useEffect(() => {
-    adminInstance
-      .get<Order>('/orders')
-      .then((res) => setOrderList([res.data].flat()));
+    adminInstance.get<Order>('/orders/').then((res) => {
+      console.log(res.data);
+      setOrderList(res.data);
+    });
   }, []);
 
   const cancleOrder = (id: string) => {
     adminInstance
-      .patch(`/orders/${id}`, { status: 5, inStock: true })
+      .patch('/orders', { status: 5, orderId: id })
       .then(() => {
         alert('취소가 완료되었습니다.');
         window.location.reload();
@@ -34,7 +70,7 @@ const AdminOrderList = () => {
 
   const returnOrder = (id: string) => {
     adminInstance
-      .patch(`/orders/${id}`, { status: 5, inStock: false })
+      .patch('/orders', { status: 5, orderId: id })
       .then(() => {
         alert('반품이 완료되었습니다.');
         window.location.reload();
@@ -73,7 +109,8 @@ const AdminOrderList = () => {
     }
   };
 
-  console.log(orderList.map((el) => el));
+  // console.log(orderList.map((el) => el));
+  console.log(orderList);
   return (
     <AdminHeaderWrap>
       <AdminHeader />
@@ -92,17 +129,17 @@ const AdminOrderList = () => {
               <td>배송관리</td>
             </tr>
           </tbody>
-          {orderList.map((el) => {
+          {orderList.orders.map((el) => {
             return (
               <tbody key={uuidv4()}>
                 <tr>
-                  <td rowSpan={el.orderItems.length}>
+                  <td>
+                    <div>{el.result.id}</div>
+                    <div>{el.user.general.email}</div>
                     <div>{el.user.name}</div>
-                    <div>{el.ordererInfo.email}</div>
-                    <div>{el.ordererInfo.phoneNum}</div>
-                    <div>({el.user._id})</div>
+                    <div>{el.user._id}</div>
                   </td>
-                  <td rowSpan={el.orderItems.length}>
+                  <td>
                     <div>
                       {el.result.paidAt
                         .toString()
@@ -113,7 +150,7 @@ const AdminOrderList = () => {
                         .slice(2)
                         .slice(0, -5)}
                     </div>
-                    <div>{el.result.id}</div>
+                    <div>주문번호: {el.result.id}</div>
                   </td>
                   <td>
                     {el.orderItems.map((el) => {
