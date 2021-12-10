@@ -182,6 +182,9 @@ export const AdminEditProductTextWrap = styled.div`
     margin-bottom: 0.3rem;
     /* margin-right: 2rem; */
   }
+  .marign-left {
+    margin-left: 5.2rem;
+  }
   .canvasSize {
     margin-left: 1.5rem;
     width: 3rem;

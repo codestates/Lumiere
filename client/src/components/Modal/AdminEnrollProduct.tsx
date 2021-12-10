@@ -196,13 +196,9 @@ const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
             className="productDetails"
           />
         </div>
-        <div>
+        <div className="marign-left">
           <span>작품테마</span>
-          <button
-            type="button"
-            onClick={() => themeHandler('인물')}
-            className="test"
-          >
+          <button type="button" onClick={() => themeHandler('인물')}>
             인물
           </button>
           <button type="button" onClick={() => themeHandler('풍경')}>
@@ -220,6 +216,9 @@ const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
           <button type="button" onClick={() => themeHandler('추상')}>
             추상
           </button>
+          <span>
+            {productInfo.theme ? productInfo.theme : '<< 선택해주세요'}
+          </span>
         </div>
         <div>
           <span className="leftMargin">작품 사이즈</span>

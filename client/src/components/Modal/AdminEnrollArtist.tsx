@@ -230,7 +230,7 @@ const AdminEnrollArtist = ({ NO, el, HowManyArtists }: GreetingProps) => {
             className="productDetails"
           />
         </div>
-        <div>
+        <div className="marign-left">
           <span>작품테마</span>
           <button
             type="button"
@@ -254,6 +254,7 @@ const AdminEnrollArtist = ({ NO, el, HowManyArtists }: GreetingProps) => {
           <button type="button" onClick={() => themeHandler('추상')}>
             추상
           </button>
+          <span>{artistInfo.theme ? artistInfo.theme : '<< 선택해주세요'}</span>
         </div>
         <div>
           <span className="leftMargin">작품 사이즈</span>

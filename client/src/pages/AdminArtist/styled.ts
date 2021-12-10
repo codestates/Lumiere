@@ -65,5 +65,5 @@ export const ProductInfoWrap2 = styled.div`
 `;
 
 export const EnrollmentButton = styled.button`
-  margin-left: 115rem;
+  margin-left: 111rem;
 `;
