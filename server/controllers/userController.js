@@ -201,19 +201,18 @@ const updatePwd = asyncHandler(async (req, res) => {
 // @access Private
 const logout = asyncHandler(async (req, res) => {
   // 로그아웃 시간 저장 -> 추후 휴먼 계정 전환 가능
-  const { lastAccessTime } = req.body;
 
-  const updatedUser = await User.findByIdAndUpdate(
+  const lastAccessTime = () => Date.now() + 9 * 60 * 60 * 1000;
+
+  await User.updateOne(
     req.user._id,
-    { 'active.lastAccessTime': lastAccessTime },
+    { 'active.lastAccessTime': lastAccessTime() },
     {
-      new: true,
       upsert: true,
     },
   );
-  res.status(200).json({
-    message: `로그아웃 시간 ${updatedUser.active.lastAccessTime}`,
-  });
+
+  res.status(200).json({ message: `로그아웃 시간이 저장되었습니다` });
 });
 
 // @desc   Delete user profile
@@ -229,11 +228,10 @@ const dropout = asyncHandler(async (req, res) => {
       });
       return;
     }
-    await User.findByIdAndUpdate(
+    await User.updateOne(
       userId,
       { active: req.body, $unset: { 'general.password': 1 } },
       {
-        new: true,
         upsert: true,
       },
     );
@@ -242,11 +240,10 @@ const dropout = asyncHandler(async (req, res) => {
     });
   }
   if (req.user.isAdmin === false) {
-    await User.findByIdAndUpdate(
+    await User.updateOne(
       req.user._id,
       { active: req.body, $unset: { 'general.password': 1 } },
       {
-        new: true,
         upsert: true,
       },
     );
@@ -262,18 +259,25 @@ const dropout = asyncHandler(async (req, res) => {
 const getUsers = asyncHandler(async (req, res) => {
   // Admin 관리자 유저만 이 정보에 대한 권한이 있다.
 
+  const pageSize = 10;
+  const page = Number(req.query.pageNumber) || 1;
+  const count = await User.countDocuments({ isAdmin: false });
+
   const users = await User.find(
     { isAdmin: false },
     {
-      updatedAt: 0,
       isAdmin: 0,
       'general.password': 0,
       'google.token': 0,
       'naver.token': 0,
       'kakao.token': 0,
     },
-  );
-  res.json(users);
+  )
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .exec();
+
+  res.json({ users, page, pages: Math.ceil(count / pageSize) });
 });
 
 export {
