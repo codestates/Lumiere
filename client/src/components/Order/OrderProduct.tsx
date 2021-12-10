@@ -18,8 +18,6 @@ export const OrderProduct = ({
   productState,
   setProductState,
 }: ProductProps) => {
-  console.log(productState);
-
   return (
     <OrderContentContainer>
       <Title>주문작품</Title>

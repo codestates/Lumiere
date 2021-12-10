@@ -73,6 +73,8 @@ const Order = () => {
     },
   ]);
 
+  const [clientPrice, setClientPrice] = useState(0);
+
   // 최초 렌더링시 주문이력 여부 확인
   useEffect(() => {
     instance
@@ -105,8 +107,8 @@ const Order = () => {
         const price = res.data.totalPrice;
         setPriceState({
           ...priceState,
-          shippingPrice: price - 10000,
-          totalPrice: price,
+          shippingPrice: price,
+          totalPrice: price + 10000,
         });
       })
       .catch(() => {
@@ -124,12 +126,22 @@ const Order = () => {
     instance
       .get('/products/cart-items', { params: { productId: arr } })
       .then((res) => {
+        console.log(res);
         setProductState(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  // 클라이언트에서 계산한 결졔 예정 금액
+  useEffect(() => {
+    setClientPrice(
+      productState.reduce((acc, cur) => {
+        return acc + cur.price;
+      }, 0),
+    );
+  }, [productState]);
 
   return (
     <OrderContainer>
@@ -157,7 +169,7 @@ const Order = () => {
           />
         </ContentLeft>
         <ContentRight>
-          <OrderPay priceState={priceState} />
+          <OrderPay priceState={priceState} clientPrice={clientPrice} />
         </ContentRight>
       </ContentWrap>
       <Footer />
