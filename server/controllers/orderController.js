@@ -50,7 +50,8 @@ const getLatestOrder = asyncHandler(async (req, res) => {
   const order = await Order.findOne(
     { user: req.user._id },
     {
-      deliver: 1,
+      deliveryInfo: 1,
+      deliveryDetails: 1,
       ordererInfo: 1,
     },
   )
@@ -143,7 +144,8 @@ const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find(
     { user: req.user._id },
     {
-      deliver: 0,
+      deliveryInfo: 0,
+      deliveryDetails: 0,
       ordererInfo: 0,
       shippingPrice: 0,
     },
@@ -158,7 +160,8 @@ const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find(
     {},
     {
-      deliver: 0,
+      deliveryInfo: 0,
+      deliveryDetails: 0,
       ordererInfo: 0,
       shippingPrice: 0,
     },

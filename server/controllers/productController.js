@@ -181,10 +181,10 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const getProductById = asyncHandler(async (req, res) => {
   const productDetail = await Product.findByIdAndUpdate(
     req.params.id,
-    { $inc: { count: 1 } }, // 조회수 올리기!!
+    { $inc: { views: 1 } }, // 조회수 올리기!!
     {
       projection: {
-        count: 0,
+        views: 0,
         updatedAt: 0,
       },
       new: true,
