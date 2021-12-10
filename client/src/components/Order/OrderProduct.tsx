@@ -1,3 +1,5 @@
+import { OrderProducts } from 'util/type';
+import { useComma } from 'util/functions';
 import {
   OrderContentContainer,
   Title,
@@ -6,21 +8,36 @@ import {
   ProductDlWrap,
 } from './styled';
 
-export const OrderProduct = () => {
+type ProductProps = {
+  // 배열을 넘겼으니 배열을 받아야함
+  productState: OrderProducts[];
+  setProductState: (data: Array<OrderProducts>) => void;
+};
+
+export const OrderProduct = ({
+  productState,
+  setProductState,
+}: ProductProps) => {
+  console.log(productState);
+
   return (
     <OrderContentContainer>
       <Title>주문작품</Title>
-      <ProductContentWrap>
-        <ImgWrap>
-          <img src="#" alt="주문작품" />
-        </ImgWrap>
-        <ProductDlWrap>
-          <dt>2013-5</dt>
-          <dd>주단태</dd>
-          <dd>52x73cm(20호)</dd>
-          <dd>80,000원</dd>
-        </ProductDlWrap>
-      </ProductContentWrap>
+      {productState.map((el) => {
+        return (
+          <ProductContentWrap key={el.title}>
+            <ImgWrap>
+              <img src={el.image} alt={`${el.artist} ${el.image}`} />
+            </ImgWrap>
+            <ProductDlWrap>
+              <dt>{el.title}</dt>
+              <dd>{el.artist.name}</dd>
+              <dd>{`${el.info.size}(${el.info.canvas}호)`}</dd>
+              <dd>{`${useComma(el.price)} 원`}</dd>
+            </ProductDlWrap>
+          </ProductContentWrap>
+        );
+      })}
     </OrderContentContainer>
   );
 };
