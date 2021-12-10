@@ -59,7 +59,7 @@ const AdminOrderList = () => {
 
   const cancleOrder = (id: string) => {
     instance
-      .patch('/orders', { status: 5, orderId: id })
+      .delete(`/orders/${id}`, { data: { status: 5 } })
       .then(() => {
         alert('취소가 완료되었습니다.');
         window.location.reload();
@@ -69,7 +69,7 @@ const AdminOrderList = () => {
 
   const returnOrder = (id: string) => {
     instance
-      .patch('/orders', { status: 5, orderId: id })
+      .delete(`/orders/${id}`, { data: { status: 5 } })
       .then(() => {
         alert('반품이 완료되었습니다.');
         window.location.reload();
@@ -130,7 +130,6 @@ const AdminOrderList = () => {
               <tbody key={uuidv4()}>
                 <tr>
                   <td>
-                    <div>{el.result.id}</div>
                     <div>{el.user.general.email}</div>
                     <div>{el.user.name}</div>
                     <div>{el.user._id}</div>

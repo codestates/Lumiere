@@ -104,7 +104,7 @@ const AdminProduct = () => {
 
   const deleteProductHandler = () => {
     instance
-      .delete('/products/', { params: { productId: clickProduct._id } })
+      .delete(`/products/${clickProduct._id}`)
       .then(() => {
         window.location.reload();
       })
