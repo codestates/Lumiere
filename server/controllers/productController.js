@@ -9,7 +9,7 @@ import isAuthorized from '../utils/isAuthorized.js';
 const { ObjectId } = mongoose.Types;
 
 // @desc   Create a product
-// @route  POST /api/products/
+// @route  POST /api/products
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
   const {
@@ -44,7 +44,7 @@ const createProduct = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch all products
-// @route  GET /api/products/
+// @route  GET /api/products
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
@@ -157,14 +157,13 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 // @desc    Delete a product
-// @route   DELETE /api/products/
+// @route   DELETE /api/products/:id
 // @access  Private/Admin
 const deleteProduct = asyncHandler(async (req, res) => {
   // 재고 있을 시 상품 삭제 가능
-  const { productId } = req.query;
 
   const product = await Product.findOneAndDelete({
-    _id: productId,
+    _id: req.params.id,
     inStock: true,
   });
 
@@ -284,7 +283,7 @@ const zzimProduct = asyncHandler(async (req, res) => {
 
   if (zzim === true) {
     await Product.updateOne(
-      productId,
+      { _id: productId },
       {
         $addToSet: { likes: req.user._id },
       },

@@ -6,7 +6,7 @@ import Product from '../models/product.js';
 import isAuthorized from '../utils/isAuthorized.js';
 
 // @desc   Create a Artist
-// @route  POST /api/artists/
+// @route  POST /api/artists
 // @access Private/Admin
 const createArtist = asyncHandler(async (req, res) => {
   // 작가 등록 시, 작품 하나 필수 등록
@@ -57,7 +57,7 @@ const createArtist = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch all Artists
-// @route  GET /api/artists/
+// @route  GET /api/artists
 // @access Public
 const getArtists = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
@@ -95,30 +95,8 @@ const getArtists = asyncHandler(async (req, res) => {
   res.json({ artists, page, pages: Math.ceil(count / pageSize) });
 });
 
-// @desc    Update a Artist
-// @route   PATCH /api/artists/:id
-// @access  Private/Admin
-const updateArtist = asyncHandler(async (req, res) => {
-  const updatedArtist = await Artist.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-    },
-  );
-  res.json({
-    code: updatedArtist.code,
-    name: updatedArtist.name,
-    aka: updatedArtist.aka,
-    record: updatedArtist.record,
-    thumbnail: updatedArtist.thumbnail,
-    joinAt: updatedArtist.joinAt,
-    countOfWorks: updatedArtist.countOfWorks,
-  });
-});
-
 // @desc    activate or inactivate a Artist
-// @route   PATCH /api/artists/
+// @route   PATCH /api/artists
 // @access  Private/Admin
 const inActivateArtist = asyncHandler(async (req, res) => {
   const { artistId, isActive } = req.body;
@@ -139,6 +117,28 @@ const inActivateArtist = asyncHandler(async (req, res) => {
   } else if (updatedArtist.isActive === false) {
     res.json({ message: '해당 작가 비활성화 완료' });
   }
+});
+
+// @desc    Update a Artist
+// @route   PATCH /api/artists/:id
+// @access  Private/Admin
+const updateArtist = asyncHandler(async (req, res) => {
+  const updatedArtist = await Artist.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+    },
+  );
+  res.json({
+    code: updatedArtist.code,
+    name: updatedArtist.name,
+    aka: updatedArtist.aka,
+    record: updatedArtist.record,
+    thumbnail: updatedArtist.thumbnail,
+    joinAt: updatedArtist.joinAt,
+    countOfWorks: updatedArtist.countOfWorks,
+  });
 });
 
 // @desc   Fetch single Artist
@@ -176,7 +176,7 @@ const zzimArtist = asyncHandler(async (req, res) => {
   }
   if (zzim === true) {
     await Artist.updateOne(
-      artistId,
+      { _id: artistId },
       {
         $addToSet: { likes: req.user._id },
       },

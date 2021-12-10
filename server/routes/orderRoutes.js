@@ -13,16 +13,13 @@ import { protect, admin } from '../middleware/auth.js';
 const router = express.Router();
 
 // endpoint => /api/orders
-router
-  .route('/')
-  .post(protect, createOrder)
-  .patch(protect, cancelOrder)
-  .get(protect, admin, getOrders);
+router.route('/').post(protect, createOrder).get(protect, admin, getOrders);
 router.route('/latest').get(protect, getLatestOrder);
 router.route('/mine').get(protect, getMyOrders);
 router
   .route('/:id')
   .get(protect, getOrderById)
-  .patch(protect, admin, updateOrderStatus);
+  .patch(protect, admin, updateOrderStatus)
+  .delete(protect, cancelOrder);
 
 export default router;

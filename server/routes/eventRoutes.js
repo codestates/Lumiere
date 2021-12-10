@@ -10,10 +10,9 @@ import { protect, admin } from '../middleware/auth.js';
 const router = express.Router();
 
 // endpoint => /api/events
+router.route('/').get(getEvents).post(protect, admin, addEvent);
 router
-  .route('/')
-  .get(getEvents)
-  .post(protect, admin, addEvent)
+  .route('/:id')
   .patch(protect, admin, updateEvent)
   .delete(protect, admin, deleteEvent);
 

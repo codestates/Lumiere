@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { OAuth2Client } from 'google-auth-library';
 import User from '../models/user.js';
 import generateAccessToken from '../utils/generateToken.js';
+import localTime from '../utils/localTime.js';
 
 // @desc   Check a email address
 // @route  POST /api/users/email
@@ -21,7 +22,7 @@ const checkEmail = asyncHandler(async (req, res) => {
 });
 
 // @desc   Register a new user
-// @route  POST /api/users/
+// @route  POST /api/users
 // @access Public
 const register = asyncHandler(async (req, res) => {
   const { email, password, name } = req.body;
@@ -67,6 +68,23 @@ const generalLogin = asyncHandler(async (req, res) => {
   } else {
     res.status(401).json({ message: '비밀번호를 다시 확인해주세요' });
   }
+});
+
+// @desc   User logout
+// @route  GET /api/users/logout
+// @access Private
+const logout = asyncHandler(async (req, res) => {
+  // 로그아웃 시간 저장 -> 추후 휴먼 계정 전환 가능
+
+  await User.updateOne(
+    { _id: req.user._id },
+    { 'active.lastAccessTime': localTime() },
+    {
+      upsert: true,
+    },
+  );
+
+  res.status(200).json({ message: `로그아웃 시간이 저장되었습니다` });
 });
 
 // @desc   Fetch token & userInfo from kakao
@@ -196,30 +214,12 @@ const updatePwd = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc   User logout
-// @route  PATCH /api/users/logout
-// @access Private
-const logout = asyncHandler(async (req, res) => {
-  // 로그아웃 시간 저장 -> 추후 휴먼 계정 전환 가능
-
-  const lastAccessTime = () => Date.now() + 9 * 60 * 60 * 1000;
-
-  await User.updateOne(
-    req.user._id,
-    { 'active.lastAccessTime': lastAccessTime() },
-    {
-      upsert: true,
-    },
-  );
-
-  res.status(200).json({ message: `로그아웃 시간이 저장되었습니다` });
-});
-
 // @desc   Delete user profile
-// @route  PATCH /api/users/
+// @route  DELETE /api/users/profile
 // @access Private & Private/Admin
 const dropout = asyncHandler(async (req, res) => {
   // 유저 본인이 탈퇴 요청 / 관리자가 탈퇴 요청
+
   if (req.user.isAdmin === true) {
     const { userId } = req.query;
     if (!userId) {
@@ -228,21 +228,29 @@ const dropout = asyncHandler(async (req, res) => {
       });
       return;
     }
+
     await User.updateOne(
-      userId,
-      { active: req.body, $unset: { 'general.password': 1 } },
+      { _id: userId },
       {
-        upsert: true,
+        'active.lastAccessTime': localTime(),
+        'active.isClosed': true,
+        $unset: { 'general.password': 1 },
       },
+      { new: true, upsert: true },
     );
+
     res.status(200).json({
-      message: '해당 유저를 정상적으로 탈퇴시켰습니다',
+      message: `해당 유저를 정상적으로 탈퇴시켰습니다`,
     });
   }
   if (req.user.isAdmin === false) {
     await User.updateOne(
-      req.user._id,
-      { active: req.body, $unset: { 'general.password': 1 } },
+      { _id: req.user._id },
+      {
+        'active.lastAccessTime': localTime(),
+        'active.isClosed': true,
+        $unset: { 'general.password': 1 },
+      },
       {
         upsert: true,
       },
@@ -254,7 +262,7 @@ const dropout = asyncHandler(async (req, res) => {
 });
 
 // @desc   Get all users
-// @route  GET /api/users/
+// @route  GET /api/users
 // @access Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
   // Admin 관리자 유저만 이 정보에 대한 권한이 있다.
