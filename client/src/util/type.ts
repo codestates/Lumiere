@@ -1,7 +1,6 @@
 export interface Users {
   general: {
     email: string;
-    token: string;
   };
   active: {
     isClosed: boolean;
@@ -10,6 +9,12 @@ export interface Users {
   _id: string;
   name: string;
   createdAt: Date;
+}
+
+export interface AdminUsersType {
+  users: [Users];
+  page: number;
+  pages: number;
 }
 
 export interface Product {
