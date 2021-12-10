@@ -23,7 +23,7 @@ const getEvents = asyncHandler(async (req, res) => {
 });
 
 // @desc   Update a event
-// @route  PATCH /api/events/
+// @route  PATCH /api/events/:id
 // @access Private/Admin
 const updateEvent = asyncHandler(async (req, res) => {
   const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
@@ -33,10 +33,10 @@ const updateEvent = asyncHandler(async (req, res) => {
 });
 
 // @desc   Delete the event
-// @route  DELETE /api/events/
+// @route  DELETE /api/events/:id
 // @access Private/Admin
 const deleteEvent = asyncHandler(async (req, res) => {
-  await Event.deleteOne(req.params.id);
+  await Event.deleteOne({ _id: req.params.id });
   res.status(200).json({ messsage: '해당 배너가 정상적으로 삭제되었습니다' });
 });
 
