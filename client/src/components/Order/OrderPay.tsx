@@ -14,13 +14,14 @@ type PriceProps = {
     shippingPrice: number;
     totalPrice: number;
   };
+  clientPrice: number;
 };
 
-export const OrderPay = ({ priceState }: PriceProps) => {
+export const OrderPay = ({ priceState, clientPrice }: PriceProps) => {
   return (
     <OrderContentContainer>
       <ContentWrap>
-        <PayTitle>결제 예정금액</PayTitle>
+        <PayTitle>결제 예정금액 {clientPrice}</PayTitle>
         <CountWrap>
           <DescriptionWrap>
             <dt>주문금액</dt>
