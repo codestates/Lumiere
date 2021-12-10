@@ -165,3 +165,26 @@ export interface ArtistsProduct {
   };
   price: number;
 }
+
+// Order Page
+export interface OrderDeliver {
+  deliver: {
+    address: string;
+    receiver: string;
+    request: string;
+  };
+}
+// Order Page
+export interface OrdererUserInfo {
+  ordererInfo: {
+    name: string;
+    phoneNum: string;
+    email: string;
+    refundTerms: string;
+  };
+}
+// Order Page
+export interface OrderPrice {
+  shippingPrice: number;
+  totalPrice: number;
+}
