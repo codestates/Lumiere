@@ -1,7 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import { useEffect, useState } from 'react';
 import instance from 'util/axios';
-import { Users } from 'util/type';
+import { Users, AdminUsersType } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import AdminHeader from 'components/Header/AdminHeader';
 import { ModalBackDrop } from 'components/Modal/styled';
@@ -9,12 +9,28 @@ import YesNoModal from 'components/Modal/YesNoModal';
 import { Table, TableWrap, AdminHeaderWrap } from './styled';
 
 const AdminUser = () => {
-  const [userList, setUserList] = useState<Array<Users>>([]);
+  const [userList, setUserList] = useState<AdminUsersType>({
+    users: [
+      {
+        general: {
+          email: '',
+        },
+        active: {
+          isClosed: false,
+          lastAccessTime: new Date(),
+        },
+        _id: '',
+        name: '',
+        createdAt: new Date(),
+      },
+    ],
+    page: 0,
+    pages: 0,
+  });
   const [isResign, setIsResign] = useState<boolean>(false);
   const [clickResign, setClickResign] = useState<Users>({
     general: {
       email: '',
-      token: '',
     },
     active: {
       isClosed: false,
@@ -25,7 +41,9 @@ const AdminUser = () => {
     createdAt: new Date(),
   });
   useEffect(() => {
-    instance.get<Users>('/users').then((res) => setUserList([res.data].flat()));
+    instance.get<AdminUsersType>('/users').then((res) => {
+      setUserList(res.data);
+    });
   }, []);
 
   const isResignHandler = () => {
@@ -51,7 +69,11 @@ const AdminUser = () => {
         alert('탈퇴완료');
         window.location.reload();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert('이미 탈퇴한 회원이거나 일시적인 오류입니다.');
+        window.location.reload();
+        console.log(err);
+      });
   };
   return (
     <AdminHeaderWrap>
@@ -71,7 +93,7 @@ const AdminUser = () => {
               <td>관리</td>
             </tr>
           </tbody>
-          {userList.map((el) => {
+          {userList.users.map((el) => {
             return (
               <tbody key={uuidv4()}>
                 <tr>

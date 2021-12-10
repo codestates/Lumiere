@@ -36,7 +36,6 @@ const ArtistList = () => {
       <ArtistListWrap>
         {artistList.map((art, idx) => {
           const { _id, aka, name, thumbnail, countOfWorks } = art;
-          // const { name } = artist;
           return (
             <ArtistWrap key={_id} className="artistWrapBorder">
               <Link to={`/artistdetail/${_id}`}>
