@@ -55,23 +55,23 @@ const getProducts = asyncHandler(async (req, res) => {
   let count;
   let products;
 
-  const decodedData = isAuthorized(req);
-  if (decodedData) {
-    req.user = await User.findById(decodedData.id).select('-general.password');
-    if (req.user.isAdmin === true) {
-      pageSize = 40;
-      count = await Product.countDocuments({});
-      products = await Product.find({})
-        .populate('artist', ['name', 'aka', 'code', 'record'])
-        .sort({ _id: -1 })
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
-        .exec();
+  // const decodedData = isAuthorized(req);
+  // if (decodedData) {
+  //   req.user = await User.findById(decodedData.id).select('-general.password');
+  //   if (req.user.isAdmin === true) {
+  pageSize = 40;
+  count = await Product.countDocuments({});
+  products = await Product.find({})
+    .populate('artist', ['name', 'aka', 'code', 'record'])
+    .sort({ _id: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+    .exec();
 
-      res.json({ products, page, pages: Math.ceil(count / pageSize) });
-      return;
-    } // 관리자
-  }
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
+  return;
+  //   } // 관리자
+  // }
 
   pageSize = 40;
   count = await Product.countDocuments({ inStock: true });

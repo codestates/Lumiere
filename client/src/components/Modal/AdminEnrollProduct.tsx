@@ -22,6 +22,7 @@ type GreetingProps = {
 
 const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
   const [productInfo, setProductInfo] = useState<Product>({
+    likes: [''],
     artist: el,
     artCode: '',
     title: '',

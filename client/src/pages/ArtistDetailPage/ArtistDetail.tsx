@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';

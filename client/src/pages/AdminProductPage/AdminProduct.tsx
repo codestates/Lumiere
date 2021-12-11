@@ -16,6 +16,7 @@ const AdminProduct = () => {
   const [productList, setProductList] = useState<AdminProductsType>({
     products: [
       {
+        likes: [''],
         artist: {
           code: '',
           name: '',
@@ -49,6 +50,7 @@ const AdminProduct = () => {
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [clickProduct, setClickProduct] = useState<Product>({
+    likes: [''],
     artist: {
       code: '',
       name: '',
