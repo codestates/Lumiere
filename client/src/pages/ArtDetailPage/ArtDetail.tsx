@@ -1,6 +1,8 @@
+/* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
+import { useComma } from 'util/functions';
 import { ProductDetail } from 'util/type';
 import Header from 'components/Header/Header';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
@@ -18,20 +20,30 @@ import {
 
 const ArtDetail = () => {
   const [productDetail, setProductDetail] = useState<Array<ProductDetail>>([]);
-  const [artistId, setArtistId] = useState('');
 
   useEffect(() => {
     instance
       .get(`/products/${window.location.href.split('artdetail/')[1]}`)
       .then((res) => {
-        const { _id } = res.data.productDetail.artist;
-        setArtistId(_id);
         setProductDetail([res.data].flat());
       })
       .catch((err) => {
         window.location.replace('/error');
       });
   }, []);
+
+  const addToCartHandler: (productId: string) => void = (productId) => {
+    const cartItems = localStorage.getItem('cartItems');
+    if (!cartItems) {
+      localStorage.setItem('cartItems', JSON.stringify([productId]));
+    } else if (!JSON.parse(cartItems).includes(productId)) {
+      const cartArr = JSON.parse(cartItems);
+      cartArr.push(productId);
+      localStorage.setItem('cartItems', JSON.stringify(cartArr));
+    } else {
+      alert('이미 장바구니에 담겨있습니다');
+    }
+  };
 
   return (
     <ArtDetailContainer>
@@ -57,8 +69,8 @@ const ArtDetail = () => {
                 <span>작가</span>
                 <div>
                   <Link
-                    to={`/artistdetail/${artistId}`}
-                    state={{ id: artistId }}
+                    to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
+                    state={{ id: productDetail[0].productDetail.artist._id }}
                   >
                     {productDetail[0].productDetail.artist.name}
                     <MdOutlineArrowForwardIos />
@@ -70,7 +82,8 @@ const ArtDetail = () => {
                 <div>
                   {productDetail[0].productDetail.info.details}
                   <br />
-                  {productDetail[0].productDetail.info.size},{' '}
+                  {productDetail[0].productDetail.info.size}(
+                  {productDetail[0].productDetail.info.canvas}호),{' '}
                   {productDetail[0].productDetail.info.createdAt}
                 </div>
               </div>
@@ -84,18 +97,24 @@ const ArtDetail = () => {
               <div>
                 <span>작품금액</span>
                 {productDetail[0].productDetail.inStock ? (
-                  <div>
-                    {productDetail[0].productDetail.price
-                      .toString()
-                      .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
-                    원
-                  </div>
+                  <div>{useComma(productDetail[0].productDetail.price)}원</div>
                 ) : (
                   <div>품절</div>
                 )}
               </div>
               <OrderBtnBox>
-                <div>아트 쇼핑백</div>
+                <div
+                  onClick={() =>
+                    addToCartHandler(productDetail[0].productDetail._id)
+                  }
+                  onKeyPress={() =>
+                    addToCartHandler(productDetail[0].productDetail._id)
+                  }
+                  role="button"
+                  tabIndex={0}
+                >
+                  아트 쇼핑백
+                </div>
                 <div className="primary_button">바로구매</div>
                 <Link to="#top">
                   <FiShare2 />
