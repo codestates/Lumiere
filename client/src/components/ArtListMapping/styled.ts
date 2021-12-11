@@ -23,19 +23,27 @@ export const ArtInfoBox = styled.div`
   display: flex;
   flex-direction: row;
   .title {
-    flex: 5;
+    flex: 7;
   }
   .heartIcon {
     flex: 1;
   }
   h4 {
     margin-bottom: 0.5rem;
-    font-size: 1.2rem;
+    font-size: 18px;
+    font-weight: bold;
     color: #111111;
+    @media screen and (max-width: 767px) {
+      font-size: 16px;
+    }
   }
   p {
-    line-height: 1.4;
-    color: #888888;
+    line-height: 1.5;
+    font-size: 12px;
+    color: #989898;
+    @media screen and (max-width: 767px) {
+      font-size: 14px;
+    }
   }
   .likeit {
     fill: red;
