@@ -8,9 +8,11 @@ import AdminEnrollArtist from 'components/Modal/AdminEnrollArtist';
 import AdminArtistEdit from 'components/Modal/AdminEditArtist';
 import AdminHeader from 'components/Header/AdminHeader';
 import AdminEnrollProduct from 'components/Modal/AdminEnrollProduct';
+import PageNation from 'components/PageNation/PageNation';
 import { Table, TableWrap, EnrollmentButton, AdminHeaderWrap } from './styled';
 
 const AdminArtist = () => {
+  const [curPage, setCurPage] = useState<number>(1);
   const [artistList, setArtistList] = useState<AdminArtistsType>({
     artists: [
       {
@@ -70,6 +72,18 @@ const AdminArtist = () => {
     });
   }, []);
 
+  const pageChangeHandler = (page: number) => {
+    setCurPage(page);
+    instance
+      .get<AdminArtistsType>('/artists', { params: { pageNumber: page } })
+      .then((res) => {
+        setArtistList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const isEnrollArtistHandler = () => {
     setIsEnrollArtist(!isEnrollArtist);
   };
@@ -112,6 +126,11 @@ const AdminArtist = () => {
       <EnrollmentButton type="button" onClick={isEnrollArtistHandler}>
         작가등록
       </EnrollmentButton>
+      <PageNation
+        curPage={curPage}
+        totalPages={artistList.pages}
+        pageChangeHandler={pageChangeHandler}
+      />
       <TableWrap>
         <Table>
           <tbody>
@@ -196,7 +215,7 @@ const AdminArtist = () => {
           <AdminEnrollArtist
             NO={isEnrollArtistHandler}
             el={clickArtist}
-            HowManyArtists={artistList.artists.length + 1}
+            HowManyArtists={+artistList.artists[0].code + 1}
           />
         </ModalBackDrop>
       )}

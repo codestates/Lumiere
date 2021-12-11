@@ -110,6 +110,12 @@ export interface Artists {
   _id?: string;
 }
 
+export interface ArtistsType {
+  artists: [Artists];
+  page: number;
+  pages: number;
+}
+
 export interface AdminArtistsType {
   artists: [Artists];
   page: number;

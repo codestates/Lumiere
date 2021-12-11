@@ -56,7 +56,6 @@ const ArtList = () => {
     instance
       .get<AdminProductsType>('/products', { params: { pageNumber: page } })
       .then((res) => {
-        console.log(res.data);
         setArtList(res.data);
       })
       .catch((err) => {
@@ -68,7 +67,6 @@ const ArtList = () => {
     instance
       .get<AdminProductsType>('/products', { params: { pageNumber: curPage } })
       .then((res) => {
-        console.log(res.data);
         setArtList(res.data);
       })
       .catch((err) => {

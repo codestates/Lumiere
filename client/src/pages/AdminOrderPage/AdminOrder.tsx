@@ -5,6 +5,7 @@ import { Order } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma, convertDeliverStatus } from 'util/functions';
 import AdminHeader from 'components/Header/AdminHeader';
+import PageNation from 'components/PageNation/PageNation';
 import {
   Table,
   TableWrap,
@@ -15,6 +16,7 @@ import {
 } from './styled';
 
 const AdminOrderList = () => {
+  const [curPage, setCurPage] = useState<number>(1);
   const [orderList, setOrderList] = useState<Order>({
     orders: [
       {
@@ -56,6 +58,18 @@ const AdminOrderList = () => {
       setOrderList(res.data);
     });
   }, []);
+
+  const pageChangeHandler = (page: number) => {
+    setCurPage(page);
+    instance
+      .get<Order>('/orders/', { params: { pageNumber: page } })
+      .then((res) => {
+        setOrderList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const cancleOrder = (id: string) => {
     instance
@@ -112,6 +126,11 @@ const AdminOrderList = () => {
     <AdminHeaderWrap>
       <AdminHeader />
       <h1>결제/배송 관리</h1>
+      <PageNation
+        curPage={curPage}
+        totalPages={orderList.pages}
+        pageChangeHandler={pageChangeHandler}
+      />
       <TableWrap>
         <Table>
           <tbody>

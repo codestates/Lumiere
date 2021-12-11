@@ -6,9 +6,11 @@ import { v4 as uuidv4 } from 'uuid';
 import AdminHeader from 'components/Header/AdminHeader';
 import { ModalBackDrop } from 'components/Modal/styled';
 import YesNoModal from 'components/Modal/YesNoModal';
+import PageNation from 'components/PageNation/PageNation';
 import { Table, TableWrap, AdminHeaderWrap } from './styled';
 
 const AdminUser = () => {
+  const [curPage, setCurPage] = useState<number>(1);
   const [userList, setUserList] = useState<AdminUsersType>({
     users: [
       {
@@ -54,6 +56,17 @@ const AdminUser = () => {
     setIsResign(!isResign);
     setClickResign(el);
   };
+  const pageChangeHandler = (page: number) => {
+    setCurPage(page);
+    instance
+      .get<AdminUsersType>('/users', { params: { pageNumber: page } })
+      .then((res) => {
+        setUserList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const resignHandler = () => {
     instance
@@ -80,6 +93,11 @@ const AdminUser = () => {
       <AdminHeader />
       {/* <Link to="/"></Link> */}
       <h1>유저 관리</h1>
+      <PageNation
+        curPage={curPage}
+        totalPages={userList.pages}
+        pageChangeHandler={pageChangeHandler}
+      />
       <TableWrap>
         <Table>
           <tbody>
