@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import { ProductDetail } from 'util/type';
 import Header from 'components/Header/Header';
@@ -20,22 +20,17 @@ const ArtDetail = () => {
   const [productDetail, setProductDetail] = useState<Array<ProductDetail>>([]);
   const [artistId, setArtistId] = useState('');
 
-  const location = useLocation();
-
   useEffect(() => {
-    if (location.state.id) {
-      instance
-        .get(`/products/${location.state.id}`)
-        .then((res) => {
-          console.log(res.data);
-          const { _id } = res.data.productDetail.artist;
-          setArtistId(_id);
-          setProductDetail([res.data].flat());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    instance
+      .get(`/products/${window.location.href.split('artdetail/')[1]}`)
+      .then((res) => {
+        const { _id } = res.data.productDetail.artist;
+        setArtistId(_id);
+        setProductDetail([res.data].flat());
+      })
+      .catch((err) => {
+        window.location.replace('/error');
+      });
   }, []);
 
   return (
