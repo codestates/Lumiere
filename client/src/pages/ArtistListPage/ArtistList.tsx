@@ -4,7 +4,8 @@ import instance from 'util/axios';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
-import { Artists } from '../../util/type';
+import PageNation from 'components/PageNation/PageNation';
+import { ArtistsType } from '../../util/type';
 import {
   ArtistListContainer,
   ArtistListWrap,
@@ -15,18 +16,47 @@ import {
 } from './styled';
 
 const ArtistList = () => {
-  const [artistList, setArtistList] = useState<Array<Artists>>([]);
-
+  const [curPage, setCurPage] = useState<number>(1);
+  const [artistList, setArtistList] = useState<ArtistsType>({
+    artists: [
+      {
+        code: '',
+        name: '',
+        aka: '',
+        record: '',
+        thumbnail: '',
+        joinAt: new Date(),
+        countOfWorks: 0,
+        isActive: false,
+        _id: '',
+      },
+    ],
+    page: 0,
+    pages: 0,
+  });
   useEffect(() => {
     instance
-      .get<Artists>('/artists')
+      .get<ArtistsType>('/artists')
       .then((res) => {
-        setArtistList([res.data].flat());
+        console.log(res.data);
+        setArtistList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  const pageChangeHandler = (page: number) => {
+    setCurPage(page);
+    instance
+      .get<ArtistsType>('/artists', { params: { pageNumber: page } })
+      .then((res) => {
+        setArtistList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <ArtistListContainer>
@@ -34,7 +64,7 @@ const ArtistList = () => {
       <h1>작가소개</h1>
       <h2>저희 Lumière와 함께하고 있는 작가분들입니다.</h2>
       <ArtistListWrap>
-        {artistList.map((art, idx) => {
+        {artistList.artists.map((art, idx) => {
           const { _id, aka, name, thumbnail, countOfWorks } = art;
           return (
             <ArtistWrap key={_id} className="artistWrapBorder">
@@ -60,6 +90,11 @@ const ArtistList = () => {
           );
         })}
       </ArtistListWrap>
+      <PageNation
+        curPage={curPage}
+        totalPages={artistList.pages}
+        pageChangeHandler={pageChangeHandler}
+      />
       <QuickBtns />
       <Footer />
     </ArtistListContainer>

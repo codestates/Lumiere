@@ -8,9 +8,11 @@ import AdminHeader from 'components/Header/AdminHeader';
 import { ModalBackDrop } from 'components/Modal/styled';
 import YesNoModal from 'components/Modal/YesNoModal';
 import AdminEditProduct from 'components/Modal/AdminEditProduct';
+import PageNation from 'components/PageNation/PageNation';
 import { Table, TableWrap, AdminHeaderWrap } from './styled';
 
 const AdminProduct = () => {
+  const [curPage, setCurPage] = useState<number>(1);
   const [productList, setProductList] = useState<AdminProductsType>({
     products: [
       {
@@ -79,6 +81,18 @@ const AdminProduct = () => {
     });
   }, []);
 
+  const pageChangeHandler = (page: number) => {
+    setCurPage(page);
+    instance
+      .get<AdminProductsType>('/products', { params: { pageNumber: page } })
+      .then((res) => {
+        setProductList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const isInStock = (param: boolean) => {
     if (param) return '판매중';
     return '재고없음';
@@ -122,6 +136,11 @@ const AdminProduct = () => {
     <AdminHeaderWrap>
       <AdminHeader />
       <h1>작품 관리</h1>
+      <PageNation
+        curPage={curPage}
+        totalPages={productList.pages}
+        pageChangeHandler={pageChangeHandler}
+      />
       <TableWrap>
         <Table>
           <tbody>

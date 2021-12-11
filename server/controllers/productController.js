@@ -59,7 +59,7 @@ const getProducts = asyncHandler(async (req, res) => {
   if (decodedData) {
     req.user = await User.findById(decodedData.id).select('-general.password');
     if (req.user.isAdmin === true) {
-      pageSize = 60;
+      pageSize = 40;
       count = await Product.countDocuments({});
       products = await Product.find({})
         .populate('artist', ['name', 'aka', 'code', 'record'])
@@ -73,7 +73,7 @@ const getProducts = asyncHandler(async (req, res) => {
     } // 관리자
   }
 
-  pageSize = 60;
+  pageSize = 40;
   count = await Product.countDocuments({ inStock: true });
   products = await Product.find(
     { inStock: true },
