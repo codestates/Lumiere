@@ -19,9 +19,9 @@ type PriceProps = {
 
 export const OrderPay = ({ priceState, clientPrice }: PriceProps) => {
   return (
-    <OrderContentContainer>
+    <OrderContentContainer mobile="mobile">
       <ContentWrap>
-        <PayTitle>결제 예정금액 {clientPrice}</PayTitle>
+        <PayTitle>결제 예정금액</PayTitle>
         <CountWrap>
           <DescriptionWrap>
             <dt>주문금액</dt>
@@ -37,7 +37,8 @@ export const OrderPay = ({ priceState, clientPrice }: PriceProps) => {
           </DescriptionWrap>
         </CountWrap>
         <ClickBtn type="button">
-          <ClickBtnSpan>90,000원</ClickBtnSpan>결제하기
+          <ClickBtnSpan>{`${useComma(priceState.totalPrice)} 원`}</ClickBtnSpan>
+          결제하기
         </ClickBtn>
       </ContentWrap>
     </OrderContentContainer>
