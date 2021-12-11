@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
+import { useComma } from 'util/functions';
 import { ProductDetail } from 'util/type';
 import Header from 'components/Header/Header';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
@@ -84,12 +85,7 @@ const ArtDetail = () => {
               <div>
                 <span>작품금액</span>
                 {productDetail[0].productDetail.inStock ? (
-                  <div>
-                    {productDetail[0].productDetail.price
-                      .toString()
-                      .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')}
-                    원
-                  </div>
+                  <div>{useComma(productDetail[0].productDetail.price)}원</div>
                 ) : (
                   <div>품절</div>
                 )}
