@@ -46,25 +46,11 @@ export const ContentWrap = styled.div`
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
-  overflow: scroll;
-  overflow-x: hidden;
-
-  /* 스크롤바 전체길이 */
-  &::-webkit-scrollbar {
-    width: 5px;
-    background-color: #f7f7f7;
-    border-radius: 4px;
-  }
-
-  /* 현재 내가보고있는 스크롤바 길이 */
-  &::-webkit-scrollbar-thumb {
-    background-color: #dddddd;
-    border-radius: 4px;
-  }
+  background-color: #f7f7f7;
 
   @media screen and (min-width: 768px) {
-    position: relative;
     flex: 1;
+    position: relative;
     display: flex;
     flex-direction: row;
     padding: 2.5rem 1rem 1rem;
@@ -76,6 +62,22 @@ export const ContentLeft = styled.div`
     flex: 7;
     display: flex;
     flex-direction: column;
+    height: 70vh;
+    overflow: scroll;
+    overflow-x: hidden;
+
+    /* 스크롤바 전체길이 */
+    &::-webkit-scrollbar {
+      width: 5px;
+      background-color: #f7f7f7;
+      border-radius: 4px;
+    }
+
+    /* 현재 내가보고있는 스크롤바 길이 */
+    &::-webkit-scrollbar-thumb {
+      background-color: #dddddd;
+      border-radius: 4px;
+    }
   }
 `;
 

@@ -203,3 +203,146 @@ export const CartPayClickBtn = styled.button`
     margin: 1rem;
   }
 `;
+
+// CartList
+export const ProductContentWrap = styled.div`
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  overflow: scroll;
+  overflow-x: hidden;
+
+  /* 스크롤바 전체길이 */
+  &::-webkit-scrollbar {
+    width: 5px;
+    background-color: #f7f7f7;
+    border-radius: 4px;
+  }
+
+  /* 현재 내가보고있는 스크롤바 길이 */
+  &::-webkit-scrollbar-thumb {
+    background-color: #dddddd;
+    border-radius: 4px;
+  }
+
+  @media screen and (min-width: 768px) {
+    height: 100%;
+    margin-bottom: 1rem;
+  }
+`;
+
+export const ProductContent = styled.div`
+  display: flex;
+  position: relative;
+  border-bottom: 1px solid #e4e4e4;
+  margin-bottom: 1rem;
+`;
+
+export const ListDeleteBtnWrap = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 0;
+  top: 0;
+  width: 2rem;
+  height: 2rem;
+
+  & button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+  }
+
+  & button svg {
+    font-size: 1rem;
+    pointer-events: none;
+  }
+`;
+
+export const ListCheckBtnWrap = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background: none;
+
+  & button {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: none;
+  }
+
+  & button svg {
+    font-size: 1.5rem;
+    pointer-events: none;
+  }
+`;
+
+export const ImgWrap = styled.div`
+  flex: 3;
+  width: 7rem;
+  height: 9rem;
+  padding: 0 0.5rem;
+  background-color: #ebebeb;
+
+  img {
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media screen and (min-width: 768px) {
+    flex: 2;
+  }
+`;
+
+export const ProductDlWrap = styled.dl`
+  flex: 6;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  & dt {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #424242;
+  }
+
+  & dd {
+    font-weight: 400;
+    font-size: 1rem;
+    color: #424242;
+  }
+
+  dd:nth-child(4) {
+    font-weight: 700;
+  }
+
+  @media screen and (min-width: 768px) {
+    flex: 7;
+    dt:nth-child(1) {
+      order: 1;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+    dd:nth-child(2) {
+      order: 2;
+    }
+    dd:nth-child(3) {
+      order: 4;
+    }
+
+    dd:nth-child(4) {
+      order: 3;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
+  }
+`;

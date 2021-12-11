@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 // ALl Content
-export const OrderContentContainer = styled.section`
+export const OrderContentContainer = styled.section<{ mobile?: string }>`
   position: relative;
-  margin: 1rem;
+  margin: ${({ mobile }) => (mobile ? '0 1rem 7vh' : '1rem')};
   padding: 1.5rem 1rem;
   background-color: #ffffff;
   border-radius: 4px;
