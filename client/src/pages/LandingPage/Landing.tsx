@@ -64,7 +64,6 @@ const Landing = () => {
 
             {latestArtList.map((art, idx) => {
               const { _id, image } = art;
-              console.log(art);
               return (
                 <div
                   role="button"
@@ -106,7 +105,7 @@ const Landing = () => {
           </ServiceList>
         </ServiceSection>
         <StartBtnBox>
-          <Link to="/artists">작가 구경하기</Link>
+          <Link to="/artlist">작품 구경하기</Link>
         </StartBtnBox>
       </LandingWrap>
       <QuickBtns />
