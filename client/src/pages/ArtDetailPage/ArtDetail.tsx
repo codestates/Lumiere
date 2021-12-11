@@ -16,6 +16,8 @@ import {
   DetailImgBox,
   DetailInfoBox,
   OrderBtnBox,
+  SuggestionSection,
+  SuggestionImgWrap,
 } from './styled';
 
 const ArtDetail = () => {
@@ -48,8 +50,8 @@ const ArtDetail = () => {
   return (
     <ArtDetailContainer>
       <Header />
-      <ArtDetailWrap>
-        {productDetail[0] && (
+      {productDetail[0] && (
+        <ArtDetailWrap>
           <DetailInfoWrap>
             <DetailImgBox>
               <img
@@ -70,7 +72,6 @@ const ArtDetail = () => {
                 <div>
                   <Link
                     to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
-                    state={{ id: productDetail[0].productDetail.artist._id }}
                   >
                     {productDetail[0].productDetail.artist.name}
                     <MdOutlineArrowForwardIos />
@@ -126,8 +127,62 @@ const ArtDetail = () => {
             </DetailInfoBox>
             <div className="test">hello</div>
           </DetailInfoWrap>
-        )}
-      </ArtDetailWrap>
+
+          <SuggestionSection>
+            <h2>이 작가의 다른 작품</h2>
+            <Link
+              to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
+            >
+              더보기
+              <MdOutlineArrowForwardIos />
+            </Link>
+            <SuggestionImgWrap>
+              {productDetail[0].productsByArtist.map((product, idx) => {
+                return (
+                  <div
+                    key={product._id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() =>
+                      window.location.assign(`/artdetail/${product._id}`)
+                    }
+                    onKeyDown={() =>
+                      window.location.assign(`/artdetail/${product._id}`)
+                    }
+                  >
+                    <img src={product.image} alt={`작가의 다른 작품 ${idx}`} />
+                  </div>
+                );
+              })}
+            </SuggestionImgWrap>
+          </SuggestionSection>
+          <SuggestionSection>
+            <h2>Lumiere의 추천 작품</h2>
+            <SuggestionImgWrap>
+              {productDetail[0].productsByRandom.map((product, idx) => {
+                return (
+                  <div
+                    key={product._id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() =>
+                      window.location.assign(`/artdetail/${product._id}`)
+                    }
+                    onKeyDown={() =>
+                      window.location.assign(`/artdetail/${product._id}`)
+                    }
+                  >
+                    <img
+                      src={product.image}
+                      alt={`Lumiere의 추천 작품 ${idx}`}
+                    />
+                  </div>
+                );
+              })}
+            </SuggestionImgWrap>
+          </SuggestionSection>
+        </ArtDetailWrap>
+      )}
       <QuickBtns />
     </ArtDetailContainer>
   );
