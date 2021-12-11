@@ -28,7 +28,7 @@ const AdminHeader = () => {
   const logoutHandler = () => {
     // axios 요청
     instance
-      .patch('/users/logout', { lastAccessTime: new Date() })
+      .get('/users/logout')
       .then((res) => {
         console.log(res);
         localStorage.removeItem('lumiereUserInfo');
@@ -46,6 +46,7 @@ const AdminHeader = () => {
   const showMenuBox = () => {
     setShowMenu(!showMenu);
   };
+
   return (
     <HeaderContainer>
       <HambugerBtn onClick={showMenuBox}>

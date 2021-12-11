@@ -7,30 +7,75 @@ import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import FilteringTab from 'components/FilteringTab/FilteringTab';
-import { Product } from '../../util/type';
+import PageNation from 'components/PageNation/PageNation';
+import { AdminProductsType } from '../../util/type';
 import { ArtListContainer, ArtListWrap, ArtWrap, ArtInfoBox } from './styled';
 
 const ArtList = () => {
-  const [artList, setArtList] = useState<Array<Product>>([]);
+  const [curPage, setCurPage] = useState<number>(1);
+  const [artList, setArtList] = useState<AdminProductsType>({
+    products: [
+      {
+        artist: {
+          code: '',
+          name: '',
+          aka: '',
+          record: '',
+          thumbnail: '',
+          joinAt: new Date(),
+          countOfWorks: 0,
+          isActive: false,
+        },
+        artCode: '',
+        title: '',
+        image: '',
+        theme: '',
+        info: {
+          details: '',
+          size: '',
+          canvas: 0,
+          createdAt: '',
+        },
+        price: 0,
+        view: 0,
+        inStock: false,
+        updatedAt: new Date(),
+        _id: '',
+      },
+    ],
+    page: 0,
+    pages: 0,
+  });
   const breakpointColumnsObj = {
     default: 4,
     1100: 3,
     767: 2,
   };
-
+  const pageChangeHandler = (page: number) => {
+    setCurPage(page);
+    instance
+      .get<AdminProductsType>('/products', { params: { pageNumber: page } })
+      .then((res) => {
+        console.log(res.data);
+        setArtList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   useEffect(() => {
     // axios 요청
     instance
-      .get<Product>('/products')
+      .get<AdminProductsType>('/products', { params: { pageNumber: curPage } })
       .then((res) => {
         console.log(res.data);
-        setArtList([res.data].flat());
+        setArtList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
+  console.log(artList.page);
   return (
     <ArtListContainer>
       <Header />
@@ -41,7 +86,7 @@ const ArtList = () => {
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          {artList.map((art, idx) => {
+          {artList.products.map((art, idx) => {
             const { _id, title, image, artist, info } = art;
             const { name } = artist;
             const { size } = info;
@@ -64,6 +109,11 @@ const ArtList = () => {
             );
           })}
         </Masonry>
+        <PageNation
+          curPage={curPage}
+          totalPages={artList.pages}
+          pageChangeHandler={pageChangeHandler}
+        />
       </ArtListWrap>
       <QuickBtns />
       <Footer />
