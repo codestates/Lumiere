@@ -70,8 +70,8 @@ const Landing = () => {
                   tabIndex={0}
                   key={uuidv4()}
                   className="my-masonry-grid_column"
-                  onClick={() => window.location.replace(`/artdetail/${_id}`)}
-                  onKeyDown={() => window.location.replace(`/artdetail/${_id}`)}
+                  onClick={() => window.location.assign(`/artdetail/${_id}`)}
+                  onKeyDown={() => window.location.assign(`/artdetail/${_id}`)}
                 >
                   <img src={image} alt={`최신작 ${idx}`} />
                 </div>

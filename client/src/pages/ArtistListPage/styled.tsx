@@ -96,7 +96,7 @@ export const ArtistInfoBox = styled.div`
   p {
     line-height: 1.5;
     font-size: 12px;
-    color: #989;
+    color: #989898;
   }
   svg {
     position: absolute;
