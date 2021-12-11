@@ -18,6 +18,7 @@ export interface AdminUsersType {
 }
 
 export interface Product {
+  likes: [string];
   artist: Artists;
   artCode: string;
   title: string;

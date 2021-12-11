@@ -1,21 +1,25 @@
+/* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
-import { AiOutlineHeart } from 'react-icons/ai';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import FilteringTab from 'components/FilteringTab/FilteringTab';
 import PageNation from 'components/PageNation/PageNation';
+import LoginGuideModal from 'components/Modal/LoginGuideModal';
+import { ArtListMapping } from 'components/ArtListMapping/ArtListMapping';
 import { AdminProductsType } from '../../util/type';
-import { ArtListContainer, ArtListWrap, ArtWrap, ArtInfoBox } from './styled';
+import { ArtListContainer, ArtListWrap } from './styled';
 
 const ArtList = () => {
   const [curPage, setCurPage] = useState<number>(1);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
   const [artList, setArtList] = useState<AdminProductsType>({
     products: [
       {
+        likes: [''],
         artist: {
           code: '',
           name: '',
@@ -62,18 +66,36 @@ const ArtList = () => {
         console.log(err);
       });
   };
+
+  const openLoginModalHandler = () => {
+    setIsOpenLoginModal(!isOpenLoginModal);
+  };
+
+  const likedHandler = (id: string | undefined) => {
+    const userInfo = localStorage.getItem('lumiereUserInfo');
+    if (!userInfo) {
+      openLoginModalHandler();
+    }
+    instance
+      .patch('/products/zzim', {
+        productId: id,
+        zzim: !isLiked,
+      })
+      .then(() => setIsLiked(!isLiked));
+  };
+
   useEffect(() => {
     // axios 요청
     instance
       .get<AdminProductsType>('/products', { params: { pageNumber: curPage } })
       .then((res) => {
+        console.log(res.data);
         setArtList(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  console.log(artList.page);
   return (
     <ArtListContainer>
       <Header />
@@ -84,26 +106,13 @@ const ArtList = () => {
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          {artList.products.map((art, idx) => {
-            const { _id, title, image, artist, info } = art;
-            const { name } = artist;
-            const { size } = info;
-            console.log(_id);
+          {artList.products.map((art) => {
             return (
-              <ArtWrap key={_id} className="my-masonry-grid_column">
-                <Link to={`/artdetail/${_id}`}>
-                  <img src={image} alt={`최신작 ${idx}`} />
-                  <ArtInfoBox>
-                    <h4>{title}</h4>
-                    <p>
-                      {name}
-                      <br />
-                      {size}
-                    </p>
-                    <AiOutlineHeart />
-                  </ArtInfoBox>
-                </Link>
-              </ArtWrap>
+              <ArtListMapping
+                art={art}
+                openLoginModalHandler={openLoginModalHandler}
+                key={art._id}
+              />
             );
           })}
         </Masonry>
@@ -115,6 +124,10 @@ const ArtList = () => {
       </ArtListWrap>
       <QuickBtns />
       <Footer />
+      {/* Modal */}
+      {isOpenLoginModal && (
+        <LoginGuideModal clickModalHandler={openLoginModalHandler} />
+      )}
     </ArtListContainer>
   );
 };

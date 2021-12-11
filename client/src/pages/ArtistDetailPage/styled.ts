@@ -11,6 +11,7 @@ export const ArtListWrap = styled.div`
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
+  padding-bottom: 3rem;
   /* padding: 0 0.5rem; */
   display: flex;
   flex-wrap: wrap;
