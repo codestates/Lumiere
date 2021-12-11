@@ -14,7 +14,7 @@ const Nav = () => {
   const logoutHandler = () => {
     // axios 요청
     instance
-      .patch('/users/logout', { lastAccessTime: new Date() })
+      .get('/users/logout')
       .then((res) => {
         console.log(res);
         localStorage.removeItem('lumiereUserInfo');

@@ -39,7 +39,7 @@ export interface Product {
 export interface AdminProductsType {
   products: [Product];
   page: number;
-  pagegs: number;
+  pages: number;
 }
 
 export interface ProductDetail {

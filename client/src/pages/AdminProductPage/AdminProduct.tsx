@@ -42,7 +42,7 @@ const AdminProduct = () => {
       },
     ],
     page: 0,
-    pagegs: 0,
+    pages: 0,
   });
   const [isDelete, setIsDelete] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
