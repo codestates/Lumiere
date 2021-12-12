@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { RiKakaoTalkLine } from 'react-icons/ri';
 import { SiNaver } from 'react-icons/si';
 import { GrGoogle } from 'react-icons/gr';
+import { KAKAO_AUTH_URL } from 'components/OAuth/Kakao';
 import { SignInSocialWrap } from './styled';
 
 declare global {
@@ -31,7 +32,9 @@ const SignInSocial = () => {
   return (
     <SignInSocialWrap>
       <li>
-        <RiKakaoTalkLine />
+        <a href={KAKAO_AUTH_URL}>
+          <RiKakaoTalkLine />
+        </a>
       </li>
       <li>
         <SiNaver />
