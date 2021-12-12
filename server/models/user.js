@@ -28,12 +28,14 @@ const userSchema = mongoose.Schema(
       email: String,
     },
     naver: {
+      uuid: String,
       token: String,
       email: String,
     },
     kakao: {
-      token: String,
-      email: String,
+      uuid: { type: Number },
+      token: { type: String },
+      email: { type: String },
     },
     name: {
       type: String,

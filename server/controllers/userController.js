@@ -1,10 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
-import { OAuth2Client } from 'google-auth-library';
 import User from '../models/user.js';
 import generateAccessToken from '../utils/generateToken.js';
 import localTime from '../utils/localTime.js';
+import { getAccessToken, getOption, getUserInfo } from '../utils/oAuth.js';
 
 // @desc   Check a email address
 // @route  POST /api/users/email
@@ -87,87 +87,118 @@ const logout = asyncHandler(async (req, res) => {
   res.status(200).json({ message: `로그아웃 시간이 저장되었습니다` });
 });
 
-// @desc   Fetch token & userInfo from kakao
-// @route  GET /api/users/kakao
+// @desc   Fetch token & userInfo from corporations
+// @route  GET /api/users/oauth/:corporation
 // @access Public
-const kakaoUserInfo = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+const oAuthLogin = asyncHandler(async (req, res) => {
+  const { corporation } = req.params;
+  const { code } = req.query;
 
-  const user = await User.findOne({ 'general.email': email });
-
-  if (user && (await user.matchPassword(password))) {
+  console.log('"corporation": ', corporation);
+  console.log('"code": ', code);
+  const options = getOption(corporation, code);
+  // console.log('옵션', options);
+  const token = await getAccessToken(options);
+  console.log('토큰', token.data.access_token);
+  const userInfo = await getUserInfo(
+    options.userInfo_url,
+    token.data.access_token,
+  );
+  console.log('유저', userInfo.data);
+  const query = {};
+  // query[corporation] = { uuid: userInfo.data.id };
+  // console.log(typeof query[corporation].uuid);
+  query.uuid = userInfo.data.id;
+  console.log('"query": ', query);
+  // DB와 연락하기
+  const user = await User.findOne({
+    'kakao.uuid': userInfo.data.id,
+  });
+  if (user) {
     res.json({
       _id: user._id,
       name: user.name,
+      isAdmin: user.isAdmin,
       token: generateAccessToken(user._id),
     });
   } else {
-    res
-      .status(401)
-      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+    // 만약 이름이 허용이 아니라면?
+    const newUser = new User({
+      'kakao.uuid': userInfo.data.id,
+      'kakao.token': token.data.access_token,
+      'kakao.email': userInfo.data.kakao_account.email,
+      name: userInfo.data.kakao_account.profile.nickname,
+    });
+    await newUser.save();
+    res.json({
+      _id: newUser._id,
+      name: newUser.name,
+      isAdmin: newUser.isAdmin,
+      token: generateAccessToken(newUser._id),
+    });
   }
 });
 
 // @desc   Fetch token & userInfo from naver
 // @route  GET /api/users/naver
 // @access Public
-const naverUserInfo = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+// const naverUserInfo = asyncHandler(async (req, res) => {
+//   const { email, password } = req.body;
 
-  const user = await User.findOne({ 'general.email': email });
+//   const user = await User.findOne({ 'general.email': email });
 
-  if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      token: generateAccessToken(user._id),
-    });
-  } else {
-    res
-      .status(401)
-      .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
-  }
-});
+//   if (user && (await user.matchPassword(password))) {
+//     res.json({
+//       _id: user._id,
+//       name: user.name,
+//       token: generateAccessToken(user._id),
+//     });
+//   } else {
+//     res
+//       .status(401)
+//       .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
+//   }
+// });
 
 // @desc   Fetch token & userInfo from google
 // @route  POST /api/users/google
 // @access Public
-const googleUserInfo = asyncHandler(async (req, res) => {
-  console.log(req.body.code);
-  const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// const googleUserInfo = asyncHandler(async (req, res) => {
+//   console.log(req.body.code);
+//   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-  async function verify() {
-    const ticket = await client.verifyIdToken({
-      idToken: req.body.code,
-    });
-    const payload = ticket.getPayload();
+//   async function verify() {
+//     const ticket = await client.verifyIdToken({
+//       idToken: req.body.code,
+//     });
+//     const payload = ticket.getPayload();
 
-    // 디비에 연락 -> 기존 유저라면 토큰 업데이트, 신규 유저면 정보 저장
-    const user = await User.findOne({ 'google.uuid': payload.sub });
-    if (user) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        isAdmin: user.isAdmin,
-        token: generateAccessToken(user._id),
-      });
-    } else {
-      const newUser = await User.create({
-        'google.uuid': payload.sub,
-        'google.email': payload.email,
-        name: payload.name,
-      });
-      res.json({
-        _id: newUser._id,
-        name: newUser.name,
-        isAdmin: newUser.isAdmin,
-        token: generateAccessToken(newUser._id),
-      });
-    }
-  }
-  verify().catch(console.error);
-  // 토큰 확인(해독)
-});
+//     // 디비에 연락 -> 기존 유저라면 토큰 업데이트, 신규 유저면 정보 저장
+//     const user = await User.findOne({ 'google.uuid': payload.sub });
+//     if (user) {
+//       res.json({
+//         _id: user._id,
+//         name: user.name,
+//         isAdmin: user.isAdmin,
+//         token: generateAccessToken(user._id),
+//       });
+//     } else {
+//       const newUser = await User.create({
+//         'google.uuid': payload.sub,
+//         'google.email': payload.email,
+//         name: payload.name,
+//       });
+//       res.json({
+//         _id: newUser._id,
+//         name: newUser.name,
+//         isAdmin: newUser.isAdmin,
+//         token: generateAccessToken(newUser._id),
+//       });
+//     }
+//   }
+//   verify().catch(console.error);
+//   // 토큰 확인(해독)
+// });
 
 // @desc   Check user password
 // @route  POST /api/users/profile
@@ -292,9 +323,9 @@ export {
   checkEmail,
   register,
   generalLogin,
-  kakaoUserInfo,
-  naverUserInfo,
-  googleUserInfo,
+  oAuthLogin,
+  // naverUserInfo,
+  // googleUserInfo,
   checkPwd,
   updatePwd,
   logout,
