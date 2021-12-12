@@ -20,11 +20,6 @@ export const ArtListMapping = ({
   const { name } = artist;
   const { size } = info;
   const [isLiked, setIsLiked] = useState<boolean>(false);
-  const breakpointColumnsObj = {
-    default: 4,
-    1100: 3,
-    767: 2,
-  };
 
   useEffect(() => {
     // axios 요청

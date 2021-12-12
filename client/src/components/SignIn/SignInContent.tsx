@@ -5,7 +5,7 @@ import { emailValidate, passwordValidate } from 'util/validate';
 import { IsSigninState } from 'States/IsLoginState';
 import { useSetRecoilState } from 'recoil';
 import { SignInContentWrap, SignInBtnWrap, SignInErrMessage } from './styled';
-import SignInSocial from './SignInSocail';
+import SignInSocial from './SignInSocial';
 
 type SigninInput = {
   email: string;
