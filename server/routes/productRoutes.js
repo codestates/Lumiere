@@ -23,7 +23,7 @@ router.route('/latest').get(getLatestProducts);
 router.route('/total-price').get(protect, getTotalPrice);
 router.route('/cart-items').get(getCartItems);
 router.route('/zzim').patch(protect, zzimProduct).get(protect, getZzimProducts);
-router.route('/filter/:filtered').get(getProductsByFilter);
+router.route('/filter').get(getProductsByFilter);
 router
   .route('/:id')
   .get(getProductById)
