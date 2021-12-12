@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Masonry from 'react-masonry-css';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
@@ -24,6 +25,24 @@ import {
 const Landing = () => {
   const [banners, setBanners] = useState([]);
   const [latestArtList, setLatestArtList] = useState([]);
+
+  // useEffect(() => {
+  //   const url = new URL(window.location.href);
+  //   const { search } = url;
+  //   console.log(search);
+  //   const code = search.split('=')[1].split('&')[0];
+  //   console.log(code);
+  //   axios
+  //     .get('http://localhost:5000/oauth/google', {
+  //       params: { code },
+  //     })
+  //     .then((res) => {
+  //       console.log(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   useEffect(() => {
     // axios 요청
