@@ -18,6 +18,9 @@ const Cart = () => {
   // 로컬스토리지 상태관리
   const [cartListState, setCartListState] = useState<string[]>([]);
 
+  // CheckBox 상태 관리
+  const [checkBoxList, setCheckBoxList] = useState<string[]>([]);
+
   // 작품 상태
   const [cartProductState, setCartProductState] = useState<
     Array<OrderProducts>
@@ -70,6 +73,10 @@ const Cart = () => {
     );
   }, [cartProductState]);
 
+  useEffect(() => {
+    console.log(checkBoxList);
+  }, [checkBoxList]);
+
   return (
     <CartContainer>
       <Header />
@@ -78,8 +85,15 @@ const Cart = () => {
       </CartTitleWrap>
       <CartContentWrap>
         <CartContentLeftWrap>
-          <CartMenu />
-          <CartList cartProductState={cartProductState} />
+          <CartMenu
+            checkBoxList={checkBoxList}
+            setCheckBoxList={setCheckBoxList}
+          />
+          <CartList
+            cartProductState={cartProductState}
+            checkBoxList={checkBoxList}
+            setCheckBoxList={setCheckBoxList}
+          />
         </CartContentLeftWrap>
         <CartPay totalPriceState={totalPriceState} />
       </CartContentWrap>

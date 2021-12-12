@@ -20,12 +20,16 @@ export const CartPay = ({ totalPriceState }: { totalPriceState: number }) => {
           <TiPlus />
           <CartPayDescriptionWrap>
             <dt>배송비</dt>
-            <dd>10,000원</dd>
+            <dd>{totalPriceState === 0 ? `0 원` : `10,000원`}</dd>
           </CartPayDescriptionWrap>
           <TiEquals />
           <CartPayDescriptionWrap>
             <dt>결제예정금액</dt>
-            <dd>{`${useComma(totalPriceState + 10000)}원`}</dd>
+            <dd>
+              {totalPriceState === 0
+                ? `${useComma(totalPriceState)}원`
+                : `${useComma(totalPriceState + 10000)}원`}
+            </dd>
           </CartPayDescriptionWrap>
         </CartPayCountWrap>
         <CartPayClickBtn type="button">주문하기</CartPayClickBtn>

@@ -143,10 +143,6 @@ export const SignInSocialWrap = styled.ul`
     font-size: 2.5rem;
   }
 
-  svg {
-    pointer-events: none;
-  }
-
   @media only screen and (min-width: 768px) {
     li {
       margin: 0 1rem;

@@ -38,25 +38,25 @@ export const CartMenuWrap = styled.div`
   }
 `;
 
-export const AllSelectBtnWrap = styled.div`
-  button {
-    display: flex;
-    align-items: center;
-  }
+export const AllSelectLabelWrap = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
 
-  div {
-    margin-top: 0.3rem;
-  }
-
-  svg {
-    pointer-events: none;
-    font-size: 1.3rem;
-    margin-right: 0.2rem;
+  & label {
+    margin-right: 0.3rem;
   }
 
   @media screen and (min-width: 768px) {
-    button {
-      font-size: 1.1rem;
+    & label {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    & label input {
+      width: 80%;
+      height: 80%;
     }
   }
 `;
@@ -267,30 +267,47 @@ export const ListDeleteBtnWrap = styled.div`
   }
 `;
 
-export const ListCheckBtnWrap = styled.div`
-  flex: 1;
+export const ListCheckLabelWrap = styled.div`
+  flex: 2;
   display: flex;
   justify-content: center;
   align-items: center;
   border: none;
   background: none;
 
-  & button {
-    width: 2rem;
-    height: 2rem;
-    padding: 0;
+  & label {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    justify-content: center;
+    text-align: center;
     border: none;
     background: none;
+    transition: all 0.5s;
   }
 
-  & button svg {
+  & label input {
+    width: 100%;
+    height: 100%;
+  }
+
+  & label:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+  }
+
+  & label svg {
     font-size: 1.5rem;
     pointer-events: none;
+  }
+
+  @media screen and (min-width: 768px) {
+    flex: 1;
   }
 `;
 
 export const ImgWrap = styled.div`
-  flex: 3;
+  flex: 4;
   width: 7rem;
   height: 9rem;
   padding: 0 0.5rem;

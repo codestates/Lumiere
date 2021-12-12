@@ -1,13 +1,29 @@
 /* eslint no-underscore-dangle: 0 */
+import React, { useState } from 'react';
 import instance from 'util/axios';
+import CartSelectDeleteModal from 'components/Modal/CartSelectDeleteModal';
 import { OrderProducts } from 'util/type';
-import { VscPass } from 'react-icons/vsc';
-import { CartMenuWrap, AllSelectBtnWrap, SelectBtnWrap } from './styled';
+import { CartMenuWrap, AllSelectLabelWrap, SelectBtnWrap } from './styled';
 
-export const CartMenu = () => {
+type CartProductsProps = {
+  checkBoxList: string[];
+  setCheckBoxList: (check: string[]) => void;
+};
+
+export const CartMenu = ({
+  checkBoxList,
+  setCheckBoxList,
+}: CartProductsProps) => {
+  const [isSelectModal, setIsSelectModal] = useState(false);
+
+  const cartItems = localStorage.getItem('cartItems');
+  const arr = JSON.parse(cartItems || '{}');
+
+  const clickModalHandler = () => {
+    setIsSelectModal(!isSelectModal);
+  };
+
   const soldoutDeleteHandler = () => {
-    const cartItems = localStorage.getItem('cartItems');
-    const arr = JSON.parse(cartItems || '{}');
     instance
       .get('/products/cart-items', { params: { productId: arr } })
       .then((res) => {
@@ -29,21 +45,50 @@ export const CartMenu = () => {
       });
   };
 
+  const selectDeleteHandler = () => {
+    const newArr = arr.filter((el: string) => {
+      return !checkBoxList.includes(el);
+    });
+    localStorage.setItem('cartItems', JSON.stringify(newArr));
+    window.location.reload();
+  };
+
+  const allCheckBoxHanlder = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.currentTarget.checked) {
+      setCheckBoxList([...arr]);
+    }
+
+    if (!e.currentTarget.checked) {
+      setCheckBoxList([]);
+    }
+  };
+
   return (
     <CartMenuWrap>
-      <AllSelectBtnWrap>
-        <button type="button">
-          <div>
-            <VscPass />
-          </div>
-          전체선택
-        </button>
-      </AllSelectBtnWrap>
+      {isSelectModal && (
+        <CartSelectDeleteModal
+          clickModalHandler={clickModalHandler}
+          selectDeleteHandler={selectDeleteHandler}
+        />
+      )}
+      <AllSelectLabelWrap>
+        <label htmlFor="all-Check">
+          <input
+            type="checkbox"
+            id="all-Check"
+            onChange={allCheckBoxHanlder}
+            checked={arr.length !== 0 && checkBoxList.length === arr.length}
+          />
+        </label>
+        전체선택
+      </AllSelectLabelWrap>
       <SelectBtnWrap>
         <button type="button" onClick={soldoutDeleteHandler}>
           품절상품삭제
         </button>
-        <button type="button">선택상품삭제</button>
+        <button type="button" onClick={clickModalHandler}>
+          선택상품삭제
+        </button>
       </SelectBtnWrap>
     </CartMenuWrap>
   );
