@@ -48,29 +48,35 @@ const createProduct = asyncHandler(async (req, res) => {
 // @access Public
 const getProducts = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
-
-  const page = Number(req.query.pageNumber) || 1;
+  const { pageNumber, isAdmin } = req.query;
+  const page = Number(pageNumber) || 1;
 
   let pageSize;
   let count;
   let products;
 
-  const decodedData = isAuthorized(req);
-  if (decodedData) {
-    req.user = await User.findById(decodedData.id).select('-general.password');
-    if (req.user.isAdmin === true) {
-      pageSize = 10;
-      count = await Product.countDocuments({});
-      products = await Product.find({})
-        .populate('artist', ['name', 'aka', 'code', 'record'])
-        .sort({ _id: -1 })
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
-        .exec();
+  if (isAdmin === true) {
+    const decodedData = isAuthorized(req);
+    if (decodedData) {
+      // 토큰이 유효할 경우
+      req.user = await User.findById(decodedData.id).select(
+        '-general.password',
+      );
+      if (req.user.isAdmin === true) {
+        // 관리자인 경우
+        pageSize = 10;
+        count = await Product.countDocuments({});
+        products = await Product.find({})
+          .populate('artist', ['name', 'aka', 'code', 'record'])
+          .sort({ _id: -1 })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
+          .exec();
 
-      res.json({ products, page, pages: Math.ceil(count / pageSize) });
-      return;
-    } // 관리자
+        res.json({ products, page, pages: Math.ceil(count / pageSize) });
+        return;
+      }
+    }
   }
 
   pageSize = 28;
@@ -95,7 +101,7 @@ const getProducts = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch filtered products
-// @route  GET /api/products/:filtered
+// @route  GET /api/products/filter/:filtered
 // @access Public
 const getProductsByFilter = asyncHandler(async (req, res) => {
   // 품절 제외

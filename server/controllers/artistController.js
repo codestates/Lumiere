@@ -61,27 +61,35 @@ const createArtist = asyncHandler(async (req, res) => {
 // @access Public
 const getArtists = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
-
-  const page = Number(req.query.pageNumber) || 1;
+  const { pageNumber, isAdmin } = req.query;
+  const page = Number(pageNumber) || 1;
   const pageSize = 9;
+
   let count;
   let artists;
 
-  const decodedData = isAuthorized(req);
-  if (decodedData) {
-    req.user = await User.findById(decodedData.id).select('-general.password');
-    if (req.user.isAdmin === true) {
-      count = await Artist.countDocuments({});
-      artists = await Artist.find({}, { likes: 0 })
-        .sort({ _id: -1 })
-        .limit(pageSize)
-        .skip(pageSize * (page - 1))
-        .exec();
+  if (isAdmin === true) {
+    const decodedData = isAuthorized(req);
+    if (decodedData) {
+      // 토큰이 유효할 경우
+      req.user = await User.findById(decodedData.id).select(
+        '-general.password',
+      );
+      if (req.user.isAdmin === true) {
+        // 관리자인 경우
+        count = await Artist.countDocuments({});
+        artists = await Artist.find({}, { likes: 0 })
+          .sort({ _id: -1 })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
+          .exec();
 
-      res.json({ artists, page, pages: Math.ceil(count / pageSize) });
-      return;
-    } // 관리자
+        res.json({ artists, page, pages: Math.ceil(count / pageSize) });
+        return;
+      }
+    }
   }
+
   count = await Artist.countDocuments({ isActive: true });
   artists = await Artist.find(
     { isActive: true },
