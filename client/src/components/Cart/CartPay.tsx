@@ -1,4 +1,5 @@
 import { TiEquals, TiPlus } from 'react-icons/ti';
+import { useComma } from 'util/functions';
 import {
   CartPayWrap,
   CartPayContentWrap,
@@ -7,14 +8,14 @@ import {
   CartPayClickBtn,
 } from './styled';
 
-export const CartPay = () => {
+export const CartPay = ({ totalPriceState }: { totalPriceState: number }) => {
   return (
     <CartPayWrap>
       <CartPayContentWrap>
         <CartPayCountWrap>
           <CartPayDescriptionWrap>
             <dt>총 상품 금액</dt>
-            <dd>80,000원</dd>
+            <dd>{`${useComma(totalPriceState)}원`}</dd>
           </CartPayDescriptionWrap>
           <TiPlus />
           <CartPayDescriptionWrap>
@@ -24,7 +25,7 @@ export const CartPay = () => {
           <TiEquals />
           <CartPayDescriptionWrap>
             <dt>결제예정금액</dt>
-            <dd>90,000원</dd>
+            <dd>{`${useComma(totalPriceState + 10000)}원`}</dd>
           </CartPayDescriptionWrap>
         </CartPayCountWrap>
         <CartPayClickBtn type="button">주문하기</CartPayClickBtn>
