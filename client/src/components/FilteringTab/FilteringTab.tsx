@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { tabMenus } from './dummy';
+import { useState, useEffect } from 'react';
+import { tabMenus, tabTypes } from './dummy';
 import {
   TabContainer,
   TabList,
@@ -9,9 +9,28 @@ import {
   FilteringMenu,
 } from './styled';
 
-const FilteringTab = () => {
+type GreetingProps = {
+  filteringHandler: (type: {
+    theme?: string;
+    sizeMin?: number;
+    sizeMax?: number;
+    priceMin?: number;
+    priceMax?: number;
+  }) => void;
+  // setTabFilter: (active: string) => void;
+};
+const FilteringTab = ({ filteringHandler }: GreetingProps) => {
   const [currentTab, setCurrentTab] = useState(1);
   const [currentMenu, setCurrentMenu] = useState(-1);
+
+  useEffect(() => {
+    if (currentMenu <= 5) filteringHandler(tabTypes[currentMenu]);
+    else if (currentMenu <= 16) {
+      filteringHandler(tabTypes[currentMenu]);
+    } else {
+      filteringHandler(tabTypes[currentMenu]);
+    }
+  }, [currentMenu]);
 
   const selectTabHandler = (id: number) => {
     setCurrentTab(id);

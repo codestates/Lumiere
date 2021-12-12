@@ -14,7 +14,7 @@ import { ArtListContainer, ArtListWrap } from './styled';
 
 const ArtList = () => {
   const [curPage, setCurPage] = useState<number>(1);
-  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [tabFilter, setTabFilter] = useState<string>('');
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
   const [artList, setArtList] = useState<AdminProductsType>({
     products: [
@@ -71,19 +71,6 @@ const ArtList = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
 
-  const likedHandler = (id: string | undefined) => {
-    const userInfo = localStorage.getItem('lumiereUserInfo');
-    if (!userInfo) {
-      openLoginModalHandler();
-    }
-    instance
-      .patch('/products/zzim', {
-        productId: id,
-        zzim: !isLiked,
-      })
-      .then(() => setIsLiked(!isLiked));
-  };
-
   useEffect(() => {
     // axios 요청
     instance
@@ -96,10 +83,55 @@ const ArtList = () => {
         console.log(err);
       });
   }, []);
+
+  const filteringHandler = (type: {
+    theme?: string;
+    sizeMin?: number;
+    sizeMax?: number;
+    priceMin?: number;
+    priceMax?: number;
+  }) => {
+    if (!type) {
+      instance
+        .get<AdminProductsType>('/products', {
+          params: { pageNumber: curPage },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setArtList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      instance
+        .get('/products/filter', {
+          params: {
+            pageNumber: curPage,
+            theme: type.theme,
+            sizeMin: type.sizeMin,
+            sizeMax: type.sizeMax,
+            priceMin: type.priceMin,
+            priceMax: type.priceMax,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          setArtList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   return (
     <ArtListContainer>
       <Header />
-      <FilteringTab />
+      <FilteringTab
+        filteringHandler={filteringHandler}
+        // setTabFilter={setTabFilter}
+      />
       <ArtListWrap>
         <Masonry
           breakpointCols={breakpointColumnsObj}
@@ -131,4 +163,5 @@ const ArtList = () => {
     </ArtListContainer>
   );
 };
+
 export default ArtList;

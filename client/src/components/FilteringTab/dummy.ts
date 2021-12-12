@@ -21,6 +21,7 @@ export const tabMenus = [
       { id: 13, parent: 1, name: '~30호' },
       { id: 14, parent: 1, name: '~40호' },
       { id: 15, parent: 1, name: '~60호' },
+      { id: 16, parent: 1, name: '~100호' },
     ],
   },
   {
@@ -36,3 +37,35 @@ export const tabMenus = [
     ],
   },
 ];
+
+export const tabTypes: {
+  [key: number]: {
+    theme?: string;
+    sizeMin?: number;
+    sizeMax?: number;
+    priceMin?: number;
+    priceMax?: number;
+  };
+} = {
+  0: { theme: '인물' },
+  1: { theme: '풍경' },
+  2: { theme: '정물' },
+  3: { theme: '동물' },
+  4: { theme: '상상' },
+  5: { theme: '추상' },
+
+  10: { sizeMin: 1, sizeMax: 5 },
+  11: { sizeMin: 6, sizeMax: 10 },
+  12: { sizeMin: 11, sizeMax: 20 },
+  13: { sizeMin: 21, sizeMax: 30 },
+  14: { sizeMin: 31, sizeMax: 40 },
+  15: { sizeMin: 41, sizeMax: 60 },
+  16: { sizeMin: 61, sizeMax: 100 },
+
+  20: { priceMin: 0, priceMax: 50000 },
+  21: { priceMin: 50000, priceMax: 100000 },
+  22: { priceMin: 100000, priceMax: 200000 },
+  23: { priceMin: 200000, priceMax: 500000 },
+  24: { priceMin: 500000, priceMax: 1000000 },
+  25: { priceMin: 1000000 },
+};
