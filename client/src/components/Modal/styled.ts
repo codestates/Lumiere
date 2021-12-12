@@ -284,8 +284,14 @@ export const SelectButton = styled.button`
   font-weight: 800;
   font-size: 1.1rem;
   border: none;
-  background: none;
-  background-color: black;
-  color: #ffffff;
+  background: var(--color-black) !important;
+  color: #ffffff !important;
   margin-right: 1rem;
+  transition: all 0.5s;
+
+  &:hover {
+    cursor: pointer;
+    outline: none;
+    transform: scale(1.05);
+  }
 `;
