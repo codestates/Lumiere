@@ -63,7 +63,7 @@ export const DetailInfoBox = styled.div`
   margin: 0.5rem 0 1rem;
   font-weight: 700;
 
-  h4 {
+  > div > h4 {
     margin: auto 0;
     font-size: 1.2rem;
   }
@@ -111,10 +111,10 @@ export const DetailInfoBox = styled.div`
     width: 30%;
     margin: 0;
 
-    > div:first-child div {
+    > div:first-child > div {
       display: block;
       text-align: right;
-      svg {
+      > svg {
         width: 2rem;
         height: 100%;
         margin-left: 0.4rem;
@@ -129,6 +129,7 @@ export const OrderBtnBox = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
+  z-index: var(--button-index);
   display: flex;
   width: 100%;
 
