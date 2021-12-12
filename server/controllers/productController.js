@@ -101,11 +101,7 @@ const getProducts = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch filtered products
-<<<<<<< Updated upstream
-// @route  GET /api/products/filter/:filtered
-=======
 // @route  GET /api/products/filter
->>>>>>> Stashed changes
 // @access Public
 const getProductsByFilter = asyncHandler(async (req, res) => {
   // 품절 제외
