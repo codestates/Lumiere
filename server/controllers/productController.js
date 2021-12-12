@@ -101,15 +101,19 @@ const getProducts = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch filtered products
+<<<<<<< Updated upstream
 // @route  GET /api/products/filter/:filtered
+=======
+// @route  GET /api/products/filter
+>>>>>>> Stashed changes
 // @access Public
 const getProductsByFilter = asyncHandler(async (req, res) => {
   // 품절 제외
   const { theme, sizeMin, sizeMax, priceMin, priceMax } = req.query;
-  const { filtered } = req.params;
+
   let filter;
 
-  if (filtered === 'theme') {
+  if (theme) {
     filter = { theme };
   } else if (sizeMin && sizeMax) {
     filter = { 'info.canvas': { $gte: sizeMin, $lte: sizeMax } };
@@ -141,7 +145,7 @@ const getProductsByFilter = asyncHandler(async (req, res) => {
     .skip(pageSize * (page - 1))
     .exec();
 
-  res.json({ products, filtered, page, pages: Math.ceil(count / pageSize) });
+  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Update a product
