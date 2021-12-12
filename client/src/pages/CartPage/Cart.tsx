@@ -39,6 +39,8 @@ const Cart = () => {
     },
   ]);
 
+  const [totalPriceState, setTotalPriceState] = useState<number>(0);
+
   // 로컬스토리지 갱신을 위한 useEffect
   useEffect(() => {
     const localInfo = localStorage.getItem('cartItems');
@@ -58,7 +60,14 @@ const Cart = () => {
   }, [cartListState]);
 
   useEffect(() => {
-    console.log(cartProductState);
+    setTotalPriceState(
+      cartProductState.reduce((acc, cur) => {
+        if (cur.inStock) {
+          return acc + cur.price;
+        }
+        return acc;
+      }, 0),
+    );
   }, [cartProductState]);
 
   return (
@@ -72,7 +81,7 @@ const Cart = () => {
           <CartMenu />
           <CartList cartProductState={cartProductState} />
         </CartContentLeftWrap>
-        <CartPay />
+        <CartPay totalPriceState={totalPriceState} />
       </CartContentWrap>
       <Footer />
     </CartContainer>

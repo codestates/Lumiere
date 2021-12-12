@@ -253,6 +253,12 @@ export const ListDeleteBtnWrap = styled.div`
     height: 100%;
     border: none;
     background: none;
+    transition: all 0.5s;
+  }
+
+  & button:hover {
+    cursor: pointer;
+    transform: scale(1.1);
   }
 
   & button svg {

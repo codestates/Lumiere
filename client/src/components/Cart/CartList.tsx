@@ -74,7 +74,7 @@ export const CartList = ({ cartProductState }: CartProductsProps) => {
               <dt>{el.title}</dt>
               <dd>{el.artist.name}</dd>
               <dd>{`${el.info.size} (${el.info.canvas}호)`}</dd>
-              <dd>{`${useComma(el.price)} 원`}</dd>
+              <dd>{el.inStock ? `${useComma(el.price)} 원` : `품절`}</dd>
             </ProductDlWrap>
           </ProductContent>
         );
