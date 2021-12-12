@@ -55,25 +55,25 @@ const getProducts = asyncHandler(async (req, res) => {
   let count;
   let products;
 
-  // const decodedData = isAuthorized(req);
-  // if (decodedData) {
-  //   req.user = await User.findById(decodedData.id).select('-general.password');
-  //   if (req.user.isAdmin === true) {
-  pageSize = 40;
-  count = await Product.countDocuments({});
-  products = await Product.find({})
-    .populate('artist', ['name', 'aka', 'code', 'record'])
-    .sort({ _id: -1 })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1))
-    .exec();
+  const decodedData = isAuthorized(req);
+  if (decodedData) {
+    req.user = await User.findById(decodedData.id).select('-general.password');
+    if (req.user.isAdmin === true) {
+      pageSize = 10;
+      count = await Product.countDocuments({});
+      products = await Product.find({})
+        .populate('artist', ['name', 'aka', 'code', 'record'])
+        .sort({ _id: -1 })
+        .limit(pageSize)
+        .skip(pageSize * (page - 1))
+        .exec();
 
-  res.json({ products, page, pages: Math.ceil(count / pageSize) });
-  return;
-  //   } // 관리자
-  // }
+      res.json({ products, page, pages: Math.ceil(count / pageSize) });
+      return;
+    } // 관리자
+  }
 
-  pageSize = 40;
+  pageSize = 28;
   count = await Product.countDocuments({ inStock: true });
   products = await Product.find(
     { inStock: true },
@@ -95,26 +95,22 @@ const getProducts = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch filtered products
-// @route  GET /api/products/filter
+// @route  GET /api/products/:filtered
 // @access Public
 const getProductsByFilter = asyncHandler(async (req, res) => {
   // 품절 제외
   const { theme, sizeMin, sizeMax, priceMin, priceMax } = req.query;
+  const { filtered } = req.params;
   let filter;
-  let filtered;
 
-  if (theme) {
+  if (filtered === 'theme') {
     filter = { theme };
-    filtered = '테마';
   } else if (sizeMin && sizeMax) {
     filter = { 'info.canvas': { $gte: sizeMin, $lte: sizeMax } };
-    filtered = '사이즈';
   } else if (priceMin && priceMax) {
     filter = { price: { $gte: priceMin, $lte: priceMax } };
-    filtered = '가격';
   } else if (priceMin) {
     filter = { price: { $gte: priceMin } };
-    filtered = '가격';
   } else {
     res.status(400).json({ message: '필터할 정보가 명확하지 않습니다' });
     return;
