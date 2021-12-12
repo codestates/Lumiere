@@ -1,4 +1,5 @@
 import Footer from 'components/Footer/Footer';
+import { useLocation } from 'react-router-dom';
 import Header from 'components/Header/Header';
 import { useEffect, useState } from 'react';
 import {
@@ -24,6 +25,10 @@ import {
 } from './styled';
 
 const Order = () => {
+  // Cart에서 histtory로 받아온값
+  const location = useLocation();
+  const orderProduct: string[] = location.state.id;
+
   const localInfo = localStorage.getItem('lumiereUserInfo');
   const userName = JSON.parse(localInfo || '{}').name;
 
@@ -96,13 +101,8 @@ const Order = () => {
 
   // 주문 가격 확인
   useEffect(() => {
-    const arr = [
-      '61b22e4d7f66248003c84f50',
-      '61b22cb17f66248003c84f3d',
-      '61adb647306c6f00a95f6eb1',
-    ];
     instance
-      .get('/products/total-price', { params: { productId: arr } })
+      .get('/products/total-price', { params: { productId: orderProduct } })
       .then((res) => {
         const price = res.data.totalPrice;
         setPriceState({
@@ -118,15 +118,9 @@ const Order = () => {
 
   // 구입예정 제품 정보 확인
   useEffect(() => {
-    const arr = [
-      '61b22e4d7f66248003c84f50',
-      '61b22cb17f66248003c84f3d',
-      '61adb647306c6f00a95f6eb1',
-    ];
     instance
-      .get('/products/cart-items', { params: { productId: arr } })
+      .get('/products/cart-items', { params: { productId: orderProduct } })
       .then((res) => {
-        console.log(res);
         setProductState(res.data);
       })
       .catch((err) => {

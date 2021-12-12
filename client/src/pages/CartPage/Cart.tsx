@@ -73,10 +73,6 @@ const Cart = () => {
     );
   }, [cartProductState]);
 
-  useEffect(() => {
-    console.log(checkBoxList);
-  }, [checkBoxList]);
-
   return (
     <CartContainer>
       <Header />
@@ -95,7 +91,12 @@ const Cart = () => {
             setCheckBoxList={setCheckBoxList}
           />
         </CartContentLeftWrap>
-        <CartPay totalPriceState={totalPriceState} />
+        <CartPay
+          totalPriceState={totalPriceState}
+          cartListState={cartListState}
+          setCartProductState={setCartProductState}
+          cartProductState={cartProductState}
+        />
       </CartContentWrap>
       <Footer />
     </CartContainer>

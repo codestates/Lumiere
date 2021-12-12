@@ -1,5 +1,10 @@
 import { TiEquals, TiPlus } from 'react-icons/ti';
+import { useState } from 'react';
+import instance from 'util/axios';
+import { useNavigate } from 'react-router-dom';
+import CartSoldOutModal from 'components/Modal/CartSoldOutModal';
 import { useComma } from 'util/functions';
+import { OrderProducts } from 'util/type';
 import {
   CartPayWrap,
   CartPayContentWrap,
@@ -8,9 +13,52 @@ import {
   CartPayClickBtn,
 } from './styled';
 
-export const CartPay = ({ totalPriceState }: { totalPriceState: number }) => {
+type CartProps = {
+  // 배열을 넘겼으니 배열을 받아야함
+  totalPriceState: number;
+  cartListState: string[];
+  cartProductState: OrderProducts[];
+  setCartProductState: (check: OrderProducts[]) => void;
+};
+
+export const CartPay = ({
+  totalPriceState,
+  cartListState,
+  cartProductState,
+  setCartProductState,
+}: CartProps) => {
+  const [isSoldOutModal, setIsSoldOutModal] = useState(false);
+
+  const history = useNavigate();
+
+  const orderSoldOutHandler = () => {
+    instance
+      .get('/products/cart-items', { params: { productId: cartListState } })
+      .then((res) => {
+        setCartProductState(res.data);
+        const newArr = cartProductState.filter((el) => {
+          return el.inStock;
+        });
+        if (newArr.length === cartListState.length) {
+          history('/order', { state: { id: cartListState } });
+        } else {
+          clickModalHandler();
+        }
+      })
+      .catch(() => {
+        window.location.assign('/error');
+      });
+  };
+
+  const clickModalHandler = () => {
+    setIsSoldOutModal(!isSoldOutModal);
+  };
+
   return (
     <CartPayWrap>
+      {isSoldOutModal && (
+        <CartSoldOutModal clickModalHandler={clickModalHandler} />
+      )}
       <CartPayContentWrap>
         <CartPayCountWrap>
           <CartPayDescriptionWrap>
@@ -32,7 +80,9 @@ export const CartPay = ({ totalPriceState }: { totalPriceState: number }) => {
             </dd>
           </CartPayDescriptionWrap>
         </CartPayCountWrap>
-        <CartPayClickBtn type="button">주문하기</CartPayClickBtn>
+        <CartPayClickBtn type="button" onClick={orderSoldOutHandler}>
+          주문하기
+        </CartPayClickBtn>
       </CartPayContentWrap>
     </CartPayWrap>
   );
