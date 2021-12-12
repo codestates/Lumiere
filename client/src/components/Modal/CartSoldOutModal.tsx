@@ -11,25 +11,21 @@ type Props = {
   clickModalHandler: () => void;
 };
 
-const CartNotListModal = ({ clickModalHandler }: Props) => {
-  const backMovingHanlder = () => {
-    window.history.back();
-  };
-
+const CartSoldOutModal = ({ clickModalHandler }: Props) => {
   return (
     <ModalBackdrop onClick={clickModalHandler}>
       <ModalWrap onClick={(e) => e.stopPropagation()}>
         <ContentWrap>
           <GuideImgBox>
-            <img src="/images/login_guide.png" alt="로그인 안내 이미지" />
+            <img src="/images/login_guide.png" alt="품절상품 안내 이미지" />
           </GuideImgBox>
-          <p>아트 쇼핑백이 비어있습니다</p>
+          <p>품절상품 삭제 후 다시 시도해주세요</p>
         </ContentWrap>
         <ButtonBox>
-          <SelectButton onClick={backMovingHanlder}>뒤로가기</SelectButton>
+          <SelectButton onClick={clickModalHandler}>닫기 </SelectButton>
         </ButtonBox>
       </ModalWrap>
     </ModalBackdrop>
   );
 };
-export default CartNotListModal;
+export default CartSoldOutModal;
