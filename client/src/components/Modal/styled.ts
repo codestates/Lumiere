@@ -276,3 +276,16 @@ export const AddWrap = styled.div`
     border-radius: 0.5rem;
   }
 `;
+
+// CartDeleteModal
+export const SelectButton = styled.button`
+  width: 40%;
+  height: 3rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  border: none;
+  background: none;
+  background-color: black;
+  color: #ffffff;
+  margin-right: 1rem;
+`;
