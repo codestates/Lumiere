@@ -1,9 +1,9 @@
 import express from 'express';
 import {
   generalLogin,
-  kakaoUserInfo,
-  googleUserInfo,
-  naverUserInfo,
+  oAuthLogin,
+  // googleUserInfo,
+  // naverUserInfo,
   register,
   checkEmail,
   checkPwd,
@@ -21,9 +21,9 @@ router.route('/').post(register).get(protect, admin, getUsers);
 router.route('/email').post(checkEmail);
 router.route('/login').post(generalLogin);
 router.route('/logout').get(protect, logout);
-router.route('/kakao').get(kakaoUserInfo);
-router.route('/naver').get(naverUserInfo);
-router.route('/google').post(googleUserInfo);
+router.route('/oauth/:corporation').get(oAuthLogin);
+// router.route('/naver').get(naverUserInfo);
+// router.route('/google').post(googleUserInfo);
 
 router
   .route('/profile')
