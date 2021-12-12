@@ -6,6 +6,7 @@ import { useComma } from 'util/functions';
 import { ProductDetail } from 'util/type';
 import Header from 'components/Header/Header';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
+import ShareBox from 'components/ShareBox/ShareBox';
 import { FiShare2 } from 'react-icons/fi';
 import { BiHeart } from 'react-icons/bi';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
@@ -22,16 +23,22 @@ import {
 
 const ArtDetail = () => {
   const [productDetail, setProductDetail] = useState<Array<ProductDetail>>([]);
+  const [clickToShare, setClickToShare] = useState(false);
+
+  const currentUrl = window.location.href;
 
   useEffect(() => {
     instance
-      .get(`/products/${window.location.href.split('artdetail/')[1]}`)
+      .get(`/products/${currentUrl.split('artdetail/')[1]}`)
       .then((res) => {
         setProductDetail([res.data].flat());
       })
       .catch((err) => {
-        window.location.replace('/error');
+        window.location.assign('/error');
       });
+    // Kakao 공유 SDK 초기화
+    window.Kakao.init(process.env.REACT_APP_KAKAO);
+    window.Kakao.isInitialized();
   }, []);
 
   const addToCartHandler: (productId: string) => void = (productId) => {
@@ -45,6 +52,10 @@ const ArtDetail = () => {
     } else {
       alert('이미 장바구니에 담겨있습니다');
     }
+  };
+
+  const clickToShareHandler = () => {
+    setClickToShare(!clickToShare);
   };
 
   return (
@@ -63,7 +74,10 @@ const ArtDetail = () => {
               <div>
                 <h4>{productDetail[0].productDetail.title}</h4>
                 <div>
-                  <FiShare2 />
+                  {clickToShare && (
+                    <ShareBox clickToShareHandler={clickToShareHandler} />
+                  )}
+                  <FiShare2 onClick={clickToShareHandler} />
                   <BiHeart />
                 </div>
               </div>
@@ -117,7 +131,10 @@ const ArtDetail = () => {
                   아트 쇼핑백
                 </div>
                 <div className="primary_button">바로구매</div>
-                <Link to="#top">
+                <Link to="#top" onClick={clickToShareHandler}>
+                  {clickToShare && (
+                    <ShareBox clickToShareHandler={clickToShareHandler} />
+                  )}
                   <FiShare2 />
                 </Link>
                 <Link to="#top">
