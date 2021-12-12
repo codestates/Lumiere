@@ -143,9 +143,15 @@ export const OrderBtnBox = styled.div`
     font-size: 1.2rem;
     font-weight: 800;
     background-color: #eeeeee;
+    &:hover {
+      background-color: #f4f4f4;
+    }
     &.primary_button {
       color: #ffffff;
       background-color: var(--color-black);
+      &:hover {
+        background-color: #4d4d4d;
+      }
     }
   }
   > a {
@@ -169,11 +175,64 @@ export const OrderBtnBox = styled.div`
       font-size: 1rem;
       transition: all 0.5s;
       &:hover {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
       }
     }
     > a {
       display: none;
+    }
+  }
+`;
+
+/* 작가의 다른 작품, 추천 작품 */
+export const SuggestionSection = styled.section`
+  position: relative;
+  margin: 2.5rem 0;
+
+  > h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  > a {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 5rem;
+    height: 1.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #888888;
+  }
+`;
+
+export const SuggestionImgWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+
+  > div {
+    width: 50%;
+    height: 14rem;
+    padding: 0.5rem;
+    overflow: hidden;
+
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    justify-content: center;
+
+    > div {
+      width: 25%;
     }
   }
 `;
