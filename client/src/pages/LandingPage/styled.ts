@@ -36,6 +36,7 @@ export const LatestSection = styled.section`
   .my-masonry-grid_column > img {
     /* change div to reference your elements you put in <Masonry> */
     /* background: grey; */
+    cursor: pointer;
     width: 100%;
     margin-bottom: 1rem;
   }

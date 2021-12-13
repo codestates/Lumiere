@@ -77,7 +77,6 @@ export const MainMenu = styled.nav`
 
     .curPage {
       color: var(--color-black);
-      border-bottom: 2px solid #eeeeee;
     }
 
     > ul {

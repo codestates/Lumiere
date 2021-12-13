@@ -28,7 +28,6 @@ const Slider = ({ banners }: Props) => {
   const [slideIndex, setSlideIndex] = useState(0);
 
   const nextSlideHandler = () => {
-    console.log('next');
     if (slideIndex < banners.length - 1) {
       setSlideIndex(slideIndex + 1);
     } else if (slideIndex === banners.length - 1) {
@@ -44,6 +43,8 @@ const Slider = ({ banners }: Props) => {
     }
   };
 
+  // const linkToHandler = () => {};
+
   return (
     <SlideContainer>
       {banners.map((banner, idx) => {
@@ -58,7 +59,7 @@ const Slider = ({ banners }: Props) => {
                 <h3>{banner.heading}</h3>
                 <p>{banner.content}</p>
               </div>
-              <Link to={banner.link}>{banner.linkname}</Link>
+              <Link to={banners[slideIndex].link}>{banner.linkname}</Link>
             </SlideInfoBox>
           </SlideWrap>
         );
