@@ -66,16 +66,30 @@ const AdminArtist = () => {
     _id: '',
   });
   useEffect(() => {
-    instance.get<AdminArtistsType>('/artists').then((res) => {
-      console.log(res.data);
-      setArtistList(res.data);
-    });
+    const userInfo = localStorage.getItem('lumiereUserInfo');
+    instance
+      .get<AdminArtistsType>('/artists', {
+        params: {
+          pageNumber: curPage,
+          isAdmin: JSON.parse(userInfo || '{}').isAdmin,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setArtistList(res.data);
+      });
   }, []);
 
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
+    const userInfo = localStorage.getItem('lumiereUserInfo');
     instance
-      .get<AdminArtistsType>('/artists', { params: { pageNumber: page } })
+      .get<AdminArtistsType>('/artists', {
+        params: {
+          pageNumber: page,
+          isAdmin: JSON.parse(userInfo || '{}').isAdmin,
+        },
+      })
       .then((res) => {
         setArtistList(res.data);
       })

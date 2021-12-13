@@ -1,6 +1,10 @@
 export interface Users {
-  general: {
+  general?: {
     email: string;
+  };
+  kakao?: {
+    email: string;
+    uuid: number;
   };
   active: {
     isClosed: boolean;

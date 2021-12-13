@@ -50,12 +50,11 @@ const getProducts = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
   const { pageNumber, isAdmin } = req.query;
   const page = Number(pageNumber) || 1;
-
   let pageSize;
   let count;
   let products;
 
-  if (isAdmin === true) {
+  if (isAdmin === 'true') {
     const decodedData = isAuthorized(req);
     if (decodedData) {
       // 토큰이 유효할 경우
@@ -78,7 +77,6 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     }
   }
-
   pageSize = 28;
   count = await Product.countDocuments({ inStock: true });
   products = await Product.find(
