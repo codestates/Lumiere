@@ -79,13 +79,32 @@ const Header = () => {
         <MainMenu>
           <ul>
             <li>
-              <Link to="/">홈</Link>
+              <Link
+                to="/"
+                className={window.location.pathname === '/' ? 'curPage' : ''}
+              >
+                홈
+              </Link>
             </li>
             <li>
-              <Link to="/artlist">작품보기</Link>
+              <Link
+                to="/artlist"
+                className={
+                  window.location.pathname === '/artlist' ? 'curPage' : ''
+                }
+              >
+                작품보기
+              </Link>
             </li>
             <li>
-              <Link to="/artists">작가</Link>
+              <Link
+                to="/artists"
+                className={
+                  window.location.pathname === '/artists' ? 'curPage' : ''
+                }
+              >
+                작가
+              </Link>
             </li>
             <li>
               <Link to="/">작가 신청</Link>

@@ -4,7 +4,7 @@ import instance from 'util/axios';
 import { Order } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma, convertDeliverStatus } from 'util/functions';
-import AdminHeader from 'components/Header/AdminHeader';
+import Header from 'components/Header/Header';
 import PageNation from 'components/PageNation/PageNation';
 import {
   Table,
@@ -124,7 +124,7 @@ const AdminOrderList = () => {
 
   return (
     <AdminHeaderWrap>
-      <AdminHeader />
+      <Header />
       <h1>결제/배송 관리</h1>
       <PageNation
         curPage={curPage}

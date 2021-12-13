@@ -75,6 +75,11 @@ export const MainMenu = styled.nav`
     flex: 4;
     display: block;
 
+    .curPage {
+      color: var(--color-black);
+      border-bottom: 2px solid #eeeeee;
+    }
+
     > ul {
       display: flex;
       align-items: center;

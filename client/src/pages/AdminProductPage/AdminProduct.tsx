@@ -4,7 +4,7 @@ import instance from 'util/axios';
 import { AdminProductsType, Product } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma } from 'util/functions';
-import AdminHeader from 'components/Header/AdminHeader';
+import Header from 'components/Header/Header';
 import { ModalBackDrop } from 'components/Modal/styled';
 import YesNoModal from 'components/Modal/YesNoModal';
 import AdminEditProduct from 'components/Modal/AdminEditProduct';
@@ -136,7 +136,7 @@ const AdminProduct = () => {
   console.log(productList);
   return (
     <AdminHeaderWrap>
-      <AdminHeader />
+      <Header />
       <h1>작품 관리</h1>
       <PageNation
         curPage={curPage}
