@@ -5,6 +5,7 @@ import instance from 'util/axios';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
+import ShareBox from 'components/ShareBox/ShareBox';
 import { FiShare2 } from 'react-icons/fi';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import LoginGuideModal from 'components/Modal/LoginGuideModal';
@@ -28,6 +29,7 @@ const ArtistDetail = () => {
   const [isClickCheckbox, setIsClickCheckbox] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
+  const [clickToShare, setClickToShare] = useState(false);
 
   useEffect(() => {
     // axios 요청
@@ -75,6 +77,11 @@ const ArtistDetail = () => {
       })
       .then(() => setIsLiked(!isLiked));
   };
+
+  const clickToShareHandler = () => {
+    setClickToShare(!clickToShare);
+  };
+
   return (
     <ArtistDeatilContainer>
       {console.log(artistInfo)}
@@ -90,7 +97,12 @@ const ArtistDetail = () => {
             </div>
           </div>
           <div className="buttonswrap">
-            <FiShare2 />
+            {clickToShare && (
+              <div>
+                <ShareBox clickToShareHandler={clickToShareHandler} />
+              </div>
+            )}
+            <FiShare2 onClick={clickToShareHandler} />
             {isLiked ? (
               <AiFillHeart onClick={likedHandler} className="likeit" />
             ) : (
@@ -98,7 +110,7 @@ const ArtistDetail = () => {
             )}
           </div>
         </HtagWrap>
-        <h2 className="h2">작가의 말</h2>
+        <h2>작가의 말</h2>
         <ArtistRecordWrap>
           {artistInfo[0] && artistInfo[0].artistDetail.record}
         </ArtistRecordWrap>
