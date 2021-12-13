@@ -62,6 +62,9 @@ export const DetailImgBox = styled.div`
 export const DetailInfoBox = styled.div`
   margin: 0.5rem 0 1rem;
   font-weight: 700;
+  .likeit {
+    fill: red;
+  }
 
   > div > h4 {
     margin: auto 0;
