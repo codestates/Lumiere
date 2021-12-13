@@ -30,6 +30,6 @@ export const LandingServiceToLogIn = [
   {
     id: 2,
     link: '/mypage',
-    name: '마이페지이로가기',
+    name: '마이페이지로 가기',
   },
 ];
