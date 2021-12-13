@@ -120,6 +120,7 @@ const ArtList = () => {
           setArtList(res.data);
         })
         .catch((err) => {
+          window.location.assign('/error')
           console.log(err);
         });
     }

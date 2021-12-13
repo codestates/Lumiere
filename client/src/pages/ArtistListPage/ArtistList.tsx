@@ -42,6 +42,7 @@ const ArtistList = () => {
         setArtistList(res.data);
       })
       .catch((err) => {
+        window.location.assign('/error')
         console.log(err);
       });
   }, []);
@@ -54,6 +55,7 @@ const ArtistList = () => {
         setArtistList(res.data);
       })
       .catch((err) => {
+        window.location.assign('/error')
         console.log(err);
       });
   };

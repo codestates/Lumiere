@@ -41,6 +41,7 @@ export const CartMenu = ({
         window.location.reload();
       })
       .catch((err) => {
+        window.location.assign('/error');
         console.log(err);
       });
   };
