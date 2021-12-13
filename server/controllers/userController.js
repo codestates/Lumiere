@@ -88,32 +88,45 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch token & userInfo from corporations
-// @route  GET /api/users/oauth/:corporation
+// @route  GET /api/users/oauth/:corp
 // @access Public
 const oAuthLogin = asyncHandler(async (req, res) => {
-  const { corporation } = req.params;
+  const { corp } = req.params;
   const { code } = req.query;
 
-  console.log('"corporation": ', corporation);
-  console.log('"code": ', code);
-  const options = getOption(corporation, code);
-  // console.log('옵션', options);
+  const options = getOption(corp, code);
+  console.log('옵션', options);
+
   const token = await getAccessToken(options);
-  console.log('토큰', token.data.access_token);
-  const userInfo = await getUserInfo(
-    options.userInfo_url,
-    token.data.access_token,
-  );
-  console.log('유저', userInfo.data);
-  const query = {};
-  // query[corporation] = { uuid: userInfo.data.id };
-  // console.log(typeof query[corporation].uuid);
-  query.uuid = userInfo.data.id;
-  console.log('"query": ', query);
+  console.log('토큰', token);
+
+  const userInfo = await getUserInfo(corp, options.userInfo_url, token);
+  console.log('유저정보', userInfo);
+
+  let uuid;
+  let email;
+  let name;
+
+  if (corp === 'google') {
+    uuid = userInfo.sub;
+    email = userInfo.email;
+    name = userInfo.name;
+  }
+  if (corp === 'kakao') {
+    uuid = userInfo.id;
+    email = userInfo.kakao_account.email;
+    name = userInfo.kakao_account.profile.nickname;
+  }
+  if (corp === 'naver') {
+    uuid = userInfo.response.id;
+    email = userInfo.response.email;
+    name = userInfo.response.name;
+  }
   // DB와 연락하기
   const user = await User.findOne({
-    'kakao.uuid': userInfo.data.id,
+    [`${corp}.uuid`]: uuid,
   });
+
   if (user) {
     res.json({
       _id: user._id,
@@ -121,14 +134,15 @@ const oAuthLogin = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       token: generateAccessToken(user._id),
     });
+    console.log('유저', user);
   } else {
-    // 만약 이름이 허용이 아니라면?
     const newUser = new User({
-      'kakao.uuid': userInfo.data.id,
-      'kakao.token': token.data.access_token,
-      'kakao.email': userInfo.data.kakao_account.email,
-      name: userInfo.data.kakao_account.profile.nickname,
+      [`${corp}.uuid`]: uuid,
+      [`${corp}.email`]: email,
+      name,
     });
+    console.log('새 유저', newUser);
+
     await newUser.save();
     res.json({
       _id: newUser._id,
@@ -138,67 +152,6 @@ const oAuthLogin = asyncHandler(async (req, res) => {
     });
   }
 });
-
-// @desc   Fetch token & userInfo from naver
-// @route  GET /api/users/naver
-// @access Public
-// const naverUserInfo = asyncHandler(async (req, res) => {
-//   const { email, password } = req.body;
-
-//   const user = await User.findOne({ 'general.email': email });
-
-//   if (user && (await user.matchPassword(password))) {
-//     res.json({
-//       _id: user._id,
-//       name: user.name,
-//       token: generateAccessToken(user._id),
-//     });
-//   } else {
-//     res
-//       .status(401)
-//       .json({ message: '이메일 또는 비밀번호를 다시 확인해주세요' });
-//   }
-// });
-
-// @desc   Fetch token & userInfo from google
-// @route  POST /api/users/google
-// @access Public
-// const googleUserInfo = asyncHandler(async (req, res) => {
-//   console.log(req.body.code);
-//   const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
-//   async function verify() {
-//     const ticket = await client.verifyIdToken({
-//       idToken: req.body.code,
-//     });
-//     const payload = ticket.getPayload();
-
-//     // 디비에 연락 -> 기존 유저라면 토큰 업데이트, 신규 유저면 정보 저장
-//     const user = await User.findOne({ 'google.uuid': payload.sub });
-//     if (user) {
-//       res.json({
-//         _id: user._id,
-//         name: user.name,
-//         isAdmin: user.isAdmin,
-//         token: generateAccessToken(user._id),
-//       });
-//     } else {
-//       const newUser = await User.create({
-//         'google.uuid': payload.sub,
-//         'google.email': payload.email,
-//         name: payload.name,
-//       });
-//       res.json({
-//         _id: newUser._id,
-//         name: newUser.name,
-//         isAdmin: newUser.isAdmin,
-//         token: generateAccessToken(newUser._id),
-//       });
-//     }
-//   }
-//   verify().catch(console.error);
-//   // 토큰 확인(해독)
-// });
 
 // @desc   Check user password
 // @route  POST /api/users/profile

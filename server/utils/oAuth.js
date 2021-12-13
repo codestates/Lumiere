@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable max-classes-per-file */
 import axios from 'axios';
 import qs from 'qs';
@@ -5,8 +6,8 @@ import qs from 'qs';
 class Kakao {
   constructor(code) {
     this.url = 'https://kauth.kakao.com/oauth/token';
-    this.client_id = 'e3511c5fc4507afd80266f273662a203';
-    this.redirect_uri = 'http://localhost:3000/oauth/kakao';
+    this.client_id = process.env.KAKAO_CLIENT_ID;
+    this.redirect_uri = `${process.env.REDIRECT_URI}/kakao`;
     this.code = code;
 
     // userInfo
@@ -19,11 +20,13 @@ class Google {
     this.url = 'https://oauth2.googleapis.com/token';
     this.client_id = process.env.GOOGLE_CLIENT_ID;
     this.client_secret = process.env.GOOGLE_CLIENT_SECRET;
-    this.redirect_uri = 'http://localhost:5000/users/oauth/google';
+    this.redirect_uri = `${process.env.REDIRECT_URI}/google`;
     this.code = code;
+    this.scope =
+      'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid';
 
     // userInfo
-    this.userInfo_url = 'https://www.googleapis.com/oauth2/v1/tokeninfo';
+    this.userInfo_url = 'https://www.googleapis.com/oauth2/v3/tokeninfo';
   }
 }
 
@@ -32,16 +35,17 @@ class Naver {
     this.url = 'https://nid.naver.com/oauth2.0/token';
     this.client_id = process.env.NAVER_CLIENT_ID;
     this.client_secret = process.env.NAVER_CLIENT_SECRET;
-    this.redirect_uri = 'http://localhost:5000/users/oauth/naver';
+    this.redirect_uri = `${process.env.REDIRECT_URI}/naver`;
     this.code = code;
+    this.state = 'Welcome,2022';
 
     // userInfo
     this.userInfo_url = 'https://openapi.naver.com/v1/nid/me';
   }
 }
 
-const getOption = (corporation, code) => {
-  switch (corporation) {
+const getOption = (corp, code) => {
+  switch (corp) {
     case 'google':
       return new Google(code);
     case 'kakao':
@@ -55,51 +59,82 @@ const getOption = (corporation, code) => {
 
 // 토큰 얻기
 const getAccessToken = async (options) => {
-  let a;
-  try {
-    await axios
-      .post(
-        'https://kauth.kakao.com/oauth/token',
-        qs.stringify({
-          grant_type: 'authorization_code',
-          client_id: 'e3511c5fc4507afd80266f273662a203',
-          redirectUri: 'http://localhost:3000/oauth/kakao',
-          code: options.code,
-        }),
-        {
-          headers: {
-            'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-          },
-          withCredentials: true,
+  if (options.scope) {
+    // 구글
+    const res = await axios.post(
+      options.url,
+      qs.stringify({
+        grant_type: 'authorization_code',
+        client_id: options.client_id,
+        client_secret: options.client_secret,
+        redirect_uri: options.redirect_uri,
+        code: options.code,
+        scope: options.scope,
+      }),
+      {
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
         },
-      )
-      .then((res) => {
-        a = res;
-      });
-  } catch (e) {
-    // console.error(e);
+      },
+    );
+    // console.log('구글용', res.data);
+    const { id_token } = res.data;
+    return id_token;
   }
-  return a;
+  if (options.state) {
+    const res = await axios.post(
+      // 네이버
+      options.url,
+      qs.stringify({
+        grant_type: 'authorization_code',
+        client_id: options.client_id,
+        client_secret: options.client_secret,
+        redirect_uri: options.redirect_uri,
+        code: options.code,
+        state: options.state,
+      }),
+      {
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded',
+        },
+      },
+    );
+    console.log('네이버용', res.data);
+    const { access_token } = res.data;
+    return access_token;
+  }
+  const res = await axios.post(
+    // 카카오
+    options.url,
+    qs.stringify({
+      grant_type: 'authorization_code',
+      client_id: options.client_id,
+      redirect_uri: options.redirect_uri,
+      code: options.code,
+    }),
+    {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+      },
+    },
+  );
+  console.log('카카오용', res.data);
+  const { access_token } = res.data;
+  return access_token;
 };
 
 // 유저 정보 얻기
-const getUserInfo = async (url, accessToken) => {
-  let a;
-  try {
-    await axios
-      .get(url, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        withCredentials: true,
-      })
-      .then((res) => {
-        a = res;
-      });
-  } catch (e) {
-    // console.error(e);
+const getUserInfo = async (corp, url, token) => {
+  if (corp === 'google') {
+    const res = await axios.get(`${url}?id_token=${token}`);
+    return res.data;
   }
-  return a;
+  const res = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
 };
 
 export { getUserInfo, getAccessToken, getOption };

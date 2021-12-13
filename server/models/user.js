@@ -7,7 +7,6 @@ const userSchema = mongoose.Schema(
     general: {
       email: {
         type: String,
-        unique: true,
         match: [
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
           '이메일 형식에 맞지 않습니다',
@@ -23,18 +22,15 @@ const userSchema = mongoose.Schema(
       },
     },
     google: {
-      uuid: String,
-      token: String,
-      email: String,
+      uuid: { type: String },
+      email: { type: String },
     },
     naver: {
-      uuid: String,
-      token: String,
-      email: String,
+      uuid: { type: String },
+      email: { type: String },
     },
     kakao: {
       uuid: { type: Number },
-      token: { type: String },
       email: { type: String },
     },
     name: {

@@ -3,32 +3,11 @@ import { RiKakaoTalkLine } from 'react-icons/ri';
 import { SiNaver } from 'react-icons/si';
 import { GrGoogle } from 'react-icons/gr';
 import { KAKAO_AUTH_URL } from 'components/OAuth/Kakao';
+import { GOOGLE_AUTH_URL } from 'components/OAuth/Google';
+import { NAVER_AUTH_URL } from 'components/OAuth/Naver';
 import { SignInSocialWrap } from './styled';
 
-declare global {
-  interface Window {
-    naver: any;
-  }
-}
-const { naver } = window;
-
 const SignInSocial = () => {
-  const Naver = () => {
-    const naverLogin = new naver.LoginWithNaverId({
-      clientId: 'WJlQ9VXvCz6GnB59o4uy',
-      callbakcUrl: 'http://localhost:3000',
-      callbackHandle: true,
-      loginButton: {
-        color: 'black',
-        type: 1,
-        height: 90,
-      },
-    });
-    naverLogin.init();
-  };
-  useEffect(() => {
-    Naver();
-  }, []);
   return (
     <SignInSocialWrap>
       <li>
@@ -37,14 +16,15 @@ const SignInSocial = () => {
         </a>
       </li>
       <li>
-        <SiNaver />
+        <a href={NAVER_AUTH_URL}>
+          <SiNaver />
+        </a>
       </li>
       <li>
-        <GrGoogle />
+        <a href={GOOGLE_AUTH_URL}>
+          <GrGoogle />
+        </a>
       </li>
-      <div role="button" tabIndex={0} id="naverIdLogin">
-        test
-      </div>
     </SignInSocialWrap>
   );
 };
