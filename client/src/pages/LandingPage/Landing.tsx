@@ -9,7 +9,9 @@ import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Slider from 'components/Slider/Slider';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
-import { LandingService } from './dummy';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
+import { LandingService, LandingServiceToLogIn } from './dummy';
 import {
   LandingContainer,
   LandingWrap,
@@ -24,6 +26,7 @@ import {
 const Landing = () => {
   const [banners, setBanners] = useState([]);
   const [latestArtList, setLatestArtList] = useState([]);
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
 
   // useEffect(() => {
   //   const url = new URL(window.location.href);
@@ -57,11 +60,12 @@ const Landing = () => {
             setLatestArtList(res.data);
           })
           .catch((res) => {
-            // const message = res.message;
+            window.location.assign('/error');
             console.log(res.message);
           });
       })
       .catch((err) => {
+        window.location.assign('/error');
         console.log(err);
       });
   }, []);
@@ -110,16 +114,18 @@ const Landing = () => {
             원하는 공간에 어울리는 작품을 구매해보세요!
           </p>
           <ServiceList>
-            {LandingService.map((service) => {
-              return (
-                <ServiceBox key={service.id}>
-                  <Link to={service.link}>
-                    <MdOutlineArrowForwardIos />
-                    <span>{service.name}</span>
-                  </Link>
-                </ServiceBox>
-              );
-            })}
+            {(isLogin ? LandingServiceToLogIn : LandingService).map(
+              (service) => {
+                return (
+                  <ServiceBox key={service.id}>
+                    <Link to={service.link}>
+                      <MdOutlineArrowForwardIos />
+                      <span>{service.name}</span>
+                    </Link>
+                  </ServiceBox>
+                );
+              },
+            )}
           </ServiceList>
         </ServiceSection>
         <StartBtnBox>
