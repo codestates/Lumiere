@@ -10,6 +10,9 @@ import localTime from '../utils/localTime.js';
 const createOrder = asyncHandler(async (req, res) => {
   // 결제 후 주문 생성 단계
   const { orderItems } = req.body;
+  const { ordererInfo } = req.body;
+  console.log(ordererInfo);
+  console.log(orderItems);
 
   if (orderItems && !orderItems.length) {
     res.status(400).json({ message: '주문하실 상품을 추가해주세요' });

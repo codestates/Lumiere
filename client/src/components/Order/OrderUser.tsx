@@ -26,7 +26,6 @@ export const OrderUser = ({
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { id } = e.target;
-    console.log(id);
     if (id === 'order-user') {
       setOrdererInfoState({ ...ordererInfoState, name: e.target.value });
     }

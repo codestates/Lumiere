@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import {
   ModalBackdrop,
   ModalWrap,
@@ -12,8 +13,10 @@ type Props = {
 };
 
 const CartNotListModal = ({ clickModalHandler }: Props) => {
+  const history = useNavigate();
+
   const backMovingHanlder = () => {
-    window.history.back();
+    history('/');
   };
 
   return (
@@ -26,7 +29,7 @@ const CartNotListModal = ({ clickModalHandler }: Props) => {
           <p>아트 쇼핑백이 비어있습니다</p>
         </ContentWrap>
         <ButtonBox>
-          <SelectButton onClick={backMovingHanlder}>뒤로가기</SelectButton>
+          <SelectButton onClick={backMovingHanlder}>메인으로 가기</SelectButton>
         </ButtonBox>
       </ModalWrap>
     </ModalBackdrop>

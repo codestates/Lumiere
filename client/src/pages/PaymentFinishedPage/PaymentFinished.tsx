@@ -1,7 +1,7 @@
 const PaymentFinished = () => {
   return (
     <>
-      <h1>PaymentFinished</h1>
+      <h1>결제완료 페이지</h1>
       <span>hello</span>
     </>
   );
