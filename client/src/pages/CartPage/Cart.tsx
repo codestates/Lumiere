@@ -1,5 +1,7 @@
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import { useState, useEffect } from 'react';
 import instance from 'util/axios';
 import { OrderProducts } from 'util/type';
@@ -43,7 +45,7 @@ const Cart = () => {
   ]);
 
   const [totalPriceState, setTotalPriceState] = useState<number>(0);
-
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   // 로컬스토리지 갱신을 위한 useEffect
   useEffect(() => {
     const localInfo = localStorage.getItem('cartItems');
@@ -58,8 +60,12 @@ const Cart = () => {
         setCartProductState(res.data);
       })
       .catch((err) => {
-        window.location.assign('/error');
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   }, [cartListState]);
 

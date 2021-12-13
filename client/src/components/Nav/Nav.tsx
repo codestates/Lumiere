@@ -22,10 +22,12 @@ const Nav = () => {
         history('/');
       })
       .catch((err) => {
-        console.log(err);
-        localStorage.removeItem('lumiereUserInfo');
-        setIsLogin(false);
-        history('/');
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   };
 

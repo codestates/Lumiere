@@ -91,7 +91,7 @@ const Landing = () => {
                   role="button"
                   tabIndex={0}
                   key={uuidv4()}
-                  className="my-masonry-grid_column"
+                  className="my-masonry-grid_column hoverClick"
                   onClick={() => window.location.assign(`/artdetail/${_id}`)}
                   onKeyDown={() => window.location.assign(`/artdetail/${_id}`)}
                 >

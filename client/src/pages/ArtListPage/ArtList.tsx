@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
 import Header from 'components/Header/Header';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import FilteringTab from 'components/FilteringTab/FilteringTab';
@@ -13,8 +15,8 @@ import { AdminProductsType } from '../../util/type';
 import { ArtListContainer, ArtListWrap } from './styled';
 
 const ArtList = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
-  const [tabFilter, setTabFilter] = useState<string>('');
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
   const [artList, setArtList] = useState<AdminProductsType>({
     products: [
@@ -63,7 +65,12 @@ const ArtList = () => {
         setArtList(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   };
 
@@ -80,7 +87,12 @@ const ArtList = () => {
         setArtList(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401 && isLogin) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.2');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   }, []);
 
@@ -101,7 +113,12 @@ const ArtList = () => {
           setArtList(res.data);
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response.status === 401 && isLogin) {
+            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+            localStorage.removeItem('lumiereUserInfo');
+            setIsLogin(false);
+            window.location.assign('/signin');
+          } else window.location.assign('/error');
         });
     } else {
       instance
@@ -120,8 +137,12 @@ const ArtList = () => {
           setArtList(res.data);
         })
         .catch((err) => {
-          window.location.assign('/error');
-          console.log(err);
+          if (err.response.status === 401 && isLogin) {
+            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+            localStorage.removeItem('lumiereUserInfo');
+            setIsLogin(false);
+            window.location.assign('/signin');
+          } else window.location.assign('/error');
         });
     }
   };
