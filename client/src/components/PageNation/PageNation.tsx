@@ -1,5 +1,4 @@
 import Pagination from 'react-js-pagination';
-import { useState } from 'react';
 import { PaginatorWrap } from './styled';
 
 interface GreetingProps {
