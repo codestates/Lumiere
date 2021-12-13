@@ -58,7 +58,7 @@ const Cart = () => {
         setCartProductState(res.data);
       })
       .catch((err) => {
-        window.location.assign('/error')
+        window.location.assign('/error');
         console.log(err);
       });
   }, [cartListState]);

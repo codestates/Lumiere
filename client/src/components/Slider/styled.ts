@@ -77,6 +77,7 @@ export const SlideInfoBox = styled.div`
 
 export const SliderButton = styled.button`
   /* display: none; */
+  cursor: pointer;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -100,6 +101,7 @@ export const SliderButton = styled.button`
 `;
 
 export const DotsContainer = styled.div`
+  cursor: pointer;
   position: absolute;
   right: 1rem;
   bottom: 1rem;
