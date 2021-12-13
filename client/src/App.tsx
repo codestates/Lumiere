@@ -42,7 +42,7 @@ function App() {
           <Route path="/admin/artist" element={<AdminArtist />} />
           <Route path="/admin/banner" element={<AdminBanner />} />
           <Route path="/error" element={<Error />} />
-          <Route path="/oauth/kakao" element={<Callback />} />
+          <Route path="/oauth/:corp" element={<Callback />} />
         </Routes>
       </Router>
     </>
