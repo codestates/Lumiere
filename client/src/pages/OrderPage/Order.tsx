@@ -27,7 +27,7 @@ import {
 const Order = () => {
   // Cart에서 histtory로 받아온값
   const location = useLocation();
-  const orderProduct: string[] = location.state.id;
+  const orderProduct: string[] = location.state.id || [];
 
   const localInfo = localStorage.getItem('lumiereUserInfo');
   const userName = JSON.parse(localInfo || '{}').name;
