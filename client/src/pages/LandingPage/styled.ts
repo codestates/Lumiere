@@ -10,7 +10,7 @@ export const LandingWrap = styled.div`
 
   h1 {
     margin: 2.5rem 0 1.5rem;
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 800;
     text-align: center;
   }
@@ -18,27 +18,34 @@ export const LandingWrap = styled.div`
 
 export const LatestSection = styled.section`
   margin-bottom: 1.5rem;
-  padding: 0 1rem 0 2.5rem;
-  /* font-size: 1.3rem; */
-  .my-masonry-grid {
-    display: -webkit-box; /* Not needed if autoprefixing */
-    display: -ms-flexbox; /* Not needed if autoprefixing */
-    display: flex;
-    width: auto;
-    margin-left: -30px; /* gutter size offset */
+`;
+
+export const LatestImgWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 24rem;
+  padding: 0 2rem;
+
+  > div {
+    width: 33.3%;
+    height: 50%;
+    padding: 0.4rem;
+    > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
-  .my-masonry-grid_column {
-    padding-left: 0.5rem; /* gutter size */
-    background-clip: padding-box;
+  > div:nth-child(5) {
+    height: 100%;
   }
 
-  /* Style your items */
-  .my-masonry-grid_column > img {
-    /* change div to reference your elements you put in <Masonry> */
-    /* background: grey; */
-    cursor: pointer;
-    width: 100%;
-    margin-bottom: 1rem;
+  @media screen and (min-width: 768px) {
+    padding: 0 1rem;
   }
 `;
 
