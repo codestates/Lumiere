@@ -7,6 +7,7 @@ import { ProductDetail } from 'util/type';
 import Header from 'components/Header/Header';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import ShareBox from 'components/ShareBox/ShareBox';
+import Introduction from 'components/Introduction/Introduction';
 import { FiShare2 } from 'react-icons/fi';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
@@ -16,6 +17,7 @@ import {
   ArtDetailWrap,
   DetailInfoWrap,
   DetailImgBox,
+  IntroductionSection,
   DetailInfoBox,
   OrderBtnBox,
   SuggestionSection,
@@ -179,7 +181,13 @@ const ArtDetail = () => {
                 </Link>
               </OrderBtnBox>
             </DetailInfoBox>
-            <div className="test">hello</div>
+            {/* 서비스소개 섹션 */}
+            <IntroductionSection>
+              <Introduction
+                image={productDetail[0].productDetail.image}
+                title={productDetail[0].productDetail.title}
+              />
+            </IntroductionSection>
           </DetailInfoWrap>
 
           <SuggestionSection>

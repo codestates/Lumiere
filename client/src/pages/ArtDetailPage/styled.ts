@@ -19,23 +19,12 @@ export const DetailInfoWrap = styled.div`
   display: flex;
   flex-direction: column;
 
-  div.test {
-    height: 100vh;
-    background: lavender;
-  }
-
   @media screen and (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
     padding: 2rem 1rem;
-
-    div.test {
-      width: 66%;
-      height: 100vh;
-      background: lavender;
-    }
   }
 `;
 
@@ -55,7 +44,13 @@ export const DetailImgBox = styled.div`
     /* flex: 1; */
     width: 66%;
     padding: 2rem 2rem 2.5rem 1.5rem;
-    background-color: #f4f4f4;
+    background-color: #f6f6f6;
+  }
+`;
+
+export const IntroductionSection = styled.section`
+  @media screen and (min-width: 768px) {
+    width: 66%;
   }
 `;
 
