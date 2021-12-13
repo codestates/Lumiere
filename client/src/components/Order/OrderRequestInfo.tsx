@@ -19,7 +19,6 @@ export const OrderRequestInfo = ({
   // 배송 요청사항 변경 핸들러
   const deliveryReqChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = e.target;
-    console.log(id);
     if (id === 'request-address') {
       setDeliveryReqState({ ...deliveryReqState, receiveAt: e.target.value });
     }

@@ -2,10 +2,6 @@ import styled from 'styled-components';
 
 /* 공유 버튼 리스트 컨테이너 */
 export const ShareContainer = styled.div`
-  position: absolute;
-  bottom: 0.5rem;
-  right: 4rem;
-  z-index: var(--button-index);
   display: flex;
   flex-direction: column-reverse;
   width: 13rem;
@@ -35,8 +31,6 @@ export const ShareContainer = styled.div`
     border: none;
   }
   @media (min-width: 768px) {
-    top: 0.4rem;
-    right: 2rem;
     flex-direction: column;
     height: 7rem;
 

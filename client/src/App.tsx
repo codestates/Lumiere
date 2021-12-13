@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SignIn from 'pages/SignInPage/SignIn';
 import SignUp from 'pages/SignUpPage/SignUp';
@@ -21,6 +22,12 @@ import Callback from 'pages/CallbackPage/Callback';
 import { GlobalStyle } from 'styles/global-style';
 
 function App() {
+  useEffect(() => {
+    // Kakao 공유 SDK 초기화
+    window.Kakao.init(process.env.REACT_APP_KAKAO);
+    window.Kakao.isInitialized();
+  }, []);
+
   return (
     <>
       <GlobalStyle />
@@ -44,7 +51,7 @@ function App() {
           <Route path="/admin/artist" element={<AdminArtist />} />
           <Route path="/admin/banner" element={<AdminBanner />} />
           <Route path="/error" element={<Error />} />
-          <Route path="/oauth/kakao" element={<Callback />} />
+          <Route path="/oauth/:corp" element={<Callback />} />
         </Routes>
       </Router>
     </>

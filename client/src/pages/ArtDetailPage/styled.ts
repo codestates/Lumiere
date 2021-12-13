@@ -111,7 +111,14 @@ export const DetailInfoBox = styled.div`
 
     > div:first-child > div {
       display: block;
+      min-width: 5rem;
       text-align: right;
+      > div {
+        position: absolute;
+        top: 0.4rem;
+        right: 2rem;
+        z-index: var(--button-index);
+      }
       > svg {
         width: 2rem;
         height: 100%;
@@ -163,6 +170,12 @@ export const OrderBtnBox = styled.div`
     color: #aaaaaa;
     background-color: #ffffff;
     border: 1px solid #eeeeee;
+    > div {
+      position: absolute;
+      bottom: 0.5rem;
+      right: 4rem;
+      z-index: var(--button-index);
+    }
   }
 
   @media screen and (min-width: 768px) {
