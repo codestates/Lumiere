@@ -1,8 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
-import PageNation from 'components/PageNation/PageNation';
 import instance from 'util/axios';
-import Masonry from 'react-masonry-css';
 import { Product } from 'util/type';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { ArtWrap, ArtInfoBox } from './styled';
@@ -22,7 +20,6 @@ export const ArtListMapping = ({
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
-    // axios 요청
     const userInfo = localStorage.getItem('lumiereUserInfo');
     setIsLiked(
       !!art.likes.find((el) => el === JSON.parse(userInfo || '{}')._id),
@@ -39,7 +36,10 @@ export const ArtListMapping = ({
         productId: id,
         zzim: !isLiked,
       })
-      .then(() => setIsLiked(!isLiked));
+      .then(() => setIsLiked(!isLiked))
+      .catch(() => {
+        window.location.assign('/error');
+      });
   };
 
   return (

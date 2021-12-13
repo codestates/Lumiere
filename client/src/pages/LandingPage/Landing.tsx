@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
-import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import Masonry from 'react-masonry-css';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';

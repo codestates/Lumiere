@@ -8,8 +8,9 @@ import Header from 'components/Header/Header';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import ShareBox from 'components/ShareBox/ShareBox';
 import { FiShare2 } from 'react-icons/fi';
-import { BiHeart } from 'react-icons/bi';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import {
   ArtDetailContainer,
   ArtDetailWrap,
@@ -24,16 +25,24 @@ import {
 const ArtDetail = () => {
   const [productDetail, setProductDetail] = useState<Array<ProductDetail>>([]);
   const [clickToShare, setClickToShare] = useState(false);
+  const [isLiked, setIsLiked] = useState<boolean>(false);
+  const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
 
   const currentUrl = window.location.href;
 
   useEffect(() => {
+    const userInfo = localStorage.getItem('lumiereUserInfo');
     instance
-      .get(`/products/${currentUrl.split('artdetail/')[1]}`)
+      .get<ProductDetail>(`/products/${currentUrl.split('artdetail/')[1]}`)
       .then((res) => {
         setProductDetail([res.data].flat());
+        setIsLiked(
+          !!res.data.productDetail.likes.find(
+            (el) => el === JSON.parse(userInfo || '{}')._id,
+          ),
+        );
       })
-      .catch((err) => {
+      .catch(() => {
         window.location.assign('/error');
       });
     // Kakao 공유 SDK 초기화
@@ -58,6 +67,26 @@ const ArtDetail = () => {
     setClickToShare(!clickToShare);
   };
 
+  const openLoginModalHandler = () => {
+    setIsOpenLoginModal(!isOpenLoginModal);
+  };
+
+  const likedHandler = () => {
+    const userInfo = localStorage.getItem('lumiereUserInfo');
+    if (!userInfo) {
+      openLoginModalHandler();
+    }
+    instance
+      .patch('/products/zzim', {
+        productId: productDetail[0].productDetail._id,
+        zzim: !isLiked,
+      })
+      .then(() => setIsLiked(!isLiked))
+      .catch(() => {
+        window.location.assign('/error');
+      });
+  };
+
   return (
     <ArtDetailContainer>
       <Header />
@@ -78,7 +107,11 @@ const ArtDetail = () => {
                     <ShareBox clickToShareHandler={clickToShareHandler} />
                   )}
                   <FiShare2 onClick={clickToShareHandler} />
-                  <BiHeart />
+                  {isLiked ? (
+                    <AiFillHeart onClick={likedHandler} className="likeit" />
+                  ) : (
+                    <AiOutlineHeart onClick={likedHandler} />
+                  )}
                 </div>
               </div>
               <div>
@@ -98,7 +131,7 @@ const ArtDetail = () => {
                   {productDetail[0].productDetail.info.details}
                   <br />
                   {productDetail[0].productDetail.info.size}(
-                  {productDetail[0].productDetail.info.canvas}호),{' '}
+                  {productDetail[0].productDetail.info.canvas}호),
                   {productDetail[0].productDetail.info.createdAt}
                 </div>
               </div>
@@ -138,7 +171,11 @@ const ArtDetail = () => {
                   <FiShare2 />
                 </Link>
                 <Link to="#top">
-                  <BiHeart />
+                  {isLiked ? (
+                    <AiFillHeart onClick={likedHandler} className="likeit" />
+                  ) : (
+                    <AiOutlineHeart onClick={likedHandler} />
+                  )}
                 </Link>
               </OrderBtnBox>
             </DetailInfoBox>
@@ -201,6 +238,10 @@ const ArtDetail = () => {
         </ArtDetailWrap>
       )}
       <QuickBtns />
+      {/* Modal */}
+      {isOpenLoginModal && (
+        <LoginGuideModal clickModalHandler={openLoginModalHandler} />
+      )}
     </ArtDetailContainer>
   );
 };
