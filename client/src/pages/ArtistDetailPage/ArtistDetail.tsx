@@ -45,6 +45,7 @@ const ArtistDetail = () => {
         );
       })
       .catch((err) => {
+        window.location.assign('/error')
         console.log(err);
       });
   }, []);
