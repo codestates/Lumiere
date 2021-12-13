@@ -109,8 +109,8 @@ const Order = () => {
         const price = res.data.totalPrice;
         setPriceState({
           ...priceState,
-          shippingPrice: price,
-          totalPrice: price + 10000,
+          shippingPrice: 10000,
+          totalPrice: price,
         });
       })
       .catch((err) => {
@@ -170,7 +170,15 @@ const Order = () => {
           />
         </ContentLeft>
         <ContentRight>
-          <OrderPay priceState={priceState} clientPrice={clientPrice} />
+          <OrderPay
+            shippingState={shippingState}
+            ordererInfoState={ordererInfoState}
+            deliveryReqState={deliveryReqState}
+            clientPrice={clientPrice}
+            priceState={priceState}
+            productState={productState}
+            orderProduct={orderProduct}
+          />
         </ContentRight>
       </ContentWrap>
       <Footer />

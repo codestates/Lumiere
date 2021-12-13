@@ -1,3 +1,6 @@
+/* eslint-disable */
+import { OrderProducts } from './type';
+
 export const useComma = (price: number) => {
   return Number(price).toLocaleString('ko');
 };
@@ -19,4 +22,34 @@ export const convertDeliverStatus = (param: number) => {
     default:
       return '오류';
   }
+};
+
+//  order 주문 anme
+export const useName = (title: OrderProducts[]): string => {
+  if (title.length === 1) {
+    return `${title[0].title}`;
+  }
+
+  return `${title[0].title} 외 ${title.length - 1}개의 작품`;
+};
+
+// order 주문번호
+export const useOrderNumber = () => {
+  function generateRandomCode(n: number) {
+    let str = '';
+    for (let i = 0; i < n; i++) {
+      str += Math.floor(Math.random() * 10);
+    }
+    return str;
+  }
+
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = ('0' + (today.getMonth() + 1)).slice(-2);
+  const day = ('0' + today.getDate()).slice(-2);
+
+  const dateStrng: string = year + month + day;
+
+  const productNum = generateRandomCode(6);
+  return `${dateStrng}${productNum}`;
 };
