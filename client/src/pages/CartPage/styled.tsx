@@ -60,7 +60,6 @@ export const CartContentWrap = styled.div`
 export const CartContentLeftWrap = styled.div`
   display: flex;
   flex-direction: column;
-  /* flex: 1; */
   height: 82vh;
 
   @media screen and (min-width: 768px) {

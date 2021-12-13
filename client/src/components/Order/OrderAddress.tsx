@@ -65,7 +65,7 @@ export const OrderAddress = ({
             shippingState.address
           ) : (
             <span>주소를 입력해주세요</span>
-          )}{' '}
+          )}
         </AddressContent>
         <OrderUserInfo>
           <label htmlFor="shipping-detail-address">
@@ -84,7 +84,7 @@ export const OrderAddress = ({
             <input
               type="text"
               id="shipping-user"
-              placeholder="주문자를 입력해주세요"
+              placeholder="받는사람을 입력해주세요"
               value={shippingState.receiver}
               onChange={shippingChangeHandler}
             />

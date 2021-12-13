@@ -54,6 +54,7 @@ export const ContentWrap = styled.div`
     display: flex;
     flex-direction: row;
     padding: 2.5rem 1rem 1rem;
+    height: 63vh;
   }
 `;
 
@@ -62,7 +63,7 @@ export const ContentLeft = styled.div`
     flex: 7;
     display: flex;
     flex-direction: column;
-    height: 70vh;
+    height: 100%;
     overflow: scroll;
     overflow-x: hidden;
 

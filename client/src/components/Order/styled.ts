@@ -47,6 +47,7 @@ export const LabelWrap = styled.div`
   label {
     width: 65%;
     font-size: 0.9rem;
+    border: 1px solid #ffffff;
 
     &:hover {
       border: 1px solid #bbb4b4;
@@ -285,6 +286,7 @@ export const OrderUserInfo = styled.div`
     width: 100%;
     border: none;
     font-size: 0.9rem;
+    border: 1px solid #ffffff;
 
     &:hover {
       border: 1px solid #bbb4b4;
