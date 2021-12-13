@@ -5,6 +5,8 @@ import instance from 'util/axios';
 import { useComma } from 'util/functions';
 import { ProductDetail } from 'util/type';
 import Header from 'components/Header/Header';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import ShareBox from 'components/ShareBox/ShareBox';
 import Introduction from 'components/Introduction/Introduction';
@@ -25,6 +27,7 @@ import {
 } from './styled';
 
 const ArtDetail = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [productDetail, setProductDetail] = useState<Array<ProductDetail>>([]);
   const [clickToShare, setClickToShare] = useState(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -44,8 +47,13 @@ const ArtDetail = () => {
           ),
         );
       })
-      .catch(() => {
-        window.location.assign('/error');
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
     // Kakao 공유 SDK 초기화
     window.Kakao.init(process.env.REACT_APP_KAKAO);
@@ -84,8 +92,13 @@ const ArtDetail = () => {
         zzim: !isLiked,
       })
       .then(() => setIsLiked(!isLiked))
-      .catch(() => {
-        window.location.assign('/error');
+      .catch((err) => {
+        if (err.response.status === 401 && isLogin) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        }
       });
   };
 

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import Header from 'components/Header/Header';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import PageNation from 'components/PageNation/PageNation';
@@ -16,6 +18,7 @@ import {
 } from './styled';
 
 const ArtistList = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [artistList, setArtistList] = useState<ArtistsType>({
     artists: [
@@ -42,8 +45,12 @@ const ArtistList = () => {
         setArtistList(res.data);
       })
       .catch((err) => {
-        window.location.assign('/error');
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   }, []);
 
@@ -55,8 +62,12 @@ const ArtistList = () => {
         setArtistList(res.data);
       })
       .catch((err) => {
-        window.location.assign('/error');
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   };
 

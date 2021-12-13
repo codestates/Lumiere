@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import instance from 'util/axios';
 import { Order } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import { useComma, convertDeliverStatus } from 'util/functions';
 import Header from 'components/Header/Header';
 import PageNation from 'components/PageNation/PageNation';
@@ -16,6 +18,7 @@ import {
 } from './styled';
 
 const AdminOrderList = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [orderList, setOrderList] = useState<Order>({
     orders: [
@@ -54,9 +57,19 @@ const AdminOrderList = () => {
     pages: 0,
   });
   useEffect(() => {
-    instance.get<Order>('/orders/').then((res) => {
-      setOrderList(res.data);
-    });
+    instance
+      .get<Order>('/orders/')
+      .then((res) => {
+        setOrderList(res.data);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
+      });
   }, []);
 
   const pageChangeHandler = (page: number) => {
@@ -67,7 +80,12 @@ const AdminOrderList = () => {
         setOrderList(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   };
 
@@ -96,27 +114,27 @@ const AdminOrderList = () => {
       case '준비중':
         return instance
           .patch(`/orders/${id}`, { status: 1 })
-          .then((res) => {
+          .then(() => {
             alert('배송상태가 준비중으로 변경되었습니다.');
             window.location.reload();
           })
-          .catch((err) => alert('변경실패, 담당자에게 문의해주세요'));
+          .catch(() => alert('변경실패, 담당자에게 문의해주세요'));
       case '배송중':
         return instance
           .patch(`/orders/${id}`, { status: 2 })
-          .then((res) => {
+          .then(() => {
             alert('배송상태가 준비중으로 변경되었습니다.');
             window.location.reload();
           })
-          .catch((err) => alert('변경실패, 담당자에게 문의해주세요'));
+          .catch(() => alert('변경실패, 담당자에게 문의해주세요'));
       case '완료':
         return instance
           .patch(`/orders/${id}`, { status: 3 })
-          .then((res) => {
+          .then(() => {
             alert('배송상태가 준비중으로 변경되었습니다.');
             window.location.reload();
           })
-          .catch((err) => alert('변경실패, 담당자에게 문의해주세요'));
+          .catch(() => alert('변경실패, 담당자에게 문의해주세요'));
       default:
         return alert('변경실패');
     }

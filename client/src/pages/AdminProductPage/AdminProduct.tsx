@@ -4,6 +4,8 @@ import instance from 'util/axios';
 import { AdminProductsType, Product } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma } from 'util/functions';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import Header from 'components/Header/Header';
 import { ModalBackDrop } from 'components/Modal/styled';
 import YesNoModal from 'components/Modal/YesNoModal';
@@ -12,6 +14,7 @@ import PageNation from 'components/PageNation/PageNation';
 import { Table, TableWrap, AdminHeaderWrap } from './styled';
 
 const AdminProduct = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [productList, setProductList] = useState<AdminProductsType>({
     products: [
@@ -88,6 +91,14 @@ const AdminProduct = () => {
       })
       .then((res) => {
         setProductList(res.data);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   }, []);
 
@@ -105,7 +116,12 @@ const AdminProduct = () => {
         setProductList(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   };
 

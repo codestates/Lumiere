@@ -1,6 +1,8 @@
 /* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
 import instance from 'util/axios';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import { Product } from 'util/type';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { ArtWrap, ArtInfoBox } from './styled';
@@ -14,6 +16,7 @@ export const ArtListMapping = ({
   art,
   openLoginModalHandler,
 }: GreetingProps) => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const { _id, title, image, artist, info } = art;
   const { name } = artist;
   const { size } = info;
@@ -37,8 +40,13 @@ export const ArtListMapping = ({
         zzim: !isLiked,
       })
       .then(() => setIsLiked(!isLiked))
-      .catch(() => {
-        window.location.assign('/error');
+      .catch((err) => {
+        if (err.response.status === 401 && isLogin) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        }
       });
   };
 

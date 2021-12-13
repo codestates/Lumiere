@@ -7,11 +7,14 @@ import { ModalBackDrop } from 'components/Modal/styled';
 import AdminEnrollArtist from 'components/Modal/AdminEnrollArtist';
 import AdminArtistEdit from 'components/Modal/AdminEditArtist';
 import Header from 'components/Header/Header';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import AdminEnrollProduct from 'components/Modal/AdminEnrollProduct';
 import PageNation from 'components/PageNation/PageNation';
 import { Table, TableWrap, EnrollmentButton, AdminHeaderWrap } from './styled';
 
 const AdminArtist = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [artistList, setArtistList] = useState<AdminArtistsType>({
     artists: [
@@ -77,6 +80,14 @@ const AdminArtist = () => {
       .then((res) => {
         console.log(res.data);
         setArtistList(res.data);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   }, []);
 
@@ -94,7 +105,12 @@ const AdminArtist = () => {
         setArtistList(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   };
 

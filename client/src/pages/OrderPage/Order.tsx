@@ -1,5 +1,7 @@
 import Footer from 'components/Footer/Footer';
 import { useLocation } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import Header from 'components/Header/Header';
 import { useEffect, useState } from 'react';
 import {
@@ -79,7 +81,7 @@ const Order = () => {
   ]);
 
   const [clientPrice, setClientPrice] = useState(0);
-
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   // 최초 렌더링시 주문이력 여부 확인
   useEffect(() => {
     instance
@@ -111,8 +113,13 @@ const Order = () => {
           totalPrice: price + 10000,
         });
       })
-      .catch(() => {
-        // 주문 가격 에러
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   }, []);
 
