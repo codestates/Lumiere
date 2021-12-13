@@ -4,12 +4,15 @@ import instance from 'util/axios';
 import { Users, AdminUsersType } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import Header from 'components/Header/Header';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import { ModalBackDrop } from 'components/Modal/styled';
 import YesNoModal from 'components/Modal/YesNoModal';
 import PageNation from 'components/PageNation/PageNation';
 import { Table, TableWrap, AdminHeaderWrap } from './styled';
 
 const AdminUser = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [userList, setUserList] = useState<AdminUsersType>({
     users: [
@@ -43,10 +46,20 @@ const AdminUser = () => {
     createdAt: new Date(),
   });
   useEffect(() => {
-    instance.get<AdminUsersType>('/users').then((res) => {
-      console.log(res.data);
-      setUserList(res.data);
-    });
+    instance
+      .get<AdminUsersType>('/users')
+      .then((res) => {
+        console.log(res.data);
+        setUserList(res.data);
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
+      });
   }, []);
 
   const isResignHandler = () => {
@@ -65,7 +78,12 @@ const AdminUser = () => {
         setUserList(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   };
 

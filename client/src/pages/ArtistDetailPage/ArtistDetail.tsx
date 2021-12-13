@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import Header from 'components/Header/Header';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import { FiShare2 } from 'react-icons/fi';
@@ -21,6 +23,7 @@ import {
 } from './styled';
 
 const ArtistDetail = () => {
+  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [artistInfo, setArtistInfo] = useState<Array<ArtistDetailType>>([]);
   const [productFilter, setProductFilter] = useState([
     { image: '', inStock: true, _id: '' },
@@ -45,8 +48,12 @@ const ArtistDetail = () => {
         );
       })
       .catch((err) => {
-        window.location.assign('/error');
-        console.log(err);
+        if (err.response.status === 401) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        } else window.location.assign('/error');
       });
   }, []);
 
@@ -73,7 +80,15 @@ const ArtistDetail = () => {
         artistId: artistInfo[0].artistDetail._id,
         zzim: !isLiked,
       })
-      .then(() => setIsLiked(!isLiked));
+      .then(() => setIsLiked(!isLiked))
+      .catch((err) => {
+        if (err.response.status === 401 && isLogin) {
+          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+          localStorage.removeItem('lumiereUserInfo');
+          setIsLogin(false);
+          window.location.assign('/signin');
+        }
+      });
   };
   return (
     <ArtistDeatilContainer>
