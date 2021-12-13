@@ -47,9 +47,6 @@ const ArtDetail = () => {
       .catch(() => {
         window.location.assign('/error');
       });
-    // Kakao 공유 SDK 초기화
-    window.Kakao.init(process.env.REACT_APP_KAKAO);
-    window.Kakao.isInitialized();
   }, []);
 
   const addToCartHandler: (productId: string) => void = (productId) => {
@@ -106,7 +103,9 @@ const ArtDetail = () => {
                 <h4>{productDetail[0].productDetail.title}</h4>
                 <div>
                   {clickToShare && (
-                    <ShareBox clickToShareHandler={clickToShareHandler} />
+                    <div>
+                      <ShareBox clickToShareHandler={clickToShareHandler} />
+                    </div>
                   )}
                   <FiShare2 onClick={clickToShareHandler} />
                   {isLiked ? (
@@ -168,7 +167,9 @@ const ArtDetail = () => {
                 <div className="primary_button">바로구매</div>
                 <Link to="#top" onClick={clickToShareHandler}>
                   {clickToShare && (
-                    <ShareBox clickToShareHandler={clickToShareHandler} />
+                    <div>
+                      <ShareBox clickToShareHandler={clickToShareHandler} />
+                    </div>
                   )}
                   <FiShare2 />
                 </Link>
