@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
-import { v4 as uuidv4 } from 'uuid';
-import Masonry from 'react-masonry-css';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
@@ -16,6 +14,7 @@ import {
   LandingContainer,
   LandingWrap,
   LatestSection,
+  LatestImgWrap,
   ServiceSection,
   ServiceTitle,
   ServiceList,
@@ -77,21 +76,14 @@ const Landing = () => {
         <Slider banners={banners} />
         <LatestSection>
           <h1>최신작 소개</h1>
-          <Masonry
-            breakpointCols={3}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
-          >
-            {/* array of JSX items */}
-
+          <LatestImgWrap>
             {latestArtList.map((art, idx) => {
               const { _id, image } = art;
               return (
                 <div
                   role="button"
                   tabIndex={0}
-                  key={uuidv4()}
-                  className="my-masonry-grid_column"
+                  key={_id}
                   onClick={() => window.location.assign(`/artdetail/${_id}`)}
                   onKeyDown={() => window.location.assign(`/artdetail/${_id}`)}
                 >
@@ -99,7 +91,7 @@ const Landing = () => {
                 </div>
               );
             })}
-          </Masonry>
+          </LatestImgWrap>
         </LatestSection>
         <ServiceSection>
           <ServiceTitle>

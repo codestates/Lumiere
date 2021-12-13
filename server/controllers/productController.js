@@ -216,7 +216,7 @@ const getProductById = asyncHandler(async (req, res) => {
 // @access Public
 const getLatestProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({}, { image: 1 })
-    .limit(9)
+    .limit(5)
     .sort({ _id: -1 });
 
   if (products) res.json(products);
