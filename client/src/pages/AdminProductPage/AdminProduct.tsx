@@ -78,15 +78,29 @@ const AdminProduct = () => {
     _id: '',
   });
   useEffect(() => {
-    instance.get<AdminProductsType>('/products').then((res) => {
-      setProductList(res.data);
-    });
+    const userInfo = localStorage.getItem('lumiereUserInfo');
+    instance
+      .get<AdminProductsType>('/products', {
+        params: {
+          pageNumber: curPage,
+          isAdmin: JSON.parse(userInfo || '{}').isAdmin,
+        },
+      })
+      .then((res) => {
+        setProductList(res.data);
+      });
   }, []);
 
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
+    const userInfo = localStorage.getItem('lumiereUserInfo');
     instance
-      .get<AdminProductsType>('/products', { params: { pageNumber: page } })
+      .get<AdminProductsType>('/products', {
+        params: {
+          pageNumber: page,
+          isAdmin: JSON.parse(userInfo || '{}').isAdmin,
+        },
+      })
       .then((res) => {
         setProductList(res.data);
       })

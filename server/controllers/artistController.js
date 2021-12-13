@@ -68,7 +68,7 @@ const getArtists = asyncHandler(async (req, res) => {
   let count;
   let artists;
 
-  if (isAdmin === true) {
+  if (isAdmin === 'true') {
     const decodedData = isAuthorized(req);
     if (decodedData) {
       // 토큰이 유효할 경우

@@ -44,6 +44,7 @@ const AdminUser = () => {
   });
   useEffect(() => {
     instance.get<AdminUsersType>('/users').then((res) => {
+      console.log(res.data);
       setUserList(res.data);
     });
   }, []);
@@ -119,7 +120,9 @@ const AdminUser = () => {
                     <div>{el._id}</div>
                   </td>
                   <td>
-                    <div>{el.general.email}</div>
+                    <div>{el.general?.email}</div>
+                    <div>{el.kakao?.email}</div>
+                    <div>{el.general ? '(일반)' : '(카카오유저)'}</div>
                   </td>
                   <td>
                     <div>{el.name}</div>
