@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ModalBackDrop } from 'components/Modal/styled';
 import AdminEnrollArtist from 'components/Modal/AdminEnrollArtist';
 import AdminArtistEdit from 'components/Modal/AdminEditArtist';
-import AdminHeader from 'components/Header/AdminHeader';
+import Header from 'components/Header/Header';
 import AdminEnrollProduct from 'components/Modal/AdminEnrollProduct';
 import PageNation from 'components/PageNation/PageNation';
 import { Table, TableWrap, EnrollmentButton, AdminHeaderWrap } from './styled';
@@ -121,7 +121,7 @@ const AdminArtist = () => {
 
   return (
     <AdminHeaderWrap>
-      <AdminHeader />
+      <Header />
       <h1>작가 관리</h1>
       <EnrollmentButton type="button" onClick={isEnrollArtistHandler}>
         작가등록

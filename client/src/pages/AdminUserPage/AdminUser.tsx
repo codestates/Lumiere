@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import instance from 'util/axios';
 import { Users, AdminUsersType } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
-import AdminHeader from 'components/Header/AdminHeader';
+import Header from 'components/Header/Header';
 import { ModalBackDrop } from 'components/Modal/styled';
 import YesNoModal from 'components/Modal/YesNoModal';
 import PageNation from 'components/PageNation/PageNation';
@@ -90,7 +90,7 @@ const AdminUser = () => {
   };
   return (
     <AdminHeaderWrap>
-      <AdminHeader />
+      <Header />
       {/* <Link to="/"></Link> */}
       <h1>유저 관리</h1>
       <PageNation

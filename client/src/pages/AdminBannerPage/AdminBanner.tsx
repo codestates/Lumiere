@@ -5,7 +5,7 @@ import instance from 'util/axios';
 import { Order } from 'util/type';
 import { v4 as uuidv4 } from 'uuid';
 import { useComma, convertDeliverStatus } from 'util/functions';
-import AdminHeader from 'components/Header/AdminHeader';
+import Header from 'components/Header/Header';
 import {
   Table,
   TableWrap,
@@ -77,7 +77,7 @@ const AdminBanner = () => {
   console.log(orderList.map((el) => el));
   return (
     <AdminHeaderWrap>
-      <AdminHeader />
+      <Header />
       test
     </AdminHeaderWrap>
   );
