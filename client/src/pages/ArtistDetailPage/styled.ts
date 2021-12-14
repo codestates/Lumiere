@@ -42,10 +42,14 @@ export const ArtistWrap = styled.div`
     border: 3px solid #e97272;
   }
   img {
+    position: absolute;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    position: absolute;
+    transition: all 0.5s;
+  }
+  img:hover {
+    transform: scale(1.1);
   }
 `;
 
@@ -80,9 +84,9 @@ export const ButtonWrap = styled.div`
   padding-top: 1rem;
   .circle {
     background-color: #e97272;
-    width: 18px;
-    height: 18px;
-    border-radius: 9px;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
     margin-right: 0.5rem;
   }
   .soldout {
@@ -98,11 +102,13 @@ export const ButtonWrap = styled.div`
     }
   }
   .filter {
-    input {
-      margin: 0px;
-    }
     flex: 1;
     text-align: right;
+    cursor: default;
+    input {
+      margin: 0px;
+      cursor: pointer;
+    }
     label {
       margin: 5px;
       vertical-align: middle;
@@ -147,6 +153,7 @@ export const HtagWrap = styled.div`
       margin-left: 0.4rem;
       padding: 0.4rem;
       color: #aaaaaa;
+      cursor: pointer;
     }
   }
   h1 {

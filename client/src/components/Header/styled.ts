@@ -38,7 +38,7 @@ export const HambugerBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 3rem;
+  width: 6vh;
   height: 100%;
   font-size: 2rem;
   text-align: center;
@@ -87,22 +87,23 @@ export const MainMenu = styled.nav`
       > li {
         margin: 0 0.2rem;
         > div {
+          display: inline;
           cursor: pointer;
         }
       }
-      > li a,
-      div {
+      > li > a,
+      > li > div {
         padding: 0.2rem 0.4rem;
         font-weight: 700;
         color: #888888;
         border-bottom: 2px solid #ffffff;
         transition: all 0.5s;
       }
-      > li a:hover {
+      > li > a:hover {
         color: var(--color-black);
         border-bottom: 2px solid #eeeeee;
       }
-      > li div:hover {
+      > li > div:hover {
         color: var(--color-black);
         border-bottom: 2px solid #eeeeee;
       }
@@ -112,6 +113,11 @@ export const MainMenu = styled.nav`
 
 export const AdminMenu = styled.li`
   position: relative;
+
+  > a {
+    position: relative;
+    z-index: 1;
+  }
   > ul {
     display: none;
   }
@@ -126,19 +132,22 @@ export const AdminMenu = styled.li`
       > li {
         display: flex;
         width: 8rem;
-        background-color: rgba(255, 255, 255, 0.5);
-      }
-      > li a {
-        width: 100%;
-        padding: 0.4rem 0;
-        font-size: 0.9rem;
-        text-align: center;
+        background-color: rgba(0, 0, 0, 0.5);
         border-bottom: 1px solid #eeeeee;
       }
-      > li a:hover {
+      > li > a {
+        width: 100%;
+        padding: 0.5rem 0;
+        font-size: 0.9rem;
         color: #ffffff;
-        background-color: rgba(0, 0, 0, 0.5);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+        text-align: center;
+      }
+      > li > a:hover {
+        font-weight: 800;
+        background-color: var(--color-black);
+      }
+      > li:last-child {
+        border-bottom: none;
       }
     }
   }
@@ -158,7 +167,6 @@ export const IconBox = styled.div`
   button {
     margin: 0;
     padding: 0;
-    font-size: 1.3rem;
     background: none;
     border: none;
   }
@@ -167,7 +175,9 @@ export const IconBox = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 1.5rem;
+    width: 2rem;
+    font-size: 1.6rem;
+    cursor: pointer;
   }
   div:nth-child(3) {
     display: none;
@@ -175,7 +185,7 @@ export const IconBox = styled.div`
   @media screen and (min-width: 768px) {
     div,
     button {
-      width: 2rem;
+      font-size: 1.3rem;
     }
     div:nth-child(3) {
       display: flex;

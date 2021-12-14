@@ -36,7 +36,7 @@ export const TabMenu = styled.li`
   color: #888888;
   background: #f8f8f8;
   border: 1px solid #eeeeee;
-
+  cursor: pointer;
   &.tab_focused {
     color: var(--color-black);
     background: #ffffff;
@@ -54,7 +54,7 @@ export const TabMenu = styled.li`
     background: #ffffff;
     border: none;
     border-top: 1px solid #eeeeee;
-
+    cursor: default;
     &.tab_focused {
       background: #ffffff;
       border: none;
@@ -124,6 +124,7 @@ export const FilteringMenu = styled.li`
   color: #888888;
   border: 1px solid #eeeeee;
   border-radius: 0.3rem;
+  cursor: pointer;
 
   &.menu_focused {
     font-weight: 700;

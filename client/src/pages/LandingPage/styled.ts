@@ -34,10 +34,20 @@ export const LatestImgWrap = styled.div`
     width: 33.3%;
     height: 50%;
     padding: 0.4rem;
-    > img {
+    > a {
+      display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      overflow: hidden;
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.5s;
+      }
+      > img:hover {
+        transform: scale(1.1);
+      }
     }
   }
   > div:nth-child(5) {
@@ -117,10 +127,15 @@ export const ServiceBox = styled.li`
     padding: 1rem;
     color: #ffffff;
     background-color: var(--color-black);
+    transition: all 0.5s;
     span {
       padding-top: 1rem;
       color: #ffffff;
     }
+  }
+  a:hover,
+  a:focus {
+    background-color: #555555;
   }
 
   @media screen and (min-width: 768px) {
