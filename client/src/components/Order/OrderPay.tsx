@@ -25,7 +25,6 @@ import {
 
 type PriceProps = {
   priceState: OrderPrice;
-  clientPrice: number;
   shippingState: OrderDeliver;
   ordererInfoState: OrdererUserInfo;
   deliveryReqState: OrderDelierDetail;
@@ -43,7 +42,6 @@ declare global {
 
 export const OrderPay = ({
   priceState,
-  clientPrice,
   shippingState,
   ordererInfoState,
   deliveryReqState,
@@ -54,9 +52,7 @@ export const OrderPay = ({
   const [inputAllCheck, setInputAllCheck] = useState(false);
 
   const history = useNavigate();
-  useEffect(() => {
-    console.log(clientPrice, '오더페이');
-  });
+
   useEffect(() => {
     const { address, detailedAddress, receiver, contactNum } = shippingState;
     const { name, phoneNum, email, refundTerms } = ordererInfoState;
