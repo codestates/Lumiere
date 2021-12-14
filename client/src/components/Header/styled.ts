@@ -86,8 +86,12 @@ export const MainMenu = styled.nav`
       margin-left: 2rem;
       > li {
         margin: 0 0.2rem;
+        > div {
+          cursor: pointer;
+        }
       }
-      > li a {
+      > li a,
+      div {
         padding: 0.2rem 0.4rem;
         font-weight: 700;
         color: #888888;
@@ -95,6 +99,10 @@ export const MainMenu = styled.nav`
         transition: all 0.5s;
       }
       > li a:hover {
+        color: var(--color-black);
+        border-bottom: 2px solid #eeeeee;
+      }
+      > li div:hover {
         color: var(--color-black);
         border-bottom: 2px solid #eeeeee;
       }

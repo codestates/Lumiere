@@ -32,7 +32,7 @@ const ArtistDetail = () => {
   const [isClickCheckbox, setIsClickCheckbox] = useState<boolean>(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
-  const [clickToShare, setClickToShare] = useState(false);
+  const [clickToShare, setClickToShare] = useState<boolean>(false);
 
   useEffect(() => {
     // axios 요청

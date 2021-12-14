@@ -29,6 +29,7 @@ export const ModalWrap = styled.div`
 `;
 
 export const CloseBtn = styled.div`
+  cursor: pointer;
   position: absolute;
   top: 0;
   right: 0;
