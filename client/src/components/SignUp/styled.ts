@@ -77,8 +77,8 @@ export const SigunUpInputFormInput = styled.input<{
     !err && !errboolean
       ? '1px solid #DCD9D9'
       : err && !errboolean
-      ? '3px solid red'
-      : '3px solid green'};
+      ? '2px solid #D45B5B'
+      : '2px solid #51AF42'};
 
   &::placeholder {
     font-size: 0.9rem;
@@ -88,7 +88,7 @@ export const SigunUpInputFormInput = styled.input<{
 export const SignUpErrImg = styled.div`
   position: absolute;
   top: 2rem;
-  right: 0;
+  right: 0.3rem;
   z-index: 0;
 
   svg {
@@ -106,7 +106,7 @@ export const SignUpErrMessage = styled.span<{ err: string }>`
   display: block;
   margin: 0.4rem 0 0.8rem 0;
   font-size: 0.6rem;
-  color: red;
+  color: #d55b5b;
 
   @media only screen and (min-width: 768px) {
     font-size: 0.85rem;
@@ -188,7 +188,7 @@ export const SignUpPrivacyWrap = styled.div`
 export const PrivacyMessage = styled.span<{ privacyErrState: boolean }>`
   visibility: ${({ privacyErrState }) =>
     privacyErrState ? 'visible' : 'hidden'};
-  color: red;
+  color: #d55b5b;
   font-size: 0.8rem;
 
   @media only screen and (min-width: 768px) {
