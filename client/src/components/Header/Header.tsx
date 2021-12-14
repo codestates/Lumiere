@@ -24,8 +24,9 @@ import {
 
 const Header = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
-  const [showMenu, setShowMenu] = useState(false);
-  const [clickModal, setClickModal] = useState(false);
+  const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [clickModal, setClickModal] = useState<boolean>(false);
+  const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
 
   const history = useNavigate();
   const userInfo = localStorage.getItem('lumiereUserInfo');
@@ -66,6 +67,17 @@ const Header = () => {
     }
   };
 
+  const openLoginModalHandler = () => {
+    setIsOpenLoginModal(!isOpenLoginModal);
+  };
+
+  const goToMyPageHandler = () => {
+    if (!isLogin) {
+      openLoginModalHandler();
+    } else {
+      window.location.assign('/mypage');
+    }
+  };
   return (
     <HeaderContainer>
       {clickModal && <LoginGuideModal clickModalHandler={clickModalHandler} />}
@@ -113,6 +125,19 @@ const Header = () => {
             </li>
             <li>
               <Link to="/">작가 신청</Link>
+            </li>
+            <li>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => goToMyPageHandler()}
+                onKeyDown={() => goToMyPageHandler()}
+                className={
+                  window.location.pathname === '/mypage' ? 'curPage' : ''
+                }
+              >
+                마이페이지
+              </div>
             </li>
             {isLogin && userInfo && JSON.parse(userInfo).isAdmin ? (
               <AdminMenu>
@@ -172,6 +197,10 @@ const Header = () => {
           </HeaderInfoBox>
         )}
       </HeaderWrap>
+      {/* Modal */}
+      {isOpenLoginModal && (
+        <LoginGuideModal clickModalHandler={openLoginModalHandler} />
+      )}
     </HeaderContainer>
   );
 };
