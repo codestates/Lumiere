@@ -37,7 +37,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: true,
       minlength: [2, '성함을 2글자 이상 입력해주세요'],
-      maxlength: [10, '성함을 10글자 이하로 입력해주세요'],
+      maxlength: [52, '성함을 52글자 이하로 입력해주세요'],
     },
     active: {
       lastAccessTime: {
