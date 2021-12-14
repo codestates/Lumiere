@@ -140,7 +140,12 @@ const AdminUser = () => {
                   <td>
                     <div>{el.general?.email}</div>
                     <div>{el.kakao?.email}</div>
-                    <div>{el.general ? '(일반)' : '(카카오유저)'}</div>
+                    <div>{el.google?.email}</div>
+                    <div>{el.naver?.email}</div>
+                    <div>{el.general ? '(일반)' : ''}</div>
+                    <div>{el.kakao ? '(카카오)' : ''}</div>
+                    <div>{el.naver ? '(네이버)' : ''}</div>
+                    <div>{el.google ? '(구글)' : ''}</div>
                   </td>
                   <td>
                     <div>{el.name}</div>
