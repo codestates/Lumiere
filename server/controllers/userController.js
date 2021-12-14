@@ -88,7 +88,7 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 // @desc   Fetch token & userInfo from corporations
-// @route  GET /api/users/oauth/:corp
+// @route  GET /api/users/:corp
 // @access Public
 const oAuthLogin = asyncHandler(async (req, res) => {
   const { corp } = req.params;
