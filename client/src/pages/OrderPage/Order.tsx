@@ -110,11 +110,11 @@ const Order = () => {
         setPriceState({
           ...priceState,
           shippingPrice: 10000,
-          totalPrice: price,
+          totalPrice: price - 10000,
         });
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.status === 401 && !isLogin) {
           alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
           localStorage.removeItem('lumiereUserInfo');
           setIsLogin(false);
@@ -135,12 +135,15 @@ const Order = () => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log(clientPrice, '오더');
+  });
   // 클라이언트에서 계산한 결졔 예정 금액
   useEffect(() => {
     setClientPrice(
       productState.reduce((acc, cur) => {
         return acc + cur.price;
-      }, 0),
+      }, 10000),
     );
   }, [productState]);
 

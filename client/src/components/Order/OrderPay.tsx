@@ -54,7 +54,9 @@ export const OrderPay = ({
   const [inputAllCheck, setInputAllCheck] = useState(false);
 
   const history = useNavigate();
-
+  useEffect(() => {
+    console.log(clientPrice, '오더페이');
+  });
   useEffect(() => {
     const { address, detailedAddress, receiver, contactNum } = shippingState;
     const { name, phoneNum, email, refundTerms } = ordererInfoState;
@@ -181,37 +183,51 @@ export const OrderPay = ({
           alert('품절 상품이 있습니다 품절상품 제외하고 다시 주문해주세요');
           window.history.back();
         } else {
-          // 임시 주문서 생성
-          const orderItem = productState.map((el) => {
-            return {
-              product: el._id,
-              image: el.image,
-              title: el.title,
-              artist: el.artist.name,
-              size: `${el.info.size}(${el.info.canvas}호)`,
-              price: el.price,
-            };
-          });
           instance
-            .post('/orders', {
-              orderItems: orderItem,
-              result: {
-                id: useOrderNumber(),
-              },
-              deliveryInfo: shippingState,
-              deliveryDetails: deliveryReqState,
-              ordererInfo: ordererInfoState,
-              shippingPrice: priceState.shippingPrice,
-              totalPrice: priceState.totalPrice + priceState.shippingPrice,
+            .get('/products/total-price', {
+              params: { productId: orderProduct },
             })
             .then((res) => {
-              // 임시주문서 order id
-              const orderid = res.data.orderId;
-              hanldePayment(orderid);
-            })
-            .catch((err) => {
-              // 임시 주문서 생성 실패
-              window.location.assign('/error');
+              if (
+                res.data.totalPrice !==
+                priceState.totalPrice + priceState.shippingPrice
+              ) {
+                return window.location.assign('/error');
+              } else {
+                // 임시 주문서 생성
+                const orderItem = productState.map((el) => {
+                  return {
+                    product: el._id,
+                    image: el.image,
+                    title: el.title,
+                    artist: el.artist.name,
+                    size: `${el.info.size}(${el.info.canvas}호)`,
+                    price: el.price,
+                  };
+                });
+                instance
+                  .post('/orders', {
+                    orderItems: orderItem,
+                    result: {
+                      id: useOrderNumber(),
+                    },
+                    deliveryInfo: shippingState,
+                    deliveryDetails: deliveryReqState,
+                    ordererInfo: ordererInfoState,
+                    shippingPrice: priceState.shippingPrice,
+                    totalPrice:
+                      priceState.totalPrice + priceState.shippingPrice,
+                  })
+                  .then((res) => {
+                    // 임시주문서 order id
+                    const orderid = res.data.orderId;
+                    hanldePayment(orderid);
+                  })
+                  .catch((err) => {
+                    // 임시 주문서 생성 실패
+                    window.location.assign('/error');
+                  });
+              }
             });
         }
       })

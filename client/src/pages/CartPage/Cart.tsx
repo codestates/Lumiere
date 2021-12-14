@@ -49,6 +49,9 @@ const Cart = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   // 로컬스토리지 갱신을 위한 useEffect
   useEffect(() => {
+    if (!isLogin) {
+      window.location.assign('/signin');
+    }
     const localInfo = localStorage.getItem('cartItems');
     setCartListState(JSON.parse(localInfo || '[]'));
   }, []);
