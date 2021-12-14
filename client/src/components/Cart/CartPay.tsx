@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: 0 */
 import { TiEquals, TiPlus } from 'react-icons/ti';
 import { useState } from 'react';
 import instance from 'util/axios';
@@ -16,6 +17,7 @@ import {
 type CartProps = {
   // 배열을 넘겼으니 배열을 받아야함
   totalPriceState: number;
+  checkBoxList: string[];
   cartListState: string[];
   cartProductState: OrderProducts[];
   setCartProductState: (check: OrderProducts[]) => void;
@@ -23,6 +25,7 @@ type CartProps = {
 
 export const CartPay = ({
   totalPriceState,
+  checkBoxList,
   cartListState,
   cartProductState,
   setCartProductState,
@@ -37,10 +40,10 @@ export const CartPay = ({
       .then((res) => {
         setCartProductState(res.data);
         const newArr = cartProductState.filter((el) => {
-          return el.inStock;
+          return checkBoxList.includes(el._id) && el.inStock;
         });
-        if (newArr.length === cartListState.length) {
-          history('/order', { state: { id: cartListState } });
+        if (newArr.length === checkBoxList.length) {
+          history('/order', { state: { id: checkBoxList } });
         } else {
           clickModalHandler();
         }

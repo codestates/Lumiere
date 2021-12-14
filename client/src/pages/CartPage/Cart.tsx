@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: 0 */
 import Footer from 'components/Footer/Footer';
 import Header from 'components/Header/Header';
 import { useRecoilState } from 'recoil';
@@ -69,16 +70,22 @@ const Cart = () => {
       });
   }, [cartListState]);
 
+  // 결제 금액 구하는 로직
   useEffect(() => {
+    console.log(checkBoxList);
+    console.log(cartListState);
+    const newArr = cartProductState.filter((el) => {
+      return checkBoxList.includes(el._id) && el.inStock;
+    });
     setTotalPriceState(
-      cartProductState.reduce((acc, cur) => {
+      newArr.reduce((acc, cur) => {
         if (cur.inStock) {
           return acc + cur.price;
         }
         return acc;
       }, 0),
     );
-  }, [cartProductState]);
+  }, [checkBoxList, cartListState]);
 
   return (
     <CartContainer>
@@ -100,6 +107,7 @@ const Cart = () => {
         </CartContentLeftWrap>
         <CartPay
           totalPriceState={totalPriceState}
+          checkBoxList={checkBoxList}
           cartListState={cartListState}
           setCartProductState={setCartProductState}
           cartProductState={cartProductState}
