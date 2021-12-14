@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { useState, useEffect } from 'react';
 import { useComma, useName, useOrderNumber } from 'util/functions';
 import instance from 'util/axios';
 import dotenv from 'dotenv';
@@ -49,7 +50,33 @@ export const OrderPay = ({
   productState,
   orderProduct,
 }: PriceProps) => {
+  // input Validate State
+  const [inputAllCheck, setInputAllCheck] = useState(false);
+
   const history = useNavigate();
+
+  useEffect(() => {
+    const { address, detailedAddress, receiver, contactNum } = shippingState;
+    const { name, phoneNum, email, refundTerms } = ordererInfoState;
+    const { receiveAt, requestedTerms } = deliveryReqState;
+
+    if (
+      address &&
+      detailedAddress &&
+      receiver &&
+      contactNum &&
+      name &&
+      phoneNum &&
+      email &&
+      refundTerms &&
+      receiveAt &&
+      requestedTerms
+    ) {
+      setInputAllCheck(true);
+    } else {
+      setInputAllCheck(false);
+    }
+  }, [shippingState, ordererInfoState, deliveryReqState]);
 
   const OrderPaymentHandler = () => {
     // IAMPORT 핸들러
@@ -161,6 +188,11 @@ export const OrderPay = ({
         const newArr = res.data.filter((el: OrderProducts) => {
           return el.inStock;
         });
+        if (!inputAllCheck) {
+          alert('배송지 주문자 정보, 배송 요청사항을 모두 입력해주세요');
+          return;
+        }
+
         if (newArr.length !== res.data.length) {
           // 품절 상품이 있는경우
           alert('품절 상품이 있습니다 품절상품 제외하고 다시 주문해주세요');
