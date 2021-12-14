@@ -42,6 +42,10 @@ export const CartPay = ({
         const newArr = cartProductState.filter((el) => {
           return checkBoxList.includes(el._id) && el.inStock;
         });
+        if (checkBoxList.length === 0) {
+          clickModalHandler();
+          return;
+        }
         if (newArr.length === checkBoxList.length) {
           history('/order', { state: { id: checkBoxList } });
         } else {
