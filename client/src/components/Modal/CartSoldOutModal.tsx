@@ -19,7 +19,7 @@ const CartSoldOutModal = ({ clickModalHandler }: Props) => {
           <GuideImgBox>
             <img src="/images/login_guide.png" alt="품절상품 안내 이미지" />
           </GuideImgBox>
-          <p>품절상품 삭제 후 다시 시도해주세요</p>
+          <p>품절상품 삭제 혹은 구입하실 상품을 선택해 주세요</p>
         </ContentWrap>
         <ButtonBox>
           <SelectButton onClick={clickModalHandler}>닫기 </SelectButton>
