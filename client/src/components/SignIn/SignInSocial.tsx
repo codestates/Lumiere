@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { RiKakaoTalkLine } from 'react-icons/ri';
 import { SiNaver } from 'react-icons/si';
 import { GrGoogle } from 'react-icons/gr';

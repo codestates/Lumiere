@@ -39,7 +39,7 @@ const Header = () => {
         console.log(res);
         localStorage.removeItem('lumiereUserInfo');
         setIsLogin(false);
-        history('/');
+        window.location.reload();
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -183,9 +183,14 @@ const Header = () => {
                   <span>{userInfo && JSON.parse(userInfo).name}</span>님
                 </div>
               </Link>
-              <Link to="/" onClick={logoutHandler}>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={logoutHandler}
+                onKeyDown={logoutHandler}
+              >
                 <AiOutlinePoweroff />
-              </Link>
+              </div>
             </UserInfoBox>
           </HeaderInfoBox>
         ) : (

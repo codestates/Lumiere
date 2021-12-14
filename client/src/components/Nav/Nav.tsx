@@ -1,14 +1,11 @@
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
 import instance from 'util/axios';
-import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { NavContainer, NavInfoBox, UserInfoBox, NavButtonBox } from './styled';
 
 const Nav = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
-
-  const history = useNavigate();
   const userInfo = localStorage.getItem('lumiereUserInfo');
 
   const logoutHandler = () => {
@@ -19,7 +16,7 @@ const Nav = () => {
         console.log(res);
         localStorage.removeItem('lumiereUserInfo');
         setIsLogin(false);
-        history('/');
+        window.location.reload();
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -60,9 +57,14 @@ const Nav = () => {
           </UserInfoBox>
           <NavButtonBox>
             <Link to="/mypage">마이페이지</Link>
-            <Link to="/" onClick={logoutHandler}>
+            <div
+              role="button"
+              tabIndex={0}
+              onKeyDown={logoutHandler}
+              onClick={logoutHandler}
+            >
               로그아웃
-            </Link>
+            </div>
           </NavButtonBox>
         </NavInfoBox>
       ) : (
