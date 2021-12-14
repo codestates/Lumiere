@@ -7,6 +7,14 @@ export interface Users {
     email: string;
     uuid: number;
   };
+  google?: {
+    email: string;
+    uuid: number;
+  };
+  naver?: {
+    email: string;
+    uuid: number;
+  };
   active: {
     isClosed: boolean;
     lastAccessTime: Date;
