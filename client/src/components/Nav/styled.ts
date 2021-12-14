@@ -62,6 +62,9 @@ export const UserInfoBox = styled.div`
   flex: 1.3;
   display: flex;
   align-items: center;
+  svg {
+    cursor: pointer;
+  }
 
   img {
     height: 8vh;
@@ -106,7 +109,8 @@ export const NavButtonBox = styled.div`
   flex: 1;
   display: flex;
 
-  a {
+  a,
+  div {
     flex: 1;
     display: flex;
     justify-content: center;

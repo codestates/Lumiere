@@ -43,7 +43,7 @@ const SignInContent = () => {
           const userInfo = res.data;
           localStorage.setItem('lumiereUserInfo', JSON.stringify(userInfo));
           signinStateHandler(true);
-          history('/');
+          window.history.go(-1);
         })
         .catch((err) => {
           console.log(err);
