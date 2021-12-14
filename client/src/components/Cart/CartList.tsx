@@ -69,7 +69,6 @@ export const CartList = ({
       {cartProductState.length === 0 ? (
         <CartNotListModal clickModalHandler={clickModalHandler} />
       ) : (
-        // <div>아이우에오</div>
         cartProductState.map((el) => {
           return (
             <ProductContent key={el._id}>

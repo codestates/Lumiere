@@ -108,6 +108,7 @@ export const CartPayCountWrap = styled.dl`
   height: 8vh;
   padding: 0.2rem 2.2rem;
   text-align: center;
+  background-color: #ffffff;
 
   & dt {
     margin-bottom: 0.5rem;
@@ -206,8 +207,7 @@ export const CartPayClickBtn = styled.button`
 
 // CartList
 export const ProductContentWrap = styled.div`
-  margin-bottom: 1rem;
-  padding: 1rem;
+  padding: 1rem 1rem 0;
   background-color: #ffffff;
   overflow: scroll;
   overflow-x: hidden;
@@ -227,15 +227,19 @@ export const ProductContentWrap = styled.div`
 
   @media screen and (min-width: 768px) {
     height: 100%;
-    margin-bottom: 1rem;
   }
 `;
 
 export const ProductContent = styled.div`
   display: flex;
   position: relative;
+  padding: 0 0 0.5rem;
   border-bottom: 1px solid #e4e4e4;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 `;
 
 export const ListDeleteBtnWrap = styled.div`
@@ -310,14 +314,13 @@ export const ImgWrap = styled.div`
   flex: 4;
   width: 7rem;
   height: 9rem;
-  padding: 0 0.5rem;
   background-color: #ebebeb;
 
   img {
     background-color: #ffffff;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   @media screen and (min-width: 768px) {
