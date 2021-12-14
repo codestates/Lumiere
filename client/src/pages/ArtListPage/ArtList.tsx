@@ -121,10 +121,11 @@ const ArtList = () => {
           } else window.location.assign('/error');
         });
     } else {
+      setCurPage(1);
       instance
         .get('/products/filter', {
           params: {
-            pageNumber: curPage,
+            pageNumber: 1,
             theme: type.theme,
             sizeMin: type.sizeMin,
             sizeMax: type.sizeMax,
