@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import instance from 'util/axios';
 import { useComma } from 'util/functions';
 import { ProductDetail } from 'util/type';
@@ -34,6 +34,7 @@ const ArtDetail = () => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
 
+  const history = useNavigate();
   const currentUrl = window.location.href;
 
   useEffect(() => {
@@ -102,11 +103,27 @@ const ArtDetail = () => {
       });
   };
 
-  const purchaseHandler = () => {
+  const purchaseHandler: (productId: string) => void = (productId) => {
     if (!isLogin) {
       openLoginModalHandler();
-    } else if ('결제프로세스 핸들러 넣으심 됩니다') {
-      //
+    } else {
+      instance
+        .get<ProductDetail>(`/products/${currentUrl.split('artdetail/')[1]}`)
+        .then((res) => {
+          if (res.data.productDetail.inStock) {
+            history('/order', { state: { id: [productId] } });
+          } else {
+            alert('현재 품절된 작품입니다.');
+          }
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+            localStorage.removeItem('lumiereUserInfo');
+            setIsLogin(false);
+            window.location.assign('/signin');
+          } else window.location.assign('/error');
+        });
     }
   };
 
@@ -201,8 +218,12 @@ const ArtDetail = () => {
                       ? 'primary_button'
                       : 'buttonDisplayNone '
                   }
-                  onClick={() => purchaseHandler()}
-                  onKeyDown={() => purchaseHandler()}
+                  onClick={() =>
+                    purchaseHandler(productDetail[0].productDetail._id)
+                  }
+                  onKeyDown={() =>
+                    purchaseHandler(productDetail[0].productDetail._id)
+                  }
                 >
                   바로구매
                 </div>
