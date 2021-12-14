@@ -136,7 +136,8 @@ export const OrderPay = ({
                 history('/paymentfinished');
               })
               .catch((err) => {
-                // 이럴 경우에는 환불해줘야됨 꼭 구현해야 하는것
+                // 아임포트는 결제 완료되었지만 DB저장 혹시 서버에서 문제 발생할 경우
+                // 이떄 아임포트 결제 환불 시켜줘야함
                 window.location.assign('/error');
                 console.log(err.response);
               });
@@ -144,8 +145,8 @@ export const OrderPay = ({
             alert('결제금액이 이상합니다.');
             window.location.assign('/error');
           }
+          // 주문 실패한 경우
         } else {
-          // 실패한 경우
           alert('주문을 취소 하셨습니다');
         }
       };
