@@ -4,7 +4,7 @@ export const NavContainer = styled.nav`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: var(--button-index);
+  z-index: var(--nav-index);
   width: 100vw;
   height: 100vh;
   padding: 5rem 3rem 0;
@@ -15,6 +15,7 @@ export const NavContainer = styled.nav`
     position: absolute;
     top: 1rem;
     left: 50%;
+    z-index: var(--nav-index);
     transform: translateX(-50%);
     font-size: 1.5rem;
     font-weight: 800;
@@ -50,6 +51,7 @@ export const NavInfoBox = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
+  z-index: var(--nav-index);
   display: flex;
   flex-direction: column;
   width: 100%;

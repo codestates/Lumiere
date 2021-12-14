@@ -62,9 +62,10 @@ export const GlobalStyle = createGlobalStyle`
     --box-padding: 3rem 0;
     /* z-index */
     --modal-index: 10;
-    --nav-index: 9;
-    --button-index: 8;
+    --nav-btn-index: 9;
+    --nav-index: 8;
     --top-index: 7;
+    --button-index: 6;
   }
 
   /** global css **/
