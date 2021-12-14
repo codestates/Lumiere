@@ -111,6 +111,7 @@ export const DetailInfoBox = styled.div`
   @media screen and (min-width: 768px) {
     position: sticky;
     top: 7vh;
+    z-index: var(--button-index);
     width: 30%;
     margin: 0;
 
@@ -122,7 +123,6 @@ export const DetailInfoBox = styled.div`
         position: absolute;
         top: 0.4rem;
         right: 2rem;
-        z-index: var(--button-index);
       }
       > svg {
         width: 2rem;

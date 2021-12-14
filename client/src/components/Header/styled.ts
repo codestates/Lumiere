@@ -4,7 +4,7 @@ export const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: var(--button-index);
+  z-index: var(--nav-index);
   width: 100vw;
   background-color: #ffffff;
   border-bottom: 1px solid #f2f2f2;
@@ -34,7 +34,7 @@ export const HambugerBtn = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  z-index: var(--nav-index);
+  z-index: var(--nav-btn-index);
   display: flex;
   justify-content: center;
   align-items: center;

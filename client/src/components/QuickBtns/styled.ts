@@ -3,7 +3,8 @@ import styled from 'styled-components';
 export const QuickBtnsContainer = styled.div`
   position: fixed;
   right: 1rem;
-  bottom: 2.8rem;
+  bottom: 4rem;
+  z-index: var(--top-index);
   display: flex;
   flex-direction: column;
 
@@ -17,5 +18,8 @@ export const QuickBtnsContainer = styled.div`
   }
   > a:last-child {
     margin-top: 0.2rem;
+  }
+  @media screen and (min-width: 768px) {
+    bottom: 2.8rem;
   }
 `;
