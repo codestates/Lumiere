@@ -14,6 +14,7 @@ import { FiShare2 } from 'react-icons/fi';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import LoginGuideModal from 'components/Modal/LoginGuideModal';
+import Footer from 'components/Footer/Footer';
 import {
   ArtDetailContainer,
   ArtDetailWrap,
@@ -59,7 +60,9 @@ const ArtDetail = () => {
 
   const addToCartHandler: (productId: string) => void = (productId) => {
     const cartItems = localStorage.getItem('cartItems');
-    if (!cartItems) {
+    if (!isLogin) {
+      openLoginModalHandler();
+    } else if (!cartItems) {
       localStorage.setItem('cartItems', JSON.stringify([productId]));
     } else if (!JSON.parse(cartItems).includes(productId)) {
       const cartArr = JSON.parse(cartItems);
@@ -97,6 +100,14 @@ const ArtDetail = () => {
           window.location.assign('/signin');
         }
       });
+  };
+
+  const purchaseHandler = () => {
+    if (!isLogin) {
+      openLoginModalHandler();
+    } else if ('결제프로세스 핸들러 넣으심 됩니다') {
+      //
+    }
   };
 
   return (
@@ -172,12 +183,38 @@ const ArtDetail = () => {
                   onKeyPress={() =>
                     addToCartHandler(productDetail[0].productDetail._id)
                   }
+                  className={
+                    productDetail[0].productDetail.inStock
+                      ? 'addShoppingBag'
+                      : 'buttonDisplayNone'
+                  }
                   role="button"
                   tabIndex={0}
                 >
                   아트 쇼핑백
                 </div>
-                <div className="primary_button">바로구매</div>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className={
+                    productDetail[0].productDetail.inStock
+                      ? 'primary_button'
+                      : 'buttonDisplayNone '
+                  }
+                  onClick={() => purchaseHandler()}
+                  onKeyDown={() => purchaseHandler()}
+                >
+                  바로구매
+                </div>
+                <div
+                  className={
+                    productDetail[0].productDetail.inStock
+                      ? 'buttonDisplayNone'
+                      : 'primary_button cursorNone'
+                  }
+                >
+                  품절 되었습니다
+                </div>
                 <Link to="#top" onClick={clickToShareHandler}>
                   {clickToShare && (
                     <div>
@@ -260,6 +297,7 @@ const ArtDetail = () => {
         </ArtDetailWrap>
       )}
       <QuickBtns />
+      <Footer />
       {/* Modal */}
       {isOpenLoginModal && (
         <LoginGuideModal clickModalHandler={openLoginModalHandler} />

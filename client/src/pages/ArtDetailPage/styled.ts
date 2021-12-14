@@ -3,9 +3,14 @@ import styled from 'styled-components';
 export const ArtDetailContainer = styled.div`
   margin-top: 6vh;
   margin-bottom: 5rem;
-
+  Footer {
+    display: none;
+  }
   @media screen and (min-width: 768px) {
     margin-bottom: 0;
+    Footer {
+      display: flex;
+    }
   }
 `;
 
@@ -125,6 +130,7 @@ export const DetailInfoBox = styled.div`
         margin-left: 0.4rem;
         padding: 0.4rem;
         color: #aaaaaa;
+        cursor: pointer;
       }
     }
   }
@@ -137,6 +143,12 @@ export const OrderBtnBox = styled.div`
   z-index: var(--button-index);
   display: flex;
   width: 100%;
+  .addShoppingBag {
+    cursor: pointer;
+  }
+  .buttonDisplayNone {
+    display: none;
+  }
 
   > div {
     flex: 1;
@@ -153,11 +165,15 @@ export const OrderBtnBox = styled.div`
       background-color: #f4f4f4;
     }
     &.primary_button {
+      cursor: pointer;
       color: #ffffff;
       background-color: var(--color-black);
       &:hover {
         background-color: #4d4d4d;
       }
+    }
+    &.cursorNone {
+      cursor: not-allowed;
     }
   }
   > a {
@@ -237,6 +253,7 @@ export const SuggestionImgWrap = styled.div`
       width: 100%;
       height: 100%;
       object-fit: cover;
+      cursor: pointer;
     }
   }
 
