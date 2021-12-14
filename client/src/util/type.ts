@@ -65,7 +65,7 @@ export interface ProductDetail {
     info: {
       details: string;
       size: string;
-      canvas: string;
+      canvas: number;
       createdAt: string;
     };
     likes: [string];

@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { Product, Artists } from 'util/type';
-import adminInstance from 'util/axios';
+import instance from 'util/axios';
 import React, { useState, useEffect } from 'react';
 import S3 from 'react-aws-s3-typescript';
 import dotenv from 'dotenv';
@@ -102,8 +102,8 @@ const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
 
   const editHandler = () => {
     if (isThumbnail)
-      adminInstance.patch(`/artists/${el._id}`, { thumbnail: editImage });
-    adminInstance
+      instance.patch(`/artists/${el._id}`, { thumbnail: editImage });
+    instance
       .post('/products', {
         ...productInfo,
       })
