@@ -56,7 +56,10 @@ const ShareBox = ({ clickToShareHandler }: Props) => {
           <img src="/images/kakao.png" alt="카카오 공유하기" />
         </button>
         <CopyToClipboard text={currentUrl}>
-          <button type="button" onClick={() => alert('Copy to clipboard')}>
+          <button
+            type="button"
+            onClick={() => alert('링크가 복사되었습니다 :-)')}
+          >
             <ImLink />
           </button>
         </CopyToClipboard>

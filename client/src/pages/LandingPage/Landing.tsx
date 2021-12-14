@@ -27,24 +27,6 @@ const Landing = () => {
   const [latestArtList, setLatestArtList] = useState([]);
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
 
-  // useEffect(() => {
-  //   const url = new URL(window.location.href);
-  //   const { search } = url;
-  //   console.log(search);
-  //   const code = search.split('=')[1].split('&')[0];
-  //   console.log(code);
-  //   axios
-  //     .get('http://localhost:5000/oauth/google', {
-  //       params: { code },
-  //     })
-  //     .then((res) => {
-  //       console.log(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
-
   useEffect(() => {
     // axios 요청
     instance
@@ -80,14 +62,10 @@ const Landing = () => {
             {latestArtList.map((art, idx) => {
               const { _id, image } = art;
               return (
-                <div
-                  role="button"
-                  tabIndex={0}
-                  key={_id}
-                  onClick={() => window.location.assign(`/artdetail/${_id}`)}
-                  onKeyDown={() => window.location.assign(`/artdetail/${_id}`)}
-                >
-                  <img src={image} alt={`최신작 ${idx}`} />
+                <div key={_id}>
+                  <Link to={`/artdetail/${_id}`}>
+                    <img src={image} alt={`최신작 ${idx}`} />
+                  </Link>
                 </div>
               );
             })}

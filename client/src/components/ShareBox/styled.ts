@@ -29,6 +29,7 @@ export const ShareContainer = styled.div`
     font-size: 1.4rem;
     background: none;
     border: none;
+    cursor: pointer;
   }
   @media (min-width: 768px) {
     flex-direction: column;
@@ -63,6 +64,7 @@ export const ShareBtnWrap = styled.div`
     padding: 0;
     background: none;
     border: none;
+    cursor: pointer;
 
     > svg {
       width: 100%;

@@ -11,9 +11,15 @@ export const ArtWrap = styled.div`
     background-clip: padding-box;
     border: 1px solid #eeeeee;
   }
-
-  img {
-    width: 100%;
+  &:hover img {
+    transform: scale(1.1);
+  }
+  > div:first-child {
+    overflow: hidden;
+    > img {
+      width: 100%;
+      transition: all 0.5s;
+    }
   }
 `;
 

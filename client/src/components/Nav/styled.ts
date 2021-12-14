@@ -1,4 +1,4 @@
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export const NavContainer = styled.nav`
   position: absolute;
@@ -11,13 +11,17 @@ export const NavContainer = styled.nav`
   background: var(--color-black);
   transition: all 0.5s;
 
-  h1 {
+  > h1 {
     position: absolute;
-    top: 1rem;
-    left: 50%;
+    top: 0;
+    left: 0;
     z-index: var(--nav-index);
-    transform: translateX(-50%);
-    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    height: 6vh;
+    font-size: 2rem;
     font-weight: 800;
     color: #ffffff;
   }
@@ -64,9 +68,6 @@ export const UserInfoBox = styled.div`
   flex: 1.3;
   display: flex;
   align-items: center;
-  svg {
-    cursor: pointer;
-  }
 
   img {
     height: 8vh;
@@ -82,6 +83,10 @@ export const UserInfoBox = styled.div`
     span {
       font-weight: 700;
     }
+  }
+  > div {
+    display: flex;
+    align-items: center;
   }
 
   @media screen and (min-width: 768px) {
@@ -104,6 +109,9 @@ export const UserInfoBox = styled.div`
     a:nth-child(2) {
       justify-content: center;
     }
+    > div {
+      cursor: pointer;
+    }
   }
 `;
 
@@ -118,14 +126,21 @@ export const NavButtonBox = styled.div`
     justify-content: center;
     align-items: center;
     margin: 0 0.5rem 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-black);
     border: 1px solid #eeeeee;
     border-radius: 0.3rem;
     box-shadow: 0 0 0.4rem 0 rgba(0, 0, 0, 0.1);
+    transition: all 0.5s;
+  }
+  div {
+    cursor: pointer;
   }
   a:hover,
-  a:focus {
+  a:focus,
+  div:hover,
+  div:focus {
     color: #ffffff;
     background: #888888;
   }

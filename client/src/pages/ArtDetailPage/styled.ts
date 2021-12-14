@@ -190,7 +190,6 @@ export const OrderBtnBox = styled.div`
       position: absolute;
       bottom: 0.5rem;
       right: 4rem;
-      z-index: var(--button-index);
     }
   }
 
@@ -248,12 +247,15 @@ export const SuggestionImgWrap = styled.div`
     height: 14rem;
     padding: 0.5rem;
     overflow: hidden;
-
     > img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       cursor: pointer;
+      transition: all 0.5s;
+    }
+    > img:hover {
+      transform: scale(1.1);
     }
   }
 
