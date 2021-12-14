@@ -7,14 +7,14 @@ const Callback = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   // 인가코드
   const code = new URL(window.location.href).searchParams.get('code');
-
+  const codeHandler = (code: string | null) => {
+    if (window.location.href.split('oauth/')[1].split('?')[0] === 'kakao')
+      return `/users/kakao?code=${code}`;
+    return `/users/${window.location.href.split('oauth/')[1]}?code=${code}`;
+  };
   useEffect(() => {
     instance
-      .get(
-        window.location.href.split('/').find((el) => el === 'kakao')
-          ? `/users/kakao?code=${code}`
-          : `/users/${window.location.href.split('oauth/')[1]}?code=${code}`,
-      )
+      .get(codeHandler(code))
       .then((res) => {
         console.log(res); // 토큰이 넘어올 것임
         const userInfo = res.data;
