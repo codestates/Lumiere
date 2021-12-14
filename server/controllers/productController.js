@@ -12,6 +12,7 @@ const { ObjectId } = mongoose.Types;
 // @route  POST /api/products
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
+  console.log(req.body);
   const {
     artist,
     artCode,
@@ -35,8 +36,15 @@ const createProduct = asyncHandler(async (req, res) => {
     createdAt
   ) {
     await Artist.updateOne({ _id: artist }, { $inc: { countOfWorks: 1 } });
-    const product = await Product.create(req.body);
-
+    const product = await Product.create({
+      artist,
+      artCode,
+      title,
+      image,
+      theme,
+      price,
+      info: { details, size, canvas, createdAt },
+    });
     res.status(201).json(product);
   } else {
     res.status(400).json({ message: '상품 정보를 모두 입력해주세요' });
