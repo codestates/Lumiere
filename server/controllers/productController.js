@@ -270,7 +270,7 @@ const getTotalPrice = asyncHandler(async (req, res) => {
     {
       $group: {
         _id: '장바구니 상품 총 금액',
-        totalPrice: { $sum: '$price' },
+        totalPrice: { $sum: { $add: ['$price', 10000] } },
       },
     },
   ]);
