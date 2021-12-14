@@ -80,7 +80,7 @@ export const OrderPay = ({
 
   const OrderPaymentHandler = () => {
     // IAMPORT 핸들러
-    const hanldePayment = () => {
+    const hanldePayment = (orderid: string) => {
       // 가맹점 식별코드 이용하여 IMP객체 초기화
       const IMP = window.IMP; // 생략 가능
       IMP.init(process.env.REACT_APP_IMPORT);
@@ -96,7 +96,7 @@ export const OrderPay = ({
       const data: RequestPayParams = {
         pg: 'html5_inicis',
         pay_method: 'card',
-        merchant_uid: useOrderNumber(),
+        merchant_uid: orderid,
         name: useName(productState),
         amount: amount,
         buyer_name: ordererInfoState.name,
@@ -125,34 +125,16 @@ export const OrderPay = ({
 
         if (success) {
           // 주문에 성공했으니 서버에 주문 정보 전달
-          const orderItem = productState.map((el) => {
-            return {
-              product: el._id,
-              image: el.image,
-              title: el.title,
-              artist: el.artist.name,
-              size: `${el.info.size}(${el.info.canvas}호)`,
-              price: el.price,
-            };
-          });
           if (
             priceState.totalPrice + priceState.shippingPrice ===
             response.paid_amount
           ) {
             instance
-              .post('/orders', {
-                orderItems: orderItem,
-                result: {
-                  id: response.merchant_uid,
-                  imp_uid: response.imp_uid,
-                },
-                deliveryInfo: shippingState,
-                deliveryDetails: deliveryReqState,
-                ordererInfo: ordererInfoState,
-                shippingPrice: priceState.shippingPrice,
-                totalPrice: priceState.totalPrice + priceState.shippingPrice,
+              .patch(`/orders/${orderid}/pay`, {
+                imp_uid: response.imp_uid,
               })
               .then((res) => {
+                console.log(res);
                 const localInfo = localStorage.getItem('cartItems');
                 const newArr = JSON.parse(localInfo || '[]').filter(
                   (el: string) => {
@@ -181,6 +163,12 @@ export const OrderPay = ({
       IMP.request_pay(data, callback);
     };
 
+    // input창 입력 status
+    if (!inputAllCheck) {
+      alert('배송지 주문자 정보, 배송 요청사항을 모두 입력해주세요');
+      return;
+    }
+
     // 품절여부 확인
     instance
       .get('/products/cart-items', { params: { productId: orderProduct } })
@@ -188,33 +176,60 @@ export const OrderPay = ({
         const newArr = res.data.filter((el: OrderProducts) => {
           return el.inStock;
         });
-        if (!inputAllCheck) {
-          alert('배송지 주문자 정보, 배송 요청사항을 모두 입력해주세요');
-          return;
-        }
-
         if (newArr.length !== res.data.length) {
           // 품절 상품이 있는경우
           alert('품절 상품이 있습니다 품절상품 제외하고 다시 주문해주세요');
           window.history.back();
         } else {
-          // 결제 요청금액 확인
+          // 임시 주문서 생성
+          const orderItem = productState.map((el) => {
+            return {
+              product: el._id,
+              image: el.image,
+              title: el.title,
+              artist: el.artist.name,
+              size: `${el.info.size}(${el.info.canvas}호)`,
+              price: el.price,
+            };
+          });
           instance
-            .get('/products/total-price', {
-              params: { productId: orderProduct },
+            .post('/orders', {
+              orderItems: orderItem,
+              result: {
+                id: useOrderNumber(),
+              },
+              deliveryInfo: shippingState,
+              deliveryDetails: deliveryReqState,
+              ordererInfo: ordererInfoState,
+              shippingPrice: priceState.shippingPrice,
+              totalPrice: priceState.totalPrice + priceState.shippingPrice,
             })
             .then((res) => {
-              if (res.data.totalPrice && priceState.totalPrice && clientPrice) {
-                // 품절상품도 없고 결제 금액도 맞는 상태
-                hanldePayment();
-              } else {
-                // 재고는 있지만 결제금액 불일치
-                window.location.assign('/error');
-              }
+              // 임시주문서 order id
+              const orderid = res.data.orderId;
+              hanldePayment(orderid);
             })
-            .catch(() => {
+            .catch((err) => {
+              // 임시 주문서 생성 실패
               window.location.assign('/error');
             });
+
+          // instance
+          //   .get('/products/total-price', {
+          //     params: { productId: orderProduct },
+          //   })
+          //   .then((res) => {
+          //     if (res.data.totalPrice && priceState.totalPrice && clientPrice) {
+          //       // 품절상품도 없고 결제 금액도 맞는 상태
+          //       hanldePayment();
+          //     } else {
+          //       // 재고는 있지만 결제금액 불일치
+          //       window.location.assign('/error');
+          //     }
+          //   })
+          //   .catch(() => {
+          //     window.location.assign('/error');
+          //   });
         }
       })
       .catch(() => {
