@@ -27,6 +27,7 @@ const orderSchema = mongoose.Schema(
     ],
     result: {
       id: { type: String, required: true }, // 주문번호 YYYYMMDD + 6자리 총 12자리
+      imp_uid: { type: String, required: true }, // 아임포트 결제번호
       paidAt: {
         type: Date,
         required: true,

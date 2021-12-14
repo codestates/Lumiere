@@ -115,7 +115,10 @@ export const OrderPay = ({
             instance
               .post('/orders', {
                 orderItems: orderItem,
-                result: { id: response.merchant_uid },
+                result: {
+                  id: response.merchant_uid,
+                  imp_uid: response.imp_uid,
+                },
                 deliveryInfo: shippingState,
                 deliveryDetails: deliveryReqState,
                 ordererInfo: ordererInfoState,

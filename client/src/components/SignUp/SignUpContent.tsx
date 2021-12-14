@@ -147,7 +147,7 @@ const SignUpContent = () => {
         })
         .then((res) => {
           console.log(res);
-          history('/');
+          history('/signin');
         })
         .catch((err) => {
           // 404페이지로 이동
