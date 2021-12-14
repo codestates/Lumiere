@@ -130,7 +130,7 @@ export const OrderPay = ({
             response.paid_amount
           ) {
             instance
-              .patch(`/orders/${orderid}/pay`, {
+              .patch(`/orders/pay`, {
                 imp_uid: response.imp_uid,
               })
               .then((res) => {
@@ -213,23 +213,6 @@ export const OrderPay = ({
               // 임시 주문서 생성 실패
               window.location.assign('/error');
             });
-
-          // instance
-          //   .get('/products/total-price', {
-          //     params: { productId: orderProduct },
-          //   })
-          //   .then((res) => {
-          //     if (res.data.totalPrice && priceState.totalPrice && clientPrice) {
-          //       // 품절상품도 없고 결제 금액도 맞는 상태
-          //       hanldePayment();
-          //     } else {
-          //       // 재고는 있지만 결제금액 불일치
-          //       window.location.assign('/error');
-          //     }
-          //   })
-          //   .catch(() => {
-          //     window.location.assign('/error');
-          //   });
         }
       })
       .catch(() => {

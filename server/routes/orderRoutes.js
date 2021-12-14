@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   createOrder,
+  updateOrderToPaid,
   cancelOrder,
   updateOrderStatus,
   getLatestOrder,
@@ -14,6 +15,7 @@ const router = express.Router();
 
 // endpoint => /api/orders
 router.route('/').post(protect, createOrder).get(protect, admin, getOrders);
+router.route('/pay').patch(protect, updateOrderToPaid);
 router.route('/latest').get(protect, getLatestOrder);
 router.route('/mine').get(protect, getMyOrders);
 router

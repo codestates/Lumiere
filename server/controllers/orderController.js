@@ -1,4 +1,6 @@
+/* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
+import axios from 'axios';
 import asyncHandler from 'express-async-handler';
 import Order from '../models/order.js';
 import Product from '../models/product.js';
@@ -8,19 +10,18 @@ import localTime from '../utils/localTime.js';
 // @route   POST /api/orders
 // @access  Private
 const createOrder = asyncHandler(async (req, res) => {
-  // 결제 후 주문 생성 단계
+  // 결제 전 주문 생성
+
   const { orderItems } = req.body;
-  const { ordererInfo } = req.body;
-  console.log(ordererInfo);
-  console.log(orderItems);
 
   if (orderItems && !orderItems.length) {
-    res.status(400).json({ message: '주문하실 상품을 추가해주세요' });
+    res.status(400).json({ message: '주문할 상품 목록이 없습니다' });
     return;
   }
+  // 주문 생성
+  const newOrder = await Order.create({ user: req.user._id, ...req.body });
+  // 주문이 성공하였다면, 상품 재고 0으로 수정
   const itemsId = orderItems.map((item) => item.product);
-
-  // 주문 생성 전, 상품 재고 0으로 수정
   await Product.updateMany(
     {
       _id: { $in: itemsId },
@@ -28,9 +29,64 @@ const createOrder = asyncHandler(async (req, res) => {
     { inStock: false },
     { multi: true },
   );
-  // 주문 생성
-  const newOrder = await Order.create({ user: req.user._id, ...req.body });
-  res.status(201).json(newOrder);
+  res.status(201).json({ message: '주문서 생성 성공', orderId: newOrder._id });
+});
+
+// @desc    Update the order to paid after IMPORT
+// @route   PATCH /api/orders/pay
+// @access  Private
+const updateOrderToPaid = asyncHandler(async (req, res) => {
+  // 아임포트 결제 후 imp_uid 추가하기
+
+  const { imp_uid } = req.body;
+
+  // 아임포트 토큰 발급 받기
+  const getToken = await axios({
+    url: 'https://api.iamport.kr/users/getToken',
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    data: {
+      imp_key: process.env.IMPORT_KEY,
+      imp_secret: process.env.IMPORT_SECRET,
+    },
+  });
+  const { access_token } = getToken.data.response;
+
+  // imp_uid로 아임포트 서버에서 결제 정보 조회
+  const getPaymentData = await axios({
+    url: `https://api.iamport.kr/payments/${imp_uid}`,
+    method: 'get',
+    headers: { Authorization: access_token },
+  });
+  const paymentData = getPaymentData.data.response;
+  const { amount, status, merchant_uid } = paymentData;
+
+  const order = await Order.findById(merchant_uid);
+  const amountToBePaid = order.totalPrice;
+
+  if (amount === amountToBePaid && status === 'paid') {
+    // 주문서에 imp_uid 추가
+    await Order.updateOne(
+      { _id: merchant_uid },
+      { 'result.imp_uid': imp_uid },
+      { upsert: true },
+    );
+    res.json({ message: '결제 성공' });
+  } else {
+    // 아임포트 에러 시, 상품 품절 원위치 및 주문 삭제
+    const itemsId = order.orderItems.map((item) => item.product);
+    await Product.updateMany(
+      {
+        _id: { $in: itemsId },
+      },
+      { inStock: true },
+      { multi: true },
+    );
+    await Order.deleteOne({ _id: merchant_uid });
+    res
+      .status(400)
+      .json({ message: '금액 불일치, 위조된 결제시도, 주문서 삭제' });
+  }
 });
 
 // @desc    Get all orders
@@ -197,6 +253,7 @@ const getLatestOrder = asyncHandler(async (req, res) => {
 
 export {
   createOrder,
+  updateOrderToPaid,
   cancelOrder,
   updateOrderStatus,
   getOrderById,
