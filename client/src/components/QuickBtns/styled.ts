@@ -16,6 +16,12 @@ export const QuickBtnsContainer = styled.div`
   > a:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
+  > a:first-child {
+    background-color: #ffffff;
+    img {
+      width: 50px;
+    }
+  }
   > a:last-child {
     margin-top: 0.2rem;
   }
