@@ -10,7 +10,6 @@ import Cart from 'pages/CartPage/Cart';
 import MyPage from 'pages/MyPage/MyPage';
 import Order from 'pages/OrderPage/Order';
 import PaymentFinished from 'pages/PaymentFinishedPage/PaymentFinished';
-import Zzim from 'pages/MyPage/ZzimPage/Zzim';
 import AdminOrder from 'pages/AdminOrderPage/AdminOrder';
 import AdminProduct from 'pages/AdminProductPage/AdminProduct';
 import AdminUser from 'pages/AdminUserPage/AdminUser';
@@ -44,7 +43,6 @@ function App() {
           <Route path="/order" element={<Order />} />
           <Route path="/paymentfinished" element={<PaymentFinished />} />
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/mypage/zzim" element={<Zzim />} />
           <Route path="/admin/order" element={<AdminOrder />} />
           <Route path="/admin/product" element={<AdminProduct />} />
           <Route path="/admin/user" element={<AdminUser />} />
