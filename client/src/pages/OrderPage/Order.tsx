@@ -80,7 +80,6 @@ const Order = () => {
     },
   ]);
 
-  const [clientPrice, setClientPrice] = useState(0);
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   // 최초 렌더링시 주문이력 여부 확인
   useEffect(() => {
@@ -135,18 +134,6 @@ const Order = () => {
       });
   }, []);
 
-  useEffect(() => {
-    console.log(clientPrice, '오더');
-  });
-  // 클라이언트에서 계산한 결졔 예정 금액
-  useEffect(() => {
-    setClientPrice(
-      productState.reduce((acc, cur) => {
-        return acc + cur.price;
-      }, 10000),
-    );
-  }, [productState]);
-
   return (
     <OrderContainer>
       <Header />
@@ -177,7 +164,6 @@ const Order = () => {
             shippingState={shippingState}
             ordererInfoState={ordererInfoState}
             deliveryReqState={deliveryReqState}
-            clientPrice={clientPrice}
             priceState={priceState}
             productState={productState}
             orderProduct={orderProduct}
