@@ -108,6 +108,7 @@ const cancelOrder = asyncHandler(async (req, res) => {
   }
   const itemsId = order.orderItems.map((item) => item.product);
 
+  // 아임포트 결제 중 오류 시, 임시 주문서 삭제
   if (!order.result.imp_uid && order.result.status === -1) {
     await Product.updateMany(
       {
@@ -120,20 +121,58 @@ const cancelOrder = asyncHandler(async (req, res) => {
     res.status(200).json({ message: '결제 오류로 임시 주문서를 삭제했습니다' });
     return;
   }
+  if (order.result.status === 5) {
+    res.status(400).json({ message: '이미 환불된 주문입니다.' });
+    return;
+  }
 
   const { status } = req.body;
   let message;
   if (status === 4) message = '해당 주문의 반품 요청이 완료되었습니다';
   else if (status === 5) {
-    message = '해당 주문의 결제 취소가 완료되었습니다';
-
-    await Product.updateMany(
-      {
-        _id: { $in: itemsId },
+    // 아임포트 토큰 발급 받기
+    const getToken = await axios({
+      url: 'https://api.iamport.kr/users/getToken',
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      data: {
+        imp_key: process.env.IMPORT_KEY,
+        imp_secret: process.env.IMPORT_SECRET,
       },
-      { inStock: true },
-      { multi: true },
-    );
+    });
+    const { access_token } = getToken.data.response;
+
+    /* 아임포트 REST API로 결제환불 요청 */
+    const getCancelData = await axios({
+      url: 'https://api.iamport.kr/payments/cancel',
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: access_token,
+      },
+      data: {
+        imp_uid: order.result.imp_uid,
+        merchant_uid: order._id,
+        checksum: order.totalPrice,
+      },
+    });
+    console.log('결제 취소 답변', getCancelData.data);
+
+    if (getCancelData.data.code === 0) {
+      message = '해당 주문의 결제 취소가 완료되었습니다';
+      await Product.updateMany(
+        {
+          _id: { $in: itemsId },
+        },
+        { inStock: true },
+        { multi: true },
+      );
+    } else {
+      res
+        .status(400)
+        .json({ message: `취소 실패 사유: ${getCancelData.data.message}` });
+      return;
+    }
   } else {
     res.status(400).json({ message: '진행 단계를 알 수 없습니다' });
     return;
