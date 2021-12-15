@@ -20,7 +20,7 @@ const createOrder = asyncHandler(async (req, res) => {
   }
   // 주문 생성
   const newOrder = await Order.create({ user: req.user._id, ...req.body });
-  // 주문이 성공하였다면, 상품 재고 0으로 수정
+  // 상품 재고 0으로 수정
   const itemsId = orderItems.map((item) => item.product);
   await Product.updateMany(
     {
@@ -106,8 +106,16 @@ const cancelOrder = asyncHandler(async (req, res) => {
     res.status(404).json({ message: '해당 주문내역이 존재하지 않습니다' });
     return;
   }
+  const itemsId = order.orderItems.map((item) => item.product);
 
   if (!order.result.imp_uid && order.result.status === -1) {
+    await Product.updateMany(
+      {
+        _id: { $in: itemsId },
+      },
+      { inStock: true },
+      { multi: true },
+    );
     await Order.deleteOne({ _id: req.params.id });
     res.status(200).json({ message: '결제 오류로 임시 주문서를 삭제했습니다' });
     return;
@@ -118,7 +126,6 @@ const cancelOrder = asyncHandler(async (req, res) => {
   if (status === 4) message = '해당 주문의 반품 요청이 완료되었습니다';
   else if (status === 5) {
     message = '해당 주문의 결제 취소가 완료되었습니다';
-    const itemsId = order.orderItems.map((item) => item.product);
 
     await Product.updateMany(
       {
