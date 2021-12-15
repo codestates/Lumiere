@@ -287,7 +287,7 @@ const getTotalPrice = asyncHandler(async (req, res) => {
     },
     {
       $group: {
-        _id: '장바구니 상품 총 금액',
+        _id: '결제 예정 총 금액',
         totalPrice: { $sum: { $add: ['$price', 10000] } },
       },
     },
@@ -342,6 +342,7 @@ const getZzimProducts = asyncHandler(async (req, res) => {
       'info.size': 1,
       'info.canvas': 1,
       price: 1,
+      inStock: 1,
     },
   )
     .populate('artist', ['name'])

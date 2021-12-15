@@ -10,6 +10,7 @@ import OrderHistory from 'components/OrderHistory/OrderHistory';
 import ZzimProducts from 'components/ZzimProducts/ZzimProducts';
 import ZzimArtists from 'components/ZzimArtists/ZzimArtists';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import { CartMenu } from 'components/Cart/CartMenu';
 import { tabMenus } from './dummy';
 import {
   MyPageContainer,
