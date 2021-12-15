@@ -119,10 +119,11 @@ export const OrderPay = ({
           buyer_tel,
           paid_at,
           receipt_url,
+          status,
         } = response;
 
         if (success) {
-          // 주문에 성공했으니 서버에 주문 정보 전달
+          // 아임포트 결제 성공했으니 서버에 주문 정보 전달
           if (
             priceState.totalPrice + priceState.shippingPrice ===
             response.paid_amount
@@ -144,7 +145,7 @@ export const OrderPay = ({
               })
               .catch((err) => {
                 // 아임포트는 결제 완료되었지만 DB저장 혹시 서버에서 문제 발생할 경우
-                // 이떄 아임포트 결제 환불 시켜줘야함
+                // 이떄 아임포트 결제 환불 시켜줘야함, 오더 삭제
                 window.location.assign('/error');
                 console.log(err.response);
               });
@@ -152,9 +153,16 @@ export const OrderPay = ({
             alert('결제금액이 이상합니다.');
             window.location.assign('/error');
           }
-          // 주문 실패한 경우
         } else {
-          alert('주문을 취소 하셨습니다');
+          // 아임포트 결제 취소 : 임시 주문서 삭제 필요
+          instance
+            .delete(`orders/${response.merchant_uid}`)
+            .then((res) => {
+              alert('주문을 취소 하셨습니다');
+            })
+            .catch((err) => {
+              window.location.assign('/error');
+            });
         }
       };
 

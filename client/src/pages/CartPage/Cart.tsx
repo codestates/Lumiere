@@ -75,8 +75,6 @@ const Cart = () => {
 
   // 결제 금액 구하는 로직
   useEffect(() => {
-    console.log(checkBoxList);
-    console.log(cartListState);
     const newArr = cartProductState.filter((el) => {
       return checkBoxList.includes(el._id) && el.inStock;
     });
