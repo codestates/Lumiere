@@ -1,10 +1,12 @@
+import MypageOrderMenu from './MyPageOrderMenu';
+import MypageOrderList from './MyPageOrderList';
 import { OrderHistoryContainer } from './styled';
 
 const OrderHistory = () => {
   return (
     <OrderHistoryContainer>
-      <h1>OrderHistory</h1>
-      <span>hello</span>
+      <MypageOrderMenu />
+      <MypageOrderList />
     </OrderHistoryContainer>
   );
 };

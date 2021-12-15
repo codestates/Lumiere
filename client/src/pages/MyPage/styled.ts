@@ -2,9 +2,15 @@ import styled from 'styled-components';
 
 export const MyPageContainer = styled.div`
   padding-top: 6vh;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const MyPageWrap = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   text-align: center;
 `;
 
@@ -83,17 +89,18 @@ export const MenuListWrap = styled.div`
 `;
 
 export const ContentContainer = styled.div`
+  flex: 1;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 40vh;
-  padding: 1rem;
+  padding: 2rem 1rem;
   background-color: #f7f7f7;
 `;
 
 export const ContentWrap = styled.div`
+  flex: 1;
   max-width: 1152px;
   width: 100%;
-  height: 100%;
   background-color: #ffffff;
 `;
