@@ -10,6 +10,7 @@ import { AiOutlineShoppingCart, AiOutlinePoweroff } from 'react-icons/ai';
 import { RiUserLine } from 'react-icons/ri';
 import { UserInfoBox, NavButtonBox } from 'components/Nav/styled';
 import LoginGuideModal from 'components/Modal/LoginGuideModal';
+import SearchBox from 'components/SearchBox/SearchBox';
 import Nav from '../Nav/Nav';
 import {
   HeaderContainer,
@@ -163,6 +164,7 @@ const Header = () => {
             ) : null}
           </ul>
         </MainMenu>
+        <SearchBox />
         <IconBox>
           <div>
             <BiSearch />

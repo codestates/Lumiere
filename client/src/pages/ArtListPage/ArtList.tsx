@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
 import Header from 'components/Header/Header';
@@ -57,6 +58,11 @@ const ArtList = () => {
     1100: 3,
     767: 2,
   };
+
+  const params = useParams();
+  const { keyword } = params; // match v6버전
+  console.log(keyword);
+  // `/products?keyword=${keyword}&pageNumber=${pageNumber}` 요청 API 주소
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
     instance
