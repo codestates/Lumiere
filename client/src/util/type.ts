@@ -312,3 +312,32 @@ export interface RequestPayResponse extends RequestPayAdditionalResponse {
   paid_at?: number;
   receipt_url?: string;
 }
+
+// Mypage 주문내역
+export interface MypageOrder {
+  orders: [
+    {
+      orderItems: [
+        {
+          artist: string;
+          image: string;
+          price: number;
+          product: string;
+          size: string;
+          title: string;
+        },
+      ];
+      result: {
+        id: string;
+        paidAt: string;
+        status: number;
+        updatedAt: string;
+      };
+      totalPrice: number;
+      user: string;
+      _id: string;
+    },
+  ];
+  page: number;
+  pages: number;
+}
