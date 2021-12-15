@@ -50,6 +50,7 @@ function App() {
           <Route path="/admin/banner" element={<AdminBanner />} />
           <Route path="/error" element={<Error />} />
           <Route path="/oauth/:corp" element={<Callback />} />
+          <Route path="/search/:keyword" element={<ArtList />} />
         </Routes>
       </Router>
     </>

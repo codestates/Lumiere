@@ -58,6 +58,24 @@ const getProducts = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
   const { pageNumber, isAdmin } = req.query;
   const page = Number(pageNumber) || 1;
+  const keyword = req.query.keyword
+    ? {
+        $or: [
+          {
+            title: {
+              $regex: req.query.keyword,
+              $options: 'i',
+            },
+          },
+          {
+            artist: {
+              $regex: req.query.keyword,
+              $options: 'i',
+            },
+          },
+        ],
+      }
+    : {};
   let pageSize;
   let count;
   let products;
@@ -86,9 +104,9 @@ const getProducts = asyncHandler(async (req, res) => {
     }
   }
   pageSize = 28;
-  count = await Product.countDocuments({ inStock: true });
+  count = await Product.countDocuments({ inStock: true, ...keyword });
   products = await Product.find(
-    { inStock: true },
+    { inStock: true, ...keyword },
     {
       artCode: 0,
       'info.details': 0,
