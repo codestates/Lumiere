@@ -150,7 +150,7 @@ export const OrderPay = ({
                 console.log(err.response);
               });
           } else {
-            alert('결제금액이 이상합니다.');
+            alert('결제금액이 다릅니다.');
             window.location.assign('/error');
           }
         } else {
