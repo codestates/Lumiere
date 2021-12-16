@@ -12,34 +12,33 @@ export const PaginatorWrap = styled.div`
   }
   ul.pagination li {
     display: inline-block;
-    width: 30px;
-    height: 30px;
-    border: 1px solid #e2e2e2;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d3d3d3;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1rem;
-  }
-  ul.pagination li:first-child {
-    border-radius: 5px 0 0 5px;
-  }
-  ul.pagination li:last-child {
-    border-radius: 0 5px 5px 0;
+    background-color: #fbfbfb;
+    transition: all 0.5s;
   }
   ul.pagination li a {
     text-decoration: none;
-    color: #337ab7;
+    color: #888888;
     font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.5s;
   }
   ul.pagination li.active a {
-    color: white;
+    color: var(--color-black);
   }
   ul.pagination li.active {
-    background-color: #337ab7;
+    background-color: #ffffff;
+    border: 1px solid var(--color-black);
   }
   ul.pagination li a:hover,
   ul.pagination li a.active {
-    color: blue;
+    color: var(--color-black);
   }
   .page-selection {
     width: 48px;
