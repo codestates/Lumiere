@@ -2,32 +2,31 @@
 import ZzimDeleteModal from 'components/Modal/ZzimDeleteModal';
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { useComma } from 'util/functions';
-import { OrderProducts } from 'util/type';
+import { ZzimArtistsType } from 'util/type';
 import instance from 'util/axios';
 import {
-  ProductContentWrap,
-  ProductContent,
+  ArtistsContentWrap,
+  ArtistsContent,
   ImgWrap,
-  ProductDlWrap,
+  ArtistDlWrap,
   ListDeleteBtnWrap,
   ListCheckLabelWrap,
   EmptyImageWrap,
 } from './styled';
 
-type ProductsProps = {
-  productState: OrderProducts[];
+type ArtistsProps = {
+  artistsState: ZzimArtistsType[];
   checkBoxList: string[];
   setCheckBoxList: (check: string[]) => void;
-  setProductState: (productState: OrderProducts[]) => void;
+  setArtistsState: (artistsState: ZzimArtistsType[]) => void;
 };
 
-export const ZzimProductList = ({
-  productState,
+export const ZzimArtistsList = ({
+  artistsState,
   checkBoxList,
   setCheckBoxList,
-  setProductState,
-}: ProductsProps) => {
+  setArtistsState,
+}: ArtistsProps) => {
   const [isModal, setIsModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | undefined>('');
 
@@ -42,10 +41,10 @@ export const ZzimProductList = ({
 
   const deleteHandler = (target: string | undefined) => {
     instance
-      .patch('/products/zzim', { productId: target, zzim: false })
+      .patch('/artists/zzim', { artistId: target, zzim: false })
       .then(() =>
-        instance.get('/products/zzim').then((res) => {
-          setProductState(res.data);
+        instance.get('/artists/zzim').then((res) => {
+          setArtistsState(res.data);
           clickModalHandler();
         }),
       );
@@ -62,7 +61,7 @@ export const ZzimProductList = ({
   };
 
   return (
-    <ProductContentWrap>
+    <ArtistsContentWrap>
       {isModal && (
         <ZzimDeleteModal
           clickModalHandler={clickModalHandler}
@@ -70,7 +69,7 @@ export const ZzimProductList = ({
           deleteTarget={deleteTarget}
         />
       )}
-      {productState.length === 0 ? (
+      {artistsState.length === 0 ? (
         <EmptyImageWrap>
           <img
             src={`/images/EmptyZzim/hanging-cat-${
@@ -81,9 +80,9 @@ export const ZzimProductList = ({
           <div>아직 아무것도 없네요!</div>
         </EmptyImageWrap>
       ) : (
-        productState.map((el) => {
+        artistsState.map((el) => {
           return (
-            <ProductContent key={el._id}>
+            <ArtistsContent key={el._id}>
               <ListDeleteBtnWrap>
                 <button
                   type="button"
@@ -104,18 +103,17 @@ export const ZzimProductList = ({
                 </label>
               </ListCheckLabelWrap>
               <ImgWrap>
-                <img src={el.image} alt={`${el.artist} ${el.image}`} />
+                <img src={el.thumbnail} alt={`${el.name} ${el.thumbnail}`} />
               </ImgWrap>
-              <ProductDlWrap>
-                <dt>{el.title}</dt>
-                <dd>{el.artist.name}</dd>
-                <dd>{`${el.info.size} (${el.info.canvas}호)`}</dd>
-                <dd>{el.inStock ? `${useComma(el.price)} 원` : `품절`}</dd>
-              </ProductDlWrap>
-            </ProductContent>
+              <ArtistDlWrap>
+                <dt>{el.name}</dt>
+                <dd>{el.aka}</dd>
+                <dd>{`작품 수 : ${el.countOfWorks}`}</dd>
+              </ArtistDlWrap>
+            </ArtistsContent>
           );
         })
       )}
-    </ProductContentWrap>
+    </ArtistsContentWrap>
   );
 };

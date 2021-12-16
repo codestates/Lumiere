@@ -47,8 +47,13 @@ export const ContentWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  p {
-    margin: 2rem 0;
+  p:nth-child(1) {
+    margin: 2rem 0 0 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  p:nth-child(2) {
+    margin: 1rem 0 2rem 0;
     font-size: 1.2rem;
     font-weight: 700;
   }

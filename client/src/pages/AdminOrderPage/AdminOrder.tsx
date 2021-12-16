@@ -63,7 +63,7 @@ const AdminOrderList = () => {
         setOrderList(res.data);
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.status === 401 && isLogin) {
           alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
           localStorage.removeItem('lumiereUserInfo');
           setIsLogin(false);
@@ -80,7 +80,7 @@ const AdminOrderList = () => {
         setOrderList(res.data);
       })
       .catch((err) => {
-        if (err.response.status === 401) {
+        if (err.response.status === 401 && isLogin) {
           alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
           localStorage.removeItem('lumiereUserInfo');
           setIsLogin(false);

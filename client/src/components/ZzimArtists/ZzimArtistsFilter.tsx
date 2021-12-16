@@ -2,34 +2,34 @@
 import React, { useState } from 'react';
 import instance from 'util/axios';
 import SelectDeleteModal from 'components/Modal/ZzimSelectDeleteModal';
-import { OrderProducts } from 'util/type';
+import { ZzimArtistsType } from 'util/type';
 import { FilterMenuWrap, AllSelectLabelWrap, SelectBtnWrap } from './styled';
 
-type ZzimProductsProps = {
+type ZzimArtistsProps = {
   checkBoxList: string[];
   setCheckBoxList: (check: string[]) => void;
-  setProductState: (productState: OrderProducts[]) => void;
-  productState: OrderProducts[];
+  setArtistsState: (artistsState: ZzimArtistsType[]) => void;
+  artistsState: ZzimArtistsType[];
 };
 
-export const ZzimProductsFilter = ({
+export const ZzimArtistsFilter = ({
   checkBoxList,
   setCheckBoxList,
-  setProductState,
-  productState,
-}: ZzimProductsProps) => {
+  setArtistsState,
+  artistsState,
+}: ZzimArtistsProps) => {
   const [isSelectModal, setIsSelectModal] = useState(false);
-  const arr = productState.map((el) => el._id);
+  const arr = artistsState.map((el) => el._id);
   const clickModalHandler = () => {
     if (checkBoxList.length) setIsSelectModal(!isSelectModal);
   };
 
   const selectDeleteHandler = () => {
     instance
-      .patch('/products/zzim', { productId: checkBoxList, zzim: false })
+      .patch('/artists/zzim', { artistId: checkBoxList, zzim: false })
       .then(() =>
-        instance.get('/products/zzim').then((res) => {
-          setProductState(res.data);
+        instance.get('/artists/zzim').then((res) => {
+          setArtistsState(res.data);
           clickModalHandler();
         }),
       );

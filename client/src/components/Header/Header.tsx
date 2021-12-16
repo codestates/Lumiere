@@ -164,7 +164,7 @@ const Header = () => {
             ) : null}
           </ul>
         </MainMenu>
-        <SearchBox />
+        {/* <SearchBox /> */}
         <IconBox>
           <div>
             <BiSearch />
