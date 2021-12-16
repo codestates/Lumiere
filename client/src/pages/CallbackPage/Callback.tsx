@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import instance from 'util/axios';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
+import { CallbackContainer } from './styled';
 
 const Callback = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
@@ -32,7 +33,11 @@ const Callback = () => {
       });
   }, []);
 
-  return <img src="/images/loading.svg" alt="Loading" />;
+  return (
+    <CallbackContainer>
+      <img src="/images/loading.svg" alt="Loading" />
+    </CallbackContainer>
+  );
 };
 
 export default Callback;
