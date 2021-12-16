@@ -161,9 +161,15 @@ export interface Order {
         general: {
           email: string;
         };
-        kakao?: string;
-        naver?: string;
-        google?: string;
+        kakao?: {
+          email: string;
+        }
+        naver?: {
+          email: string;
+        }
+        google?: {
+          email: string;
+        }
         name: string;
         _id: string;
       };

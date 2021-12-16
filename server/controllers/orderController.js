@@ -40,7 +40,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 
   const { imp_uid } = req.body;
 
-  // 아임포트 토큰 발급 받기
+  // 아임포트 토큰 발급
   const getToken = await axios({
     url: 'https://api.iamport.kr/users/getToken',
     method: 'post',
@@ -76,21 +76,51 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       },
       { upsert: true },
     );
-    res.json({ message: '결제 성공' });
+    res.json({ message: '결제 정보 저장 완료' });
   } else {
-    // 아임포트 에러 시, 상품 품절 원위치 및 주문 삭제
-    const itemsId = order.orderItems.map((item) => item.product);
-    await Product.updateMany(
-      {
-        _id: { $in: itemsId },
+    // 결제된 금액이 결제 예정 금액과 다를 시, 취소 요청
+    /* 아임포트 REST API로 결제환불 요청 */
+    const getCancelData = await axios({
+      url: 'https://api.iamport.kr/payments/cancel',
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: access_token,
       },
-      { inStock: true },
-      { multi: true },
-    );
-    await Order.deleteOne({ _id: merchant_uid });
-    res
-      .status(400)
-      .json({ message: '금액 불일치, 위조된 결제시도, 주문서 삭제' });
+      data: {
+        imp_uid,
+        merchant_uid,
+        checksum: amount,
+      },
+    });
+    console.log('결제 취소 답변', getCancelData.data);
+    if (getCancelData.data.code === 0) {
+      // 상품 품절 원위치 및 주문 삭제
+      const itemsId = order.orderItems.map((item) => item.product);
+      await Product.updateMany(
+        {
+          _id: { $in: itemsId },
+        },
+        { inStock: true },
+        { multi: true },
+      );
+      await Order.updateOne(
+        { _id: merchant_uid },
+        {
+          'result.imp_uid': imp_uid,
+          'result.status': 5,
+          'result.paidAt': localTime(),
+          'result.updatedAt': localTime(),
+        },
+      );
+      res.status(400).json({
+        message: '금액 불일치, 위조된 결제시도로 주문을 취소했습니다',
+      });
+    } else {
+      res.status(400).json({
+        message: `금액 불일치, 결제취소 실패 사유: ${getCancelData.data.message}`,
+      });
+    }
   }
 });
 
@@ -98,7 +128,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 // @route   DELETE /api/orders/:id
 // @access  Private & Private/Admin
 const cancelOrder = asyncHandler(async (req, res) => {
-  // 취소 및 반품
+  // 주문 취소
 
   const order = await Order.findById(req.params.id);
 
@@ -107,9 +137,9 @@ const cancelOrder = asyncHandler(async (req, res) => {
     return;
   }
   const itemsId = order.orderItems.map((item) => item.product);
-
+  const { result } = order;
   // 아임포트 결제 중 오류 시, 임시 주문서 삭제
-  if (!order.result.imp_uid && order.result.status === -1) {
+  if (!result.imp_uid && result.status === -1) {
     await Product.updateMany(
       {
         _id: { $in: itemsId },
@@ -121,16 +151,13 @@ const cancelOrder = asyncHandler(async (req, res) => {
     res.status(200).json({ message: '결제 오류로 임시 주문서를 삭제했습니다' });
     return;
   }
-  if (order.result.status === 5) {
+  if (result.status === 5) {
     res.status(400).json({ message: '이미 환불된 주문입니다.' });
     return;
   }
+  if (result.status === 0 || result.status === 4) {
+    // 결제완료, 반품 단계에서만 취소 가능 나머지 단계는 반품
 
-  const { status } = req.body;
-  let message;
-  if (status === 4) message = '해당 주문의 반품 요청이 완료되었습니다';
-  else if (status === 5) {
-    // 아임포트 토큰 발급 받기
     const getToken = await axios({
       url: 'https://api.iamport.kr/users/getToken',
       method: 'post',
@@ -159,7 +186,6 @@ const cancelOrder = asyncHandler(async (req, res) => {
     console.log('결제 취소 답변', getCancelData.data);
 
     if (getCancelData.data.code === 0) {
-      message = '해당 주문의 결제 취소가 완료되었습니다';
       await Product.updateMany(
         {
           _id: { $in: itemsId },
@@ -167,22 +193,23 @@ const cancelOrder = asyncHandler(async (req, res) => {
         { inStock: true },
         { multi: true },
       );
+      await Order.updateOne(
+        { _id: req.params.id },
+        { 'result.status': 5, 'result.updatedAt': localTime() },
+      );
+      res
+        .status(200)
+        .json({ message: '해당 주문의 결제 취소가 완료되었습니다' });
     } else {
       res
         .status(400)
-        .json({ message: `취소 실패 사유: ${getCancelData.data.message}` });
-      return;
+        .json({ message: `결제취소 실패 사유: ${getCancelData.data.message}` });
     }
   } else {
-    res.status(400).json({ message: '진행 단계를 알 수 없습니다' });
-    return;
+    res.status(400).json({
+      message: '현재 단계에서는 취소가 불가합니다. 반품으로 신청해주세요',
+    });
   }
-
-  await Order.updateOne(
-    { _id: req.params.id },
-    { 'result.status': status, 'result.updatedAt': localTime() },
-  );
-  res.status(200).json({ message });
 });
 
 // @desc    Update order status
@@ -199,12 +226,20 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     return;
   }
   let message;
-  if (status === 1) message = '해당 주문이 발송 준비 중 단계로 변경되었습니다';
-  else if (status === 2) message = '해당 주문이 배송 중 단계로 변경되었습니다';
-  else if (status === 3)
+  const { result } = order;
+  if (status === 1 && result.status === 0)
+    message = '해당 주문이 발송 준비 중 단계로 변경되었습니다';
+  else if (status === 2 && result.status === 1)
+    message = '해당 주문이 배송 중 단계로 변경되었습니다';
+  else if (status === 3 && result.status === 2)
     message = '해당 주문이 배송 완료 단계로 변경되었습니다';
+  else if (
+    status === 4 &&
+    (result.status === 1 || result.status === 2 || result.status === 3)
+  )
+    message = '해당 주문의 반품 요청 단계로 변경되었습니다';
   else {
-    res.status(400).json({ message: '진행 단계를 알 수 없습니다' });
+    res.status(400).json({ message: '변경실패, 진행 단계가 알맞지 않습니다' });
     return;
   }
 

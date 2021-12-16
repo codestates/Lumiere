@@ -44,9 +44,15 @@ const AdminOrderList = () => {
           general: {
             email: '',
           },
-          kakao: '',
-          naver: '',
-          google: '',
+          kakao: {
+            email: '',
+          },
+          naver: {
+            email: '',
+          },
+          google: {
+            email: '',
+          },
           name: '',
           _id: '',
         },
@@ -58,7 +64,7 @@ const AdminOrderList = () => {
   });
   useEffect(() => {
     instance
-      .get<Order>('/orders/')
+      .get<Order>('/orders')
       .then((res) => {
         setOrderList(res.data);
       })
@@ -75,7 +81,7 @@ const AdminOrderList = () => {
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
     instance
-      .get<Order>('/orders/', { params: { pageNumber: page } })
+      .get<Order>('/orders', { params: { pageNumber: page } })
       .then((res) => {
         setOrderList(res.data);
       })
@@ -91,22 +97,14 @@ const AdminOrderList = () => {
 
   const cancleOrder = (id: string) => {
     instance
-      .delete(`/orders/${id}`, { data: { status: 5 } })
+      .delete(`/orders/${id}`)
       .then(() => {
         alert('취소가 완료되었습니다.');
         window.location.reload();
       })
-      .catch(() => alert('취소실패, 담당자에게 문의해주세요'));
-  };
-
-  const returnOrder = (id: string) => {
-    instance
-      .delete(`/orders/${id}`, { data: { status: 5 } })
-      .then(() => {
-        alert('반품이 완료되었습니다.');
-        window.location.reload();
-      })
-      .catch(() => alert('반품실패, 담당자에게 문의해주세요'));
+      .catch((err) => {
+        alert(`${err.response.data.message}`);
+      });
   };
 
   const changeOrderStatus = (id: string, status: string) => {
@@ -118,7 +116,7 @@ const AdminOrderList = () => {
             alert('배송상태가 준비중으로 변경되었습니다.');
             window.location.reload();
           })
-          .catch(() => alert('변경실패, 담당자에게 문의해주세요'));
+          .catch((err) => alert(`${err.response.data.message}`));
       case '배송중':
         return instance
           .patch(`/orders/${id}`, { status: 2 })
@@ -126,7 +124,7 @@ const AdminOrderList = () => {
             alert('배송상태가 준비중으로 변경되었습니다.');
             window.location.reload();
           })
-          .catch(() => alert('변경실패, 담당자에게 문의해주세요'));
+          .catch((err) => alert(`${err.response.data.message}`));
       case '완료':
         return instance
           .patch(`/orders/${id}`, { status: 3 })
@@ -134,7 +132,15 @@ const AdminOrderList = () => {
             alert('배송상태가 준비중으로 변경되었습니다.');
             window.location.reload();
           })
-          .catch(() => alert('변경실패, 담당자에게 문의해주세요'));
+          .catch((err) => alert(`${err.response.data.message}`));
+      case '반품':
+        return instance
+          .patch(`/orders/${id}`, { status: 4 })
+          .then(() => {
+            alert('배송상태가 반품 요청중으로 변경되었습니다.');
+            window.location.reload();
+          })
+          .catch((err) => alert(`${err.response.data.message}`));
       default:
         return alert('변경실패');
     }
@@ -215,7 +221,10 @@ const AdminOrderList = () => {
                     <button type="button" onClick={() => cancleOrder(el._id)}>
                       취소
                     </button>
-                    <button type="button" onClick={() => returnOrder(el._id)}>
+                    <button
+                      type="button"
+                      onClick={() => changeOrderStatus(el._id, '반품')}
+                    >
                       반품
                     </button>
                   </td>
