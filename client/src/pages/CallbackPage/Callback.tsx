@@ -18,6 +18,9 @@ const Callback = () => {
       .then((res) => {
         console.log(res); // 토큰이 넘어올 것임
         const userInfo = res.data;
+        if (window.location.href.split('oauth/')[1].split('?')[0]) {
+          userInfo.social = true;
+        }
         localStorage.setItem('lumiereUserInfo', JSON.stringify(userInfo));
         setIsLogin(true);
         window.history.go(-2); // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)

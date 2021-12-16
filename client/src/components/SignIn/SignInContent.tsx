@@ -41,6 +41,7 @@ const SignInContent = () => {
         .post('/users/login', { ...signinInputInfo })
         .then((res) => {
           const userInfo = res.data;
+          userInfo.social = false;
           localStorage.setItem('lumiereUserInfo', JSON.stringify(userInfo));
           signinStateHandler(true);
           window.history.go(-1);
