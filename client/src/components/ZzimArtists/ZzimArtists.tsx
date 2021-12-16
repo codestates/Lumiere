@@ -3,6 +3,7 @@ import instance from 'util/axios';
 import { ZzimArtistsType } from 'util/type';
 import { ZzimArtistsList } from './ZzimArtistsList';
 import { ZzimArtistsFilter } from './ZzimArtistsFilter';
+import { ZzimArtistsContainer } from './styled';
 
 const ZzimArtists = () => {
   const [checkBoxList, setCheckBoxList] = useState<string[]>([]);
@@ -15,7 +16,7 @@ const ZzimArtists = () => {
   }, []);
 
   return (
-    <>
+    <ZzimArtistsContainer>
       <ZzimArtistsFilter
         checkBoxList={checkBoxList}
         setCheckBoxList={setCheckBoxList}
@@ -28,7 +29,7 @@ const ZzimArtists = () => {
         setCheckBoxList={setCheckBoxList}
         setArtistsState={setArtistsState}
       />
-    </>
+    </ZzimArtistsContainer>
   );
 };
 export default ZzimArtists;

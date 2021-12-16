@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 
+export const ZzimArtistsContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
 export const FilterMenuWrap = styled.div`
-  flex: 0 0 5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -67,22 +74,8 @@ export const SelectBtnWrap = styled.div`
 
 export const ArtistsContentWrap = styled.div`
   padding: 1rem 1rem 0;
-  background-color: #ffffff;
   overflow: scroll;
   overflow-x: hidden;
-
-  /* 스크롤바 전체길이 */
-  &::-webkit-scrollbar {
-    width: 5px;
-    background-color: #f7f7f7;
-    border-radius: 4px;
-  }
-
-  /* 현재 내가보고있는 스크롤바 길이 */
-  &::-webkit-scrollbar-thumb {
-    background-color: #dddddd;
-    border-radius: 4px;
-  }
 
   @media screen and (min-width: 768px) {
     height: 100%;
@@ -217,13 +210,12 @@ export const ArtistDlWrap = styled.dl`
 export const EmptyImageWrap = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
-  padding: 3rem;
+  height: 30rem;
+  padding: 2rem 0;
   img {
-    width: 20rem;
+    height: 100%;
   }
   div {
-    position: absolute;
     position: absolute;
     top: 50%;
     left: 50%;
