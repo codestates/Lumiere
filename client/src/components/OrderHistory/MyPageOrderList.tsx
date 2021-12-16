@@ -1,5 +1,5 @@
-/* eslint no-underscore-dangle: 0 */
-import { useState, useEffect } from 'react';
+/* eslint-disable */
+import React, { useState, useEffect } from 'react';
 import PageNation from 'components/PageNation/PageNation';
 import { useComma, convertDeliverStatus } from 'util/functions';
 import instance from 'util/axios';
@@ -57,13 +57,9 @@ const MypageOrderList = () => {
         setOrderList(res.data);
         setCurPage(res.data.page);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        window.location.assign('/error');
       });
-
-    return () => {
-      console.log('컴포넌트가 화면에서 사라짐');
-    };
   }, []);
 
   const pageChangeHandler = (page: number) => {
@@ -82,6 +78,63 @@ const MypageOrderList = () => {
           window.location.assign('/signin');
         } else window.location.assign('/signin');
       });
+  };
+
+  const cancleOrderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { status, order } = e.currentTarget.dataset;
+
+    if (status === '3' || status === '4' || status === '5') {
+      alert('이미 상품이 배송중이거나 배송완료된 상태 입니다.');
+    } else {
+      instance
+        .delete(`/orders/${order}`, { data: { status: 5 } })
+        .then(() => {
+          alert('결제가 취소 되었습니다');
+          window.location.reload();
+        })
+        .catch((err) => {
+          if (err.response.status === 401 && isLogin) {
+            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+            localStorage.removeItem('lumiereUserInfo');
+            setIsLogin(false);
+            window.location.assign('/signin');
+          }
+          alert('취소실패, 담당자에게 문의해주세요');
+          window.location.assign('/error');
+        });
+    }
+  };
+
+  const refundOrderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const { status, order } = e.currentTarget.dataset;
+    console.log(status);
+
+    if (
+      status === '0' ||
+      status === '1' ||
+      status === '2' ||
+      status === '5' ||
+      status === '4'
+    ) {
+      alert('현재 상태에서는 반품이 불가능 합니다. 배송 완료후 반품 해주세요');
+    } else {
+      instance
+        .delete(`/orders/${order}`, { data: { status: 4 } })
+        .then(() => {
+          alert('반품신청이 완료되었습니다');
+          window.location.reload();
+        })
+        .catch((err) => {
+          if (err.response.status === 401 && isLogin) {
+            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+            localStorage.removeItem('lumiereUserInfo');
+            setIsLogin(false);
+            window.location.assign('/signin');
+          }
+          alert('반품요청 실패, 담당자에게 문의해주세요');
+          window.location.assign('/error');
+        });
+    }
   };
 
   return (
@@ -140,8 +193,22 @@ const MypageOrderList = () => {
                     <div>{convertDeliverStatus(el.result.status)}</div>
                   </OrderStatus>
                   <Management>
-                    <button type="button">취소</button>
-                    <button type="button">반품</button>
+                    <button
+                      type="button"
+                      onClick={cancleOrderHandler}
+                      data-status={el.result.status}
+                      data-order={el._id}
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="button"
+                      onClick={refundOrderHandler}
+                      data-status={el.result.status}
+                      data-order={el._id}
+                    >
+                      반품
+                    </button>
                   </Management>
                 </ListContainer>
               </div>
