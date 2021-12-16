@@ -19,6 +19,7 @@ import ArtistDetail from 'pages/ArtistDetailPage/ArtistDetail';
 import Error from 'pages/ErrorPage/Error';
 import Callback from 'pages/CallbackPage/Callback';
 import { GlobalStyle } from 'styles/global-style';
+import SearchResult from 'pages/SearchResult/SearchResult';
 
 function App() {
   useEffect(() => {
@@ -36,6 +37,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/artlist" element={<ArtList />} />
+          <Route path="/search/" element={<SearchResult />} />
           <Route path="/artdetail/:id" element={<ArtDetail />} />
           <Route path="/artists" element={<Artists />} />
           <Route path="/artistdetail/:id" element={<ArtistDetail />} />
@@ -50,7 +52,6 @@ function App() {
           <Route path="/admin/banner" element={<AdminBanner />} />
           <Route path="/error" element={<Error />} />
           <Route path="/oauth/:corp" element={<Callback />} />
-          <Route path="/search/:keyword" element={<ArtList />} />
         </Routes>
       </Router>
     </>

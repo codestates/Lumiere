@@ -1,6 +1,5 @@
 /* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
 import Header from 'components/Header/Header';
@@ -15,7 +14,7 @@ import { ArtListMapping } from 'components/ArtListMapping/ArtListMapping';
 import { AdminProductsType } from '../../util/type';
 import { ArtListContainer, ArtListWrap } from './styled';
 
-const ArtList = () => {
+const SearchResult = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
@@ -59,10 +58,6 @@ const ArtList = () => {
     767: 2,
   };
 
-  const params = useParams();
-  const { keyword } = params; // match v6버전
-  console.log(keyword);
-  // `/products?keyword=${keyword}&pageNumber=${pageNumber}` 요청 API 주소
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
     instance
@@ -84,25 +79,6 @@ const ArtList = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
 
-  // useEffect(() => {
-  //   // axios 요청
-  //   instance
-  //     .get<AdminProductsType>('/products', { params: { pageNumber: 1 } })
-  //     .then((res) => {
-  //       console.log('1');
-  //       console.log(res.data);
-  //       setArtList(res.data);
-  //     })
-  //     .catch((err) => {
-  //       if (err.response.status === 401 && isLogin) {
-  //         alert('로그인이 만료되었습니다. 다시 로그인해주세요.2');
-  //         localStorage.removeItem('lumiereUserInfo');
-  //         setIsLogin(false);
-  //         window.location.assign('/signin');
-  //       } else window.location.assign('/error');
-  //     });
-  // }, []);
-
   const filteringHandler = (type: {
     theme?: string;
     sizeMin?: number;
@@ -112,9 +88,11 @@ const ArtList = () => {
   }) => {
     if (!type) {
       instance
-        .get<AdminProductsType>('/products', {
-          params: { pageNumber: curPage },
-        })
+        .get<AdminProductsType>(
+          `/products?keyword=${window.location.search.slice(
+            4,
+          )}&pageNumber=${1}`,
+        )
         .then((res) => {
           console.log(res.data);
           setArtList(res.data);
@@ -158,10 +136,7 @@ const ArtList = () => {
   return (
     <ArtListContainer>
       <Header />
-      <FilteringTab
-        filteringHandler={filteringHandler}
-        // setTabFilter={setTabFilter}
-      />
+      <FilteringTab filteringHandler={filteringHandler} />
       <ArtListWrap>
         <Masonry
           breakpointCols={breakpointColumnsObj}
@@ -194,4 +169,4 @@ const ArtList = () => {
   );
 };
 
-export default ArtList;
+export default SearchResult;
