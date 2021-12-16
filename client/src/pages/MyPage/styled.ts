@@ -100,6 +100,10 @@ export const ContentContainer = styled.div`
 
 export const ContentWrap = styled.div`
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   max-width: 1152px;
   width: 100%;
   background-color: #ffffff;

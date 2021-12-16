@@ -9,6 +9,9 @@ import QuickBtns from 'components/QuickBtns/QuickBtns';
 import OrderHistory from 'components/OrderHistory/OrderHistory';
 import ZzimProducts from 'components/ZzimProducts/ZzimProducts';
 import ZzimArtists from 'components/ZzimArtists/ZzimArtists';
+import VerifyPassword from 'components/VerifyPassword/VerifyPassword';
+import ChangePassword from 'components/ChangePassword/ChangePassword';
+import UserLeave from 'components/UserLeave/UserLeave';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { CartMenu } from 'components/Cart/CartMenu';
 import { tabMenus } from './dummy';
@@ -28,7 +31,9 @@ import {
 const MyPage = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [currentTab, setCurrentTab] = useState(0);
-  const [currentMenu, setCurrentMenu] = useState(-1);
+  const [pwdMatch, setPwdMatch] = useState(false);
+  const [inputVerifyPwd, setInputVerifyPwd] = useState('');
+  const [oldPwd, setOldPwd] = useState('');
 
   useEffect(() => {
     // axios 요청
@@ -49,9 +54,27 @@ const MyPage = () => {
       return <ZzimArtists />;
     }
     if (currentTab === 3) {
-      return <ZzimArtists />;
+      const userInfo = localStorage.getItem('lumiereUserInfo');
+      if (userInfo) {
+        const { social } = JSON.parse(userInfo);
+        if (social) {
+          return <div>소셜 간편로그인 회원은 비밀번호 변경이 불가능합니다</div>;
+        }
+        if (!social && pwdMatch) {
+          return <ChangePassword oldPwd={oldPwd} setPwdMatch={setPwdMatch} />;
+        }
+      }
+      return (
+        <VerifyPassword
+          pwdMatch={pwdMatch}
+          setPwdMatch={setPwdMatch}
+          inputVerifyPwd={inputVerifyPwd}
+          setInputVerifyPwd={setInputVerifyPwd}
+          setOldPwd={setOldPwd}
+        />
+      );
     }
-    return <ZzimArtists />;
+    return <UserLeave />;
   };
 
   return (
