@@ -341,3 +341,11 @@ export interface MypageOrder {
   page: number;
   pages: number;
 }
+
+export interface ZzimArtistsType {
+  _id: string;
+  name: string;
+  aka: string;
+  thumbnail: string;
+  countOfWorks: number;
+}

@@ -26,7 +26,8 @@ const CartDeleteModal = ({
           <IoMdClose />
         </CloseBtn>
         <ContentWrap>
-          <p>관심 목록에서 삭제 하시겠습니까?</p>
+          <p>선택하신 항목을</p>
+          <p> 목록에서 삭제하시겠습니까? </p>
         </ContentWrap>
         <ButtonBox>
           <SelectButton
