@@ -5,10 +5,9 @@ import { ChangePasswordContainer } from './styled';
 
 interface Props {
   oldPwd: string;
-  setPwdMatch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ChangePassword = ({ oldPwd, setPwdMatch }: Props) => {
+const ChangePassword = ({ oldPwd }: Props) => {
   const [inputNewPwd, setInputNewPwd] = useState('');
   const [inputNewPwdCheck, setInputNewPwdCheck] = useState('');
   const [editValidateState, setEditValidateState] = useState({
@@ -76,7 +75,6 @@ const ChangePassword = ({ oldPwd, setPwdMatch }: Props) => {
           alert('비밀번호가 변경되었습니다');
           setInputNewPwd('');
           setInputNewPwdCheck('');
-          setPwdMatch(false);
         })
         .catch((err) => {
           window.location.assign('/error');

@@ -32,7 +32,6 @@ const MyPage = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [currentTab, setCurrentTab] = useState(0);
   const [pwdMatch, setPwdMatch] = useState(false);
-  const [inputVerifyPwd, setInputVerifyPwd] = useState('');
   const [oldPwd, setOldPwd] = useState('');
 
   useEffect(() => {
@@ -40,10 +39,16 @@ const MyPage = () => {
   }, []);
 
   const selectTabHandler = (id: number) => {
+    if (pwdMatch) {
+      setOldPwd('');
+      setPwdMatch(false);
+    }
     setCurrentTab(id);
   };
 
   const tabHandler = () => {
+    const userInfo = localStorage.getItem('lumiereUserInfo');
+
     if (currentTab === 0) {
       return <OrderHistory />;
     }
@@ -54,27 +59,36 @@ const MyPage = () => {
       return <ZzimArtists />;
     }
     if (currentTab === 3) {
-      const userInfo = localStorage.getItem('lumiereUserInfo');
       if (userInfo) {
         const { social } = JSON.parse(userInfo);
         if (social) {
           return <div>소셜 간편로그인 회원은 비밀번호 변경이 불가능합니다</div>;
         }
         if (!social && pwdMatch) {
-          return <ChangePassword oldPwd={oldPwd} setPwdMatch={setPwdMatch} />;
+          return <ChangePassword oldPwd={oldPwd} />;
         }
       }
       return (
         <VerifyPassword
           pwdMatch={pwdMatch}
           setPwdMatch={setPwdMatch}
-          inputVerifyPwd={inputVerifyPwd}
-          setInputVerifyPwd={setInputVerifyPwd}
           setOldPwd={setOldPwd}
         />
       );
     }
-    return <UserLeave />;
+    if (userInfo) {
+      const { social } = JSON.parse(userInfo);
+      if (social || pwdMatch) {
+        return <UserLeave />;
+      }
+    }
+    return (
+      <VerifyPassword
+        pwdMatch={pwdMatch}
+        setPwdMatch={setPwdMatch}
+        setOldPwd={setOldPwd}
+      />
+    );
   };
 
   return (
