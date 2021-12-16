@@ -3,6 +3,7 @@ import instance from 'util/axios';
 import { OrderProducts } from 'util/type';
 import { ZzimProductList } from './ZzimProductList';
 import { ZzimProductsFilter } from './ZzimProductsFilter';
+import { ZzimProductsContainer } from './styled';
 
 const ZzimProducts = () => {
   const [checkBoxList, setCheckBoxList] = useState<string[]>([]);
@@ -30,7 +31,7 @@ const ZzimProducts = () => {
   }, []);
 
   return (
-    <>
+    <ZzimProductsContainer>
       <ZzimProductsFilter
         checkBoxList={checkBoxList}
         setCheckBoxList={setCheckBoxList}
@@ -43,7 +44,7 @@ const ZzimProducts = () => {
         setCheckBoxList={setCheckBoxList}
         setProductState={setProductState}
       />
-    </>
+    </ZzimProductsContainer>
   );
 };
 export default ZzimProducts;

@@ -7,6 +7,7 @@ import { MypageOrder } from 'util/type';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
 import {
+  OrderListContainer,
   ListContainer,
   OrderNumberDescription,
   DtDdWrap,
@@ -138,7 +139,7 @@ const MypageOrderList = () => {
   };
 
   return (
-    <div>
+    <OrderListContainer>
       {orderList.page
         ? orderList.orders.map((el) => {
             return (
@@ -180,7 +181,7 @@ const MypageOrderList = () => {
                     <div className="mobile-Only shipping">
                       {`상품 ${useComma(
                         el.totalPrice - 10000,
-                      )}원 +배송비 10,000원 `}
+                      )}원 + 배송비 10,000원 `}
                     </div>
                     <div className="totalPrice">
                       <div className="mobile-Only">총 결제 금액</div>
@@ -220,7 +221,7 @@ const MypageOrderList = () => {
         totalPages={orderList.pages}
         pageChangeHandler={pageChangeHandler}
       />
-    </div>
+    </OrderListContainer>
   );
 };
 export default MypageOrderList;

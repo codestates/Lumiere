@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 
+export const ZzimProductsContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
 export const FilterMenuWrap = styled.div`
-  flex: 0 0 5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -66,6 +73,9 @@ export const SelectBtnWrap = styled.div`
 `;
 
 export const ProductContentWrap = styled.div`
+  flex: 1;
+  width: 100%;
+  height: 100%;
   padding: 1rem 1rem 0;
   background-color: #ffffff;
   overflow: scroll;
@@ -228,13 +238,12 @@ export const ProductDlWrap = styled.dl`
 export const EmptyImageWrap = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
-  padding: 3rem;
+  height: 30rem;
+  padding: 2rem 0;
   img {
-    width: 20rem;
+    height: 100%;
   }
   div {
-    position: absolute;
     position: absolute;
     top: 50%;
     left: 50%;
