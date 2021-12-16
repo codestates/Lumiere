@@ -87,7 +87,7 @@ const MypageOrderList = () => {
       alert('이미 상품이 배송중이거나 배송완료된 상태 입니다.');
     } else {
       instance
-        .delete(`/orders/${order}`, { data: { status: 5 } })
+        .delete(`/orders/${order}`)
         .then(() => {
           alert('결제가 취소 되었습니다');
           window.location.reload();
@@ -99,7 +99,7 @@ const MypageOrderList = () => {
             setIsLogin(false);
             window.location.assign('/signin');
           }
-          alert('취소실패, 담당자에게 문의해주세요');
+          alert(`${err.response.data.message}`);
           window.location.assign('/error');
         });
     }
@@ -116,10 +116,10 @@ const MypageOrderList = () => {
       status === '5' ||
       status === '4'
     ) {
-      alert('현재 상태에서는 반품이 불가능 합니다. 배송 완료후 반품 해주세요');
+      alert('현재 상태에서는 반품이 불가능 합니다. 배송 완료 후 반품 해주세요');
     } else {
       instance
-        .delete(`/orders/${order}`, { data: { status: 4 } })
+        .patch(`/orders/${order}`, { status: 4 })
         .then(() => {
           alert('반품신청이 완료되었습니다');
           window.location.reload();
@@ -131,7 +131,7 @@ const MypageOrderList = () => {
             setIsLogin(false);
             window.location.assign('/signin');
           }
-          alert('반품요청 실패, 담당자에게 문의해주세요');
+          alert(`${err.response.data.message}`);
           window.location.assign('/error');
         });
     }
