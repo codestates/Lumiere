@@ -47,16 +47,16 @@ export const ChangePasswordContainer = styled.div`
       &.valid_pass {
         border: 1px solid #51af42;
         outline: 1px solid #51af42;
-        > span {
+        + span {
           color: #51af42;
         }
       }
-    }
-    > span {
-      padding-bottom: 1rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #d55b5b;
+      + span {
+        padding-bottom: 1rem;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #d55b5b;
+      }
     }
   }
   > div:last-child {

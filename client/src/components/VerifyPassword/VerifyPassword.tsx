@@ -5,18 +5,11 @@ import { VerifyPasswordContainer } from './styled';
 interface Props {
   pwdMatch: boolean;
   setPwdMatch: React.Dispatch<React.SetStateAction<boolean>>;
-  inputVerifyPwd: string;
-  setInputVerifyPwd: React.Dispatch<React.SetStateAction<string>>;
   setOldPwd: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const VerifyPassword = ({
-  pwdMatch,
-  setPwdMatch,
-  inputVerifyPwd,
-  setInputVerifyPwd,
-  setOldPwd,
-}: Props) => {
+const VerifyPassword = ({ pwdMatch, setPwdMatch, setOldPwd }: Props) => {
+  const [inputVerifyPwd, setInputVerifyPwd] = useState('');
   const [pwdConfirmMessage, setPwdConfirmMessage] = useState('');
 
   const verifyPwdHandler = () => {
