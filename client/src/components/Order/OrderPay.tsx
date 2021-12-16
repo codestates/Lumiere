@@ -146,8 +146,8 @@ export const OrderPay = ({
               .catch((err) => {
                 // 아임포트는 결제 완료되었지만 DB저장 혹시 서버에서 문제 발생할 경우
                 // 이떄 아임포트 결제 환불 시켜줘야함, 오더 삭제
+                alert(`${err.response.data.message}`);
                 window.location.assign('/error');
-                console.log(err.response);
               });
           } else {
             alert('결제금액이 다릅니다.');
@@ -156,7 +156,7 @@ export const OrderPay = ({
         } else {
           // 아임포트 결제 취소 : 임시 주문서 삭제 필요
           instance
-            .delete(`orders/${response.merchant_uid}`)
+            .delete(`/orders/${response.merchant_uid}`)
             .then((res) => {
               alert('주문을 취소 하셨습니다');
             })
