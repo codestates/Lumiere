@@ -1,7 +1,13 @@
 import styled from 'styled-components';
 
 // OrderHistory
-export const OrderHistoryContainer = styled.div``;
+export const OrderHistoryContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
 
 // OrderMenu Web Only
 export const MenuContainer = styled.section`
@@ -9,7 +15,7 @@ export const MenuContainer = styled.section`
 
   @media screen and (min-width: 768px) {
     display: block;
-    border-bottom: 2px solid #cccccc;
+    border-bottom: 2px solid #dddddd;
   }
 `;
 
@@ -19,10 +25,10 @@ export const MenuListWrapUl = styled.ul`
   align-items: center;
   justify-content: center;
   height: 2rem;
-  font-weight: 700;
-  background-color: #f7f7f7;
   font-size: 0.9rem;
+  font-weight: 700;
   color: #666666;
+  background-color: #f7f7f7;
 
   & li:nth-child(1) {
     flex: 2.5;
@@ -46,12 +52,14 @@ export const MenuListWrapUl = styled.ul`
 `;
 
 // MyPageOrderList
+export const OrderListContainer = styled.div``;
+
 export const ListContainer = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
   text-align: start;
-  border: 2px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
 
   @media screen and (min-width: 768px) {
     display: flex;
@@ -72,7 +80,7 @@ export const OrderNumberDescription = styled.dl`
   flex-direction: row;
   justify-content: space-between;
   min-height: 3rem;
-  padding: 0.5rem;
+  padding: 1rem 0.5rem 0.5rem 1rem;
   background-color: #fbfbfb;
 
   .detailView {
@@ -146,11 +154,12 @@ export const AllProductWrap = styled.div`
   flex-direction: column;
   border-bottom: 1px solid #eeeeee;
   border-top: 1px solid #eeeeee;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
 
   @media screen and (min-width: 768px) {
     order: 2;
     flex: 5.5;
+    border-top: none;
     border-bottom: none;
   }
 `;
@@ -224,7 +233,7 @@ export const TotalPriceWrap = styled.div`
   flex: 1;
   order: 5;
   min-height: 4rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   margin-bottom: 1rem;
 
   .mobile-Only.shipping {
@@ -266,8 +275,8 @@ export const OrderStatus = styled.div`
   flex: 1;
   order: 3;
   position: absolute;
-  top: 4.3rem;
-  right: 0.5rem;
+  top: 5rem;
+  right: 0.7rem;
   font-weight: 700;
   padding: 0.5rem;
   background-color: #fbfbfb;
@@ -294,7 +303,7 @@ export const Management = styled.div`
   display: flex;
   align-items: center;
   min-height: 4rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   background-color: #fbfbfb;
 
   & button {
@@ -322,13 +331,16 @@ export const Management = styled.div`
     padding: 0;
     margin-bottom: 0;
 
-    & button {
+    > button {
       width: 3rem;
-      margin: 0 0 1rem;
-    }
-    button:hover {
-      cursor: pointer;
-      background-color: #f4f4f4;
+      margin: 0;
+      &:first-child {
+        margin: 0 0 1rem;
+      }
+      &:hover {
+        cursor: pointer;
+        background-color: #f4f4f4;
+      }
     }
   }
 `;
