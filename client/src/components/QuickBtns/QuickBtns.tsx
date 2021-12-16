@@ -3,7 +3,7 @@ import { QuickBtnsContainer } from './styled';
 const QuickBtns = () => {
   return (
     <QuickBtnsContainer>
-      <a href="http://pf.kakao.com/_Sxhxexbb">
+      <a href="https://pf.kakao.com/_Sxhxexbb/chat">
         <img src="/images/kakao.png" alt="Top Button" />
       </a>
       <a href="#top">

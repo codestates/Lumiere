@@ -39,7 +39,7 @@ export const HambugerBtn = styled.div`
   justify-content: center;
   align-items: center;
   width: 6vh;
-  height: 100%;
+  height: 6vh;
   font-size: 2rem;
   text-align: center;
   background: #ffffff;
@@ -202,5 +202,90 @@ export const HeaderInfoBox = styled.div`
     margin-left: 0.2rem;
     padding: 0 0 0 0.4rem;
     border-left: 1px solid #eeeeee;
+  }
+`;
+
+/* 검색창 영역 */
+export const SearchContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -999;
+  width: 100vw;
+  background-color: #ffffff;
+  border: 1px solid #f2f2f2;
+  opacity: 0;
+  transition: all 0.5s;
+  &.search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 6vh;
+    opacity: 1;
+  }
+`;
+
+export const SearchWrap = styled.div`
+  display: flex;
+  max-width: 820px;
+  min-width: 320px;
+  width: 100%;
+  margin: auto;
+  padding: 0.5rem;
+  #header-searchBar-form {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+`;
+
+export const SearchBarInputWrapper = styled.div`
+  display: block;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 10px 0 10px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  background-color: #eee;
+  color: #222;
+  border-radius: 2px;
+  #header-searchBar-sq {
+    display: block;
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 0 10px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    background-color: #eee;
+    color: #222;
+    border-radius: 2px;
+  }
+  input::-webkit-search-decoration,
+  input::-webkit-search-cancel-button,
+  input::-webkit-search-results-button,
+  input::-webkit-search-results-decoration {
+    display: none;
+  }
+  > label {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 100%;
+    transition: all 0.5s;
+    &:hover {
+      transform: scale(1.2);
+    }
+    > input {
+      display: none;
+    }
   }
 `;
