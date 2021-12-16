@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageNation from 'components/PageNation/PageNation';
 import { useComma, convertDeliverStatus } from 'util/functions';
 import instance from 'util/axios';
@@ -21,6 +22,7 @@ import {
 
 const MypageOrderList = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
+  const navigate = useNavigate();
   const [curPage, setCurPage] = useState<number>(1);
   const [orderList, setOrderList] = useState<MypageOrder>({
     orders: [
@@ -137,6 +139,12 @@ const MypageOrderList = () => {
     }
   };
 
+  const orderDetailHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    navigate(`/orderdetail/${e.currentTarget.dataset.id}`, {
+      state: { id: e.currentTarget.dataset.id },
+    });
+  };
+
   return (
     <div>
       {orderList.page
@@ -155,7 +163,12 @@ const MypageOrderList = () => {
                         <dd className="smalldd">{el.result.paidAt}</dd>
                       </div>
                     </DtDdWrap>
-                    <button type="button" className="detailView">
+                    <button
+                      type="button"
+                      className="detailView"
+                      onClick={orderDetailHandler}
+                      data-id={el._id}
+                    >
                       상세보기
                     </button>
                   </OrderNumberDescription>
