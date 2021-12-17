@@ -13,6 +13,7 @@
     "@types/uuid": "^8.3.3",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
+    "file-saver": "^2.0.5",
     "jquery": "^3.6.0",
     "react": "^17.0.2",
     "react-aws-s3": "^1.5.0",
@@ -62,6 +63,7 @@
   },
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
+    "@types/file-saver": "^2.0.4",
     "@types/node": "^16.11.10",
     "@types/react": "^17.0.37",
     "@types/react-copy-to-clipboard": "^5.0.2",

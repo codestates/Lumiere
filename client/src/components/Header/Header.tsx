@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
 import instance from 'util/axios';
+import { fileSaver } from 'util/functions';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { HiMenuAlt1 } from 'react-icons/hi';
@@ -45,8 +46,7 @@ const Header = () => {
     // axios 요청
     instance
       .get('/users/logout')
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         localStorage.removeItem('lumiereUserInfo');
         setIsLogin(false);
         window.location.reload();
@@ -100,6 +100,11 @@ const Header = () => {
   const searchResultHandler = () => {
     console.log(searchInput);
   };
+
+  const fileSaveHandler = () => {
+    fileSaver();
+  };
+
   return (
     <div>
       <HeaderContainer>
@@ -149,7 +154,9 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/">작가 신청</Link>
+                <a href="#top" onClick={fileSaveHandler}>
+                  작가 신청
+                </a>
               </li>
               <li>
                 <div

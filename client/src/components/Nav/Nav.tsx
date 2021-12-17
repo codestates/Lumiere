@@ -1,6 +1,7 @@
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
 import instance from 'util/axios';
+import { saveAs } from 'file-saver';
 import { Link } from 'react-router-dom';
 import { NavContainer, NavInfoBox, UserInfoBox, NavButtonBox } from './styled';
 
@@ -12,8 +13,7 @@ const Nav = () => {
     // axios 요청
     instance
       .get('/users/logout')
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         localStorage.removeItem('lumiereUserInfo');
         setIsLogin(false);
         window.location.reload();
@@ -26,6 +26,10 @@ const Nav = () => {
           window.location.assign('/signin');
         } else window.location.assign('/error');
       });
+  };
+
+  const fileSaveHandler = () => {
+    saveAs('/files/LUMIERE.docx', 'LUMIERE');
   };
 
   return (
@@ -41,7 +45,9 @@ const Nav = () => {
         <li>
           {isLogin && <Link to="/cart">장바구니</Link>}
           <Link to="/">1 : 1 문의하기</Link>
-          <Link to="/">작가 신청</Link>
+          <a href="#top" onClick={fileSaveHandler}>
+            작가 신청
+          </a>
           {isLogin && userInfo && JSON.parse(userInfo).isAdmin ? (
             <Link to="/admin/product">어드민페이지</Link>
           ) : null}
