@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
+import { saveAs } from 'file-saver';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
@@ -20,6 +21,7 @@ import {
   ServiceList,
   ServiceBox,
   StartBtnBox,
+  ArtistApplySection,
 } from './styled';
 
 const Landing = () => {
@@ -32,24 +34,24 @@ const Landing = () => {
     instance
       .get('/events')
       .then((res) => {
-        console.log(res.data);
         setBanners(res.data);
         instance
           .get('/products/latest')
           .then((res) => {
-            console.log(res);
             setLatestArtList(res.data);
           })
-          .catch((res) => {
+          .catch(() => {
             window.location.assign('/error');
-            console.log(res.message);
           });
       })
-      .catch((err) => {
+      .catch(() => {
         window.location.assign('/error');
-        console.log(err);
       });
   }, []);
+
+  const fileSaveHandler = () => {
+    saveAs('/files/LUMIERE.docx', 'LUMIERE');
+  };
 
   return (
     <LandingContainer>
@@ -101,6 +103,22 @@ const Landing = () => {
         <StartBtnBox>
           <Link to="/artlist">작품 구경하기</Link>
         </StartBtnBox>
+        <ArtistApplySection>
+          <div>
+            <img src="/images/introduction.jpeg" alt="서비스 예시 이미지" />
+          </div>
+          <div>
+            <h1>
+              Lumiere의<span>&nbsp;작가 지원하기</span>
+            </h1>
+            <p>신청서를 작성하여 이메일로 보내주세요 :-&#41;</p>
+            <div>
+              <button type="button" onClick={fileSaveHandler}>
+                신청서 다운로드
+              </button>
+            </div>
+          </div>
+        </ArtistApplySection>
       </LandingWrap>
       <QuickBtns />
       <Footer />
