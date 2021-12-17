@@ -87,7 +87,7 @@ const MypageOrderList = () => {
     const { status, order } = e.currentTarget.dataset;
 
     if (status === '3' || status === '4' || status === '5') {
-      alert('이미 상품이 배송중이거나 배송완료된 상태 입니다.');
+      alert('현재 상태에서는 취소가 불가합니다.');
     } else {
       instance
         .delete(`/orders/${order}`)
@@ -176,13 +176,16 @@ const MypageOrderList = () => {
                   <AllProductWrap>
                     {el.orderItems.map((el) => {
                       return (
-                        <ProductWrap key={el.artist}>
+                        <ProductWrap key={el.product}>
                           <ImgWrap>
-                            <img src={el.image} alt={el.title} />
+                            <img
+                              src={el.image}
+                              alt={`${el.artist}의 ${el.title}`}
+                            />
                           </ImgWrap>
                           <ProductDlWrap>
                             <dt>{el.title}</dt>
-                            <dd>{el.title}</dd>
+                            <dd>{el.artist}</dd>
                             <dd>{el.size}</dd>
                             <dd>{`${useComma(el.price)}원`}</dd>
                           </ProductDlWrap>

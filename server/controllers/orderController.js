@@ -338,8 +338,6 @@ const getLatestOrder = asyncHandler(async (req, res) => {
 
   if (order) {
     res.json(order);
-  } else {
-    res.status(404).json({ message: '최근 주문 내역이 없습니다' });
   }
 });
 

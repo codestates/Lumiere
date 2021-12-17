@@ -133,7 +133,6 @@ export const OrderPay = ({
                 imp_uid: response.imp_uid,
               })
               .then((res) => {
-                console.log(res);
                 const localInfo = localStorage.getItem('cartItems');
                 const newArr = JSON.parse(localInfo || '[]').filter(
                   (el: string) => {

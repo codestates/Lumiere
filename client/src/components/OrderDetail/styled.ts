@@ -59,7 +59,7 @@ export const DtDdWrap = styled.div`
 export const BtnWrap = styled.div`
   display: flex;
   flex-direction: row;
-  min-height: 2rem;
+  min-height: 3rem;
 
   button {
     width: 100%;
@@ -69,6 +69,7 @@ export const BtnWrap = styled.div`
     color: #8a8a8a;
     background-color: #ffffff;
     padding: 0;
+    border: 1px solid #eeeeee;
 
     &:hover {
       cursor: pointer;

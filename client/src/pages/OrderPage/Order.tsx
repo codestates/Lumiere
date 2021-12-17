@@ -96,7 +96,7 @@ const Order = () => {
         setDeliveryReqState({ receiveAt, requestedTerms });
       })
       .catch(() => {
-        // 주문이력 X
+        window.location.assign('/error');
       });
   }, []);
 

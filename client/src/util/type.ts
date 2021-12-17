@@ -163,13 +163,13 @@ export interface Order {
         };
         kakao?: {
           email: string;
-        }
+        };
         naver?: {
           email: string;
-        }
+        };
         google?: {
           email: string;
-        }
+        };
         name: string;
         _id: string;
       };
@@ -354,4 +354,45 @@ export interface ZzimArtistsType {
   aka: string;
   thumbnail: string;
   countOfWorks: number;
+}
+
+//MyPage Orderdetail
+
+export interface OrderdetailType {
+  result: {
+    id: string;
+    paidAt: string;
+    status: number;
+    updatedAt: string;
+  };
+  deliveryInfo: {
+    address: string;
+    detailedAddress: string;
+    receiver: string;
+    contactNum: string;
+  };
+  deliveryDetails: {
+    receiveAt: string;
+    requestedTerms: string;
+  };
+  ordererInfo: {
+    name: string;
+    phoneNum: string;
+    email: string;
+    refundTerms: string;
+  };
+  _id: string;
+  user: string;
+  orderItems: [
+    {
+      image: string;
+      title: string;
+      artist: string;
+      size: string;
+      price: number;
+      product: string;
+    },
+  ];
+  shippingPrice: number;
+  totalPrice: number;
 }
