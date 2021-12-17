@@ -1,6 +1,8 @@
 /* eslint-disable */
 import { useState, useEffect } from 'react';
 import { useComma, useName, useOrderNumber } from 'util/functions';
+import { useRecoilState } from 'recoil';
+import { IsDisableBtnState } from 'States/IsDisableBtnState';
 import instance from 'util/axios';
 import dotenv from 'dotenv';
 import { useNavigate } from 'react-router-dom';
@@ -50,7 +52,7 @@ export const OrderPay = ({
 }: PriceProps) => {
   // input Validate State
   const [inputAllCheck, setInputAllCheck] = useState(false);
-
+  const [isDisableBtn, setIsDisableBtn] = useRecoilState(IsDisableBtnState);
   const history = useNavigate();
 
   useEffect(() => {
@@ -77,96 +79,13 @@ export const OrderPay = ({
   }, [shippingState, ordererInfoState, deliveryReqState]);
 
   const OrderPaymentHandler = () => {
-    // IAMPORT 핸들러
-    const hanldePayment = (orderid: string) => {
-      // 가맹점 식별코드 이용하여 IMP객체 초기화
-      const IMP = window.IMP; // 생략 가능
-      IMP.init(process.env.REACT_APP_IMPORT);
-
-      // 결제 금액
-      const amount: number = priceState.totalPrice + priceState.shippingPrice;
-      if (!amount) {
-        alert('결제 금액을 확인해주세요');
-        return;
-      }
-
-      // req 함수 data 설정
-      const data: RequestPayParams = {
-        pg: 'html5_inicis',
-        pay_method: 'card',
-        merchant_uid: orderid,
-        name: useName(productState),
-        amount: amount,
-        buyer_name: ordererInfoState.name,
-        buyer_tel: ordererInfoState.phoneNum,
-        buyer_email: ordererInfoState.email,
-        m_redirect_url: 'http:localhost:3000',
-        app_scheme: 'http:localhost:3000',
-      };
-
-      const callback = (response: RequestPayResponse) => {
-        const {
-          success,
-          merchant_uid,
-          error_msg,
-          imp_uid,
-          error_code,
-          paid_amount,
-          name,
-          pg_tid,
-          buyer_name,
-          buyer_email,
-          buyer_tel,
-          paid_at,
-          receipt_url,
-          status,
-        } = response;
-
-        if (success) {
-          // 아임포트 결제 성공했으니 서버에 주문 정보 전달
-          if (
-            priceState.totalPrice + priceState.shippingPrice ===
-            response.paid_amount
-          ) {
-            instance
-              .patch(`/orders/pay`, {
-                imp_uid: response.imp_uid,
-              })
-              .then((res) => {
-                const localInfo = localStorage.getItem('cartItems');
-                const newArr = JSON.parse(localInfo || '[]').filter(
-                  (el: string) => {
-                    return !orderProduct.includes(el);
-                  },
-                );
-                localStorage.setItem('cartItems', JSON.stringify(newArr));
-                history('/paymentfinished');
-              })
-              .catch((err) => {
-                // 아임포트는 결제 완료되었지만 DB저장 혹시 서버에서 문제 발생할 경우
-                // 이떄 아임포트 결제 환불 시켜줘야함, 오더 삭제
-                alert(`${err.response.data.message}`);
-                window.location.assign('/error');
-              });
-          } else {
-            alert('결제금액이 다릅니다.');
-            window.location.assign('/error');
-          }
-        } else {
-          // 아임포트 결제 취소 : 임시 주문서 삭제 필요
-          instance
-            .delete(`/orders/${response.merchant_uid}`)
-            .then((res) => {
-              alert('주문을 취소 하셨습니다');
-            })
-            .catch((err) => {
-              window.location.assign('/error');
-            });
-        }
-      };
-
-      IMP.request_pay(data, callback);
-    };
+    if (isDisableBtn) {
+      setIsDisableBtn(false);
+      alert('결제 요청 버튼을 한번만 눌러주세요');
+      return;
+    } else {
+      setIsDisableBtn(true);
+    }
 
     // input창 입력 status
     if (!inputAllCheck) {
@@ -224,6 +143,7 @@ export const OrderPay = ({
                   .then((res) => {
                     // 임시주문서 order id
                     const orderid = res.data.orderId;
+                    setIsDisableBtn(false);
                     hanldePayment(orderid);
                   })
                   .catch((err) => {
@@ -237,6 +157,99 @@ export const OrderPay = ({
       .catch(() => {
         window.location.assign('/error');
       });
+  };
+
+  // IAMPORT 핸들러
+  const hanldePayment = (orderid: string) => {
+    // 가맹점 식별코드 이용하여 IMP객체 초기화
+    setIsDisableBtn(false);
+    const IMP = window.IMP; // 생략 가능
+    IMP.init(process.env.REACT_APP_IMPORT);
+
+    // 결제 금액
+    const amount: number = priceState.totalPrice + priceState.shippingPrice;
+    if (!amount) {
+      alert('결제 금액을 확인해주세요');
+      return;
+    }
+
+    // req 함수 data 설정
+    const data: RequestPayParams = {
+      pg: 'html5_inicis',
+      pay_method: 'card',
+      merchant_uid: orderid,
+      name: useName(productState),
+      amount: amount,
+      buyer_name: ordererInfoState.name,
+      buyer_tel: ordererInfoState.phoneNum,
+      buyer_email: ordererInfoState.email,
+      m_redirect_url: 'http:localhost:3000',
+      app_scheme: 'http:localhost:3000',
+    };
+
+    const callback = (response: RequestPayResponse) => {
+      const {
+        success,
+        merchant_uid,
+        error_msg,
+        imp_uid,
+        error_code,
+        paid_amount,
+        name,
+        pg_tid,
+        buyer_name,
+        buyer_email,
+        buyer_tel,
+        paid_at,
+        receipt_url,
+        status,
+      } = response;
+
+      if (success) {
+        // 아임포트 결제 성공했으니 서버에 주문 정보 전달
+        if (
+          priceState.totalPrice + priceState.shippingPrice ===
+          response.paid_amount
+        ) {
+          instance
+            .patch(`/orders/pay`, {
+              imp_uid: response.imp_uid,
+            })
+            .then((res) => {
+              const localInfo = localStorage.getItem('cartItems');
+              const newArr = JSON.parse(localInfo || '[]').filter(
+                (el: string) => {
+                  return !orderProduct.includes(el);
+                },
+              );
+              localStorage.setItem('cartItems', JSON.stringify(newArr));
+              history('/paymentfinished');
+            })
+            .catch((err) => {
+              // 아임포트는 결제 완료되었지만 DB저장 혹시 서버에서 문제 발생할 경우
+              // 이떄 아임포트 결제 환불 시켜줘야함, 오더 삭제
+              alert(`${err.response.data.message}`);
+              window.location.assign('/error');
+            });
+        } else {
+          alert('결제금액이 다릅니다.');
+          window.location.assign('/error');
+        }
+      } else {
+        // 아임포트 결제 취소 : 임시 주문서 삭제 필요
+        instance
+          .delete(`/orders/${response.merchant_uid}`)
+          .then((res) => {
+            alert('주문을 취소 하셨습니다');
+            setIsDisableBtn(false);
+          })
+          .catch((err) => {
+            window.location.assign('/error');
+          });
+      }
+    };
+
+    IMP.request_pay(data, callback);
   };
 
   return (

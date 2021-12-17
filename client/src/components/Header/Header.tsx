@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
 import instance from 'util/axios';
-import { fileSaver } from 'util/functions';
+import { saveAs } from 'file-saver';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { HiMenuAlt1 } from 'react-icons/hi';
@@ -102,7 +102,7 @@ const Header = () => {
   };
 
   const fileSaveHandler = () => {
-    fileSaver();
+    saveAs('/files/LUMIERE.docx', 'LUMIERE');
   };
 
   return (
