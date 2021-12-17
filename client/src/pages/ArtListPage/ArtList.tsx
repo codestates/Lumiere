@@ -1,6 +1,5 @@
 /* eslint no-underscore-dangle: 0 */
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
 import Header from 'components/Header/Header';
@@ -14,11 +13,14 @@ import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import { ArtListMapping } from 'components/ArtListMapping/ArtListMapping';
 import { AdminProductsType } from '../../util/type';
 import { ArtListContainer, ArtListWrap } from './styled';
+import { LoadingArtList } from './Loading';
+import { ArtListDummy } from './dummy';
 
 const ArtList = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [artList, setArtList] = useState<AdminProductsType>({
     products: [
       {
@@ -59,16 +61,15 @@ const ArtList = () => {
     767: 2,
   };
 
-  const params = useParams();
-  const { keyword } = params; // match v6버전
-  console.log(keyword);
   // `/products?keyword=${keyword}&pageNumber=${pageNumber}` 요청 API 주소
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
+    setIsLoading(true);
     instance
       .get<AdminProductsType>('/products', { params: { pageNumber: page } })
       .then((res) => {
         setArtList(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -84,25 +85,6 @@ const ArtList = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
 
-  // useEffect(() => {
-  //   // axios 요청
-  //   instance
-  //     .get<AdminProductsType>('/products', { params: { pageNumber: 1 } })
-  //     .then((res) => {
-  //       console.log('1');
-  //       console.log(res.data);
-  //       setArtList(res.data);
-  //     })
-  //     .catch((err) => {
-  //       if (err.response.status === 401 && isLogin) {
-  //         alert('로그인이 만료되었습니다. 다시 로그인해주세요.2');
-  //         localStorage.removeItem('lumiereUserInfo');
-  //         setIsLogin(false);
-  //         window.location.assign('/signin');
-  //       } else window.location.assign('/error');
-  //     });
-  // }, []);
-
   const filteringHandler = (type: {
     theme?: string;
     sizeMin?: number;
@@ -111,13 +93,14 @@ const ArtList = () => {
     priceMax?: number;
   }) => {
     if (!type) {
+      setIsLoading(true);
       instance
         .get<AdminProductsType>('/products', {
           params: { pageNumber: curPage },
         })
         .then((res) => {
-          console.log(res.data);
           setArtList(res.data);
+          setIsLoading(false);
         })
         .catch((err) => {
           if (err.response.status === 401 && isLogin) {
@@ -129,6 +112,7 @@ const ArtList = () => {
         });
     } else {
       setCurPage(1);
+      setIsLoading(true);
       instance
         .get('/products/filter', {
           params: {
@@ -141,8 +125,8 @@ const ArtList = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
           setArtList(res.data);
+          setIsLoading(false);
         })
         .catch((err) => {
           if (err.response.status === 401 && isLogin) {
@@ -158,33 +142,33 @@ const ArtList = () => {
   return (
     <ArtListContainer>
       <Header />
-      <FilteringTab
-        filteringHandler={filteringHandler}
-        // setTabFilter={setTabFilter}
-      />
+      <FilteringTab filteringHandler={filteringHandler} />
       <ArtListWrap>
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          {artList.products.map((art) => {
-            return (
-              <ArtListMapping
-                art={art}
-                openLoginModalHandler={openLoginModalHandler}
-                key={art._id}
-              />
-            );
-          })}
+          {isLoading
+            ? ArtListDummy.map((art) => <LoadingArtList key={art.id} />)
+            : artList.products.map((art) => {
+                return (
+                  <ArtListMapping
+                    art={art}
+                    openLoginModalHandler={openLoginModalHandler}
+                    key={art._id}
+                  />
+                );
+              })}
         </Masonry>
+
         <PageNation
           curPage={curPage}
           totalPages={artList.pages}
           pageChangeHandler={pageChangeHandler}
         />
       </ArtListWrap>
-      <QuickBtns />
+      <QuickBtns isLoading={isLoading} />
       <Footer />
       {/* Modal */}
       {isOpenLoginModal && (

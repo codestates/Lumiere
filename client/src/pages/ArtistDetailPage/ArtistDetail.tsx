@@ -33,6 +33,7 @@ const ArtistDetail = () => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
   const [clickToShare, setClickToShare] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // axios 요청
@@ -168,7 +169,7 @@ const ArtistDetail = () => {
             },
           )}
       </ArtListWrap>
-      <QuickBtns />
+      <QuickBtns isLoading={isLoading} />
       <Footer />
       {/* Modal */}
       {isOpenLoginModal && (

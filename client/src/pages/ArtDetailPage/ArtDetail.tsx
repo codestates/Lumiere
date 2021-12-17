@@ -37,6 +37,7 @@ const ArtDetail = () => {
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState('success');
   const [alertMessage, setAlertMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const history = useNavigate();
   const currentUrl = window.location.href;
@@ -344,7 +345,7 @@ const ArtDetail = () => {
           </SuggestionSection>
         </ArtDetailWrap>
       )}
-      <QuickBtns />
+      <QuickBtns isLoading={isLoading} />
       <Footer />
       {/* Alert */}
       <Alert

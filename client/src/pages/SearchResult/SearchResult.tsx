@@ -18,6 +18,7 @@ const SearchResult = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [artList, setArtList] = useState<AdminProductsType>({
     products: [
       {
@@ -159,7 +160,7 @@ const SearchResult = () => {
           pageChangeHandler={pageChangeHandler}
         />
       </ArtListWrap>
-      <QuickBtns />
+      <QuickBtns isLoading={isLoading} />
       <Footer />
       {/* Modal */}
       {isOpenLoginModal && (

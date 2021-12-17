@@ -33,6 +33,7 @@ const MyPage = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [pwdMatch, setPwdMatch] = useState(false);
   const [oldPwd, setOldPwd] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // axios 요청
@@ -138,7 +139,7 @@ const MyPage = () => {
           <ContentWrap>{tabHandler()}</ContentWrap>
         </ContentContainer>
       </MyPageWrap>
-      <QuickBtns />
+      <QuickBtns isLoading={isLoading} />
       <Footer />
     </MyPageContainer>
   );

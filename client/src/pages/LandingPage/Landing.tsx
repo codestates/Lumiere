@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import { saveAs } from 'file-saver';
+import { useRecoilState } from 'recoil';
+import { IsSigninState } from 'States/IsLoginState';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import Slider from 'components/Slider/Slider';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
-import { useRecoilState } from 'recoil';
-import { IsSigninState } from 'States/IsLoginState';
+import { LoadingSlide, LoadingLatest } from './Loading';
 import { LandingService, LandingServiceToLogIn } from './dummy';
 import {
   LandingContainer,
@@ -28,6 +29,7 @@ const Landing = () => {
   const [banners, setBanners] = useState([]);
   const [latestArtList, setLatestArtList] = useState([]);
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // axios 요청
@@ -39,6 +41,7 @@ const Landing = () => {
           .get('/products/latest')
           .then((res) => {
             setLatestArtList(res.data);
+            setIsLoading(false);
           })
           .catch(() => {
             window.location.assign('/error');
@@ -57,20 +60,24 @@ const Landing = () => {
     <LandingContainer>
       <Header />
       <LandingWrap>
-        <Slider banners={banners} />
+        {isLoading ? <LoadingSlide /> : <Slider banners={banners} />}
         <LatestSection>
           <h1>최신작 소개</h1>
           <LatestImgWrap>
-            {latestArtList.map((art, idx) => {
-              const { _id, image } = art;
-              return (
-                <div key={_id}>
-                  <Link to={`/artdetail/${_id}`}>
-                    <img src={image} alt={`최신작 ${idx}`} />
-                  </Link>
-                </div>
-              );
-            })}
+            {isLoading ? (
+              <LoadingLatest />
+            ) : (
+              latestArtList.map((art, idx) => {
+                const { _id, image } = art;
+                return (
+                  <div key={_id}>
+                    <Link to={`/artdetail/${_id}`}>
+                      <img src={image} alt={`최신작 ${idx}`} />
+                    </Link>
+                  </div>
+                );
+              })
+            )}
           </LatestImgWrap>
         </LatestSection>
         <ServiceSection>
@@ -120,7 +127,7 @@ const Landing = () => {
           </div>
         </ArtistApplySection>
       </LandingWrap>
-      <QuickBtns />
+      <QuickBtns isLoading={isLoading} />
       <Footer />
     </LandingContainer>
   );

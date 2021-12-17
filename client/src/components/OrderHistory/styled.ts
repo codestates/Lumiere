@@ -120,7 +120,8 @@ export const DtDdWrap = styled.div`
   justify-content: center;
   line-height: 1.2;
 
-  dt {
+  dt,
+  .loading_dt {
     margin: 0 1rem 0 0;
   }
 
@@ -132,7 +133,8 @@ export const DtDdWrap = styled.div`
     flex-direction: column;
     align-items: center;
 
-    dt {
+    dt,
+    .loading_dt {
       display: none;
     }
 
