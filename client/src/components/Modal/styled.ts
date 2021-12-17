@@ -47,6 +47,8 @@ export const ContentWrap = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 2rem;
+
   p:nth-child(1) {
     margin: 2rem 0 0 0;
     font-size: 1.2rem;

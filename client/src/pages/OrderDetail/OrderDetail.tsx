@@ -11,7 +11,6 @@ import {
 const OrderDetail = () => {
   const location = useLocation();
   const orderDetailId = location.state.id;
-  console.log(orderDetailId);
 
   return (
     <OrderDetailContainer>
@@ -21,7 +20,7 @@ const OrderDetail = () => {
           <h1>주문내역 상세</h1>
         </TitleWrap>
         <ContentContainer>
-          <OrderDetailContent />
+          <OrderDetailContent orderDetailId={orderDetailId} />
         </ContentContainer>
       </OrderDetailWrap>
     </OrderDetailContainer>

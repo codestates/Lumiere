@@ -289,10 +289,11 @@ const getTotalPrice = asyncHandler(async (req, res) => {
     {
       $group: {
         _id: '결제 예정 총 금액',
-        totalPrice: { $sum: { $add: ['$price', 10000] } },
+        totalPrice: { $sum: '$price' },
       },
     },
   ]);
+  totalPrice[0].totalPrice += 10000;
   res.json(totalPrice[0]);
 });
 
