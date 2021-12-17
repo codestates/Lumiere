@@ -1,10 +1,18 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
 import User from '../models/user.js';
 import generateAccessToken from '../utils/generateToken.js';
 import localTime from '../utils/localTime.js';
-import { getAccessToken, getOption, getUserInfo } from '../utils/oAuth.js';
+import {
+  getAccessToken,
+  getOption,
+  getUserInfo,
+  revokeAccess,
+  updateAccessToken,
+} from '../utils/oAuth.js';
 
 // @desc   Check a email address
 // @route  POST /api/users/email
@@ -95,13 +103,8 @@ const oAuthLogin = asyncHandler(async (req, res) => {
   const { code } = req.query;
 
   const options = getOption(corp, code);
-  console.log('옵션', options);
-
-  const token = await getAccessToken(options);
-  console.log('토큰', token);
-
+  const token = await getAccessToken(options, 'authorization_code');
   const userInfo = await getUserInfo(corp, options.userInfo_url, token);
-  console.log('유저정보', userInfo);
 
   let uuid;
   let email;
@@ -123,9 +126,19 @@ const oAuthLogin = asyncHandler(async (req, res) => {
     name = userInfo.response.name;
   }
   // DB와 연락하기
-  const user = await User.findOne({
-    [`${corp}.uuid`]: uuid,
-  });
+  const { access_token, refresh_token } = token;
+  const user = await User.findOneAndUpdate(
+    {
+      [`${corp}.uuid`]: uuid,
+    },
+    {
+      [`${corp}.email`]: email,
+      [`${corp}.accessToken`]: access_token,
+      [`${corp}.refreshToken`]: refresh_token,
+      'active.isClosed': false,
+    },
+    { new: true },
+  );
 
   if (user) {
     res.json({
@@ -134,15 +147,15 @@ const oAuthLogin = asyncHandler(async (req, res) => {
       isAdmin: user.isAdmin,
       token: generateAccessToken(user._id),
     });
-    console.log('유저', user);
   } else {
     const newUser = new User({
       [`${corp}.uuid`]: uuid,
       [`${corp}.email`]: email,
+      [`${corp}.accessToken`]: access_token,
+      [`${corp}.refreshToken`]: refresh_token,
       name,
     });
     console.log('새 유저', newUser);
-
     await newUser.save();
     res.json({
       _id: newUser._id,
@@ -212,36 +225,84 @@ const dropout = asyncHandler(async (req, res) => {
       });
       return;
     }
-
-    await User.updateOne(
-      { _id: userId },
-      {
-        'active.lastAccessTime': localTime(),
-        'active.isClosed': true,
-        $unset: { 'general.password': 1 },
-      },
-      { new: true, upsert: true },
-    );
-
-    res.status(200).json({
-      message: `해당 유저를 정상적으로 탈퇴시켰습니다`,
+    const user = await User.findById(userId);
+    if (user.general.email) {
+      await User.updateOne(
+        { _id: userId },
+        {
+          'active.lastAccessTime': localTime(),
+          'active.isClosed': true,
+          $unset: { 'general.password': 1 },
+        },
+        { new: true, upsert: true },
+      );
+      res.status(200).json({
+        message: `해당 유저를 정상적으로 탈퇴시켰습니다`,
+      });
+      return;
+    }
+    res.status(400).json({
+      message: `소셜 로그인 유저입니다`,
     });
+    return;
   }
+
   if (req.user.isAdmin === false) {
+    const user = await User.findById(req.user._id);
+    if (user.general.email) {
+      await User.updateOne(
+        { _id: req.user._id },
+        {
+          'active.lastAccessTime': localTime(),
+          'active.isClosed': true,
+          $unset: { 'general.password': 1 },
+        },
+        {
+          upsert: true,
+        },
+      );
+      res.status(200).json({ message: '루미에르를 탈퇴하셨습니다' });
+      return;
+    }
+    const { google, naver, kakao } = user;
+    const corp = google.uuid
+      ? 'google'
+      : naver.uuid
+      ? 'naver'
+      : kakao.uuid
+      ? 'kakao'
+      : null;
+
+    const options = getOption(corp, `${user[corp].refreshToken}`);
+    const token = await updateAccessToken(options, 'refresh_token');
+    const { access_token } = token;
+
+    // 엑세스 끊기
+    const revokeRes = await revokeAccess(corp, access_token);
+    let message;
+
+    if (revokeRes.data.id && corp === 'kakao') {
+      message = '카카오 계정과 연결 끊기 완료';
+    }
+    if (revokeRes.data.result === 'success' && corp === 'naver') {
+      message = '네이버 계정과 연결 끊기 완료';
+    }
+    if (revokeRes.status === 200 && corp === 'google') {
+      message = '구글 계정과 연결 끊기 완료';
+    }
     await User.updateOne(
       { _id: req.user._id },
       {
         'active.lastAccessTime': localTime(),
         'active.isClosed': true,
-        $unset: { 'general.password': 1 },
+        $unset: {
+          [`${corp}.accessToken`]: 1,
+          [`${corp}.refreshToken`]: 1,
+        },
       },
-      {
-        upsert: true,
-      },
+      { upsert: true },
     );
-    res.status(200).json({
-      message: '탈퇴가 정상적으로 완료되었습니다',
-    });
+    res.status(200).json(message);
   }
 });
 
@@ -260,9 +321,12 @@ const getUsers = asyncHandler(async (req, res) => {
     {
       isAdmin: 0,
       'general.password': 0,
-      'google.token': 0,
-      'naver.token': 0,
-      'kakao.token': 0,
+      'google.accessToken': 0,
+      'naver.accessToken': 0,
+      'kakao.accessToken': 0,
+      'google.refreshToken': 0,
+      'naver.refreshToken': 0,
+      'kakao.refreshToken': 0,
     },
   )
     .limit(pageSize)

@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+/* eslint-disable no-return-await */
 /* eslint-disable max-classes-per-file */
 import axios from 'axios';
 import qs from 'qs';
@@ -8,7 +8,7 @@ class Kakao {
     this.url = 'https://kauth.kakao.com/oauth/token';
     this.client_id = process.env.KAKAO_CLIENT_ID;
     this.redirect_uri = `${process.env.REDIRECT_URI}/kakao`;
-    this.code = code;
+    this.code = code; // 인가 코드 혹은 갱신 토큰
 
     // userInfo
     this.userInfo_url = 'https://kapi.kakao.com/v2/user/me';
@@ -37,7 +37,7 @@ class Naver {
     this.client_secret = process.env.NAVER_CLIENT_SECRET;
     this.redirect_uri = `${process.env.REDIRECT_URI}/naver`;
     this.code = code;
-    this.state = 'Welcome,2022';
+    this.state = process.env.NAVER_STATE;
 
     // userInfo
     this.userInfo_url = 'https://openapi.naver.com/v1/nid/me';
@@ -57,84 +57,115 @@ const getOption = (corp, code) => {
   }
 };
 
+const config = {
+  headers: {
+    'content-type': 'application/x-www-form-urlencoded',
+  },
+};
+
 // 토큰 얻기
-const getAccessToken = async (options) => {
+const getAccessToken = async (options, grantType) => {
   if (options.scope) {
     // 구글
     const res = await axios.post(
       options.url,
       qs.stringify({
-        grant_type: 'authorization_code',
+        grant_type: grantType,
         client_id: options.client_id,
         client_secret: options.client_secret,
         redirect_uri: options.redirect_uri,
         code: options.code,
         scope: options.scope,
       }),
-      {
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-        },
-      },
+      config,
     );
-    // console.log('구글용', res.data);
-    const { id_token } = res.data;
-    return id_token;
+    return res.data;
   }
   if (options.state) {
     const res = await axios.post(
       // 네이버
       options.url,
       qs.stringify({
-        grant_type: 'authorization_code',
+        grant_type: grantType,
         client_id: options.client_id,
         client_secret: options.client_secret,
         redirect_uri: options.redirect_uri,
         code: options.code,
         state: options.state,
       }),
-      {
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded',
-        },
-      },
+      config,
     );
-    console.log('네이버용', res.data);
-    const { access_token } = res.data;
-    return access_token;
+    return res.data;
   }
   const res = await axios.post(
     // 카카오
     options.url,
     qs.stringify({
-      grant_type: 'authorization_code',
+      grant_type: grantType,
       client_id: options.client_id,
       redirect_uri: options.redirect_uri,
       code: options.code,
     }),
-    {
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-      },
-    },
+    config,
   );
-  console.log('카카오용', res.data);
-  const { access_token } = res.data;
-  return access_token;
+  return res.data;
 };
 
 // 유저 정보 얻기
 const getUserInfo = async (corp, url, token) => {
   if (corp === 'google') {
-    const res = await axios.get(`${url}?id_token=${token}`);
+    const res = await axios.get(`${url}?id_token=${token.id_token}`);
     return res.data;
   }
   const res = await axios.get(url, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token.access_token}`,
     },
   });
   return res.data;
 };
 
-export { getUserInfo, getAccessToken, getOption };
+// 토큰 갱신
+const updateAccessToken = async (options, grantType) => {
+  const res = await axios.post(
+    options.url,
+    qs.stringify({
+      grant_type: grantType,
+      client_id: options.client_id,
+      client_secret: options.client_secret,
+      refresh_token: options.code,
+    }),
+    config,
+  );
+  return res.data;
+};
+
+// 연결 끊기
+const revokeAccess = async (corp, token) => {
+  switch (corp) {
+    case 'google':
+      return await axios.post(
+        `https://oauth2.googleapis.com/revoke?token=${token}`,
+      );
+    case 'naver':
+      return await axios.post(
+        `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${process.env.NAVER_CLIENT_ID}&client_secret=${process.env.NAVER_CLIENT_SECRET}&access_token=${token}&service_provider=NAVER`,
+      );
+    case 'kakao':
+      return await axios.get('https://kapi.kakao.com/v1/user/unlink', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    default:
+      return null;
+  }
+};
+
+export {
+  getUserInfo,
+  getAccessToken,
+  updateAccessToken,
+  getOption,
+  revokeAccess,
+};
