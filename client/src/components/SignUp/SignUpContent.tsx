@@ -1,6 +1,8 @@
 /* eslint-disable */
 import React, { useState, useReducer, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useRecoilState } from 'recoil';
+import { IsDisableBtnState } from 'States/IsDisableBtnState';
 import instance from 'util/axios';
 import SignUpPrivacy from './SignUpPrivacy';
 import { emailValidate } from 'util/validate';
@@ -39,6 +41,7 @@ const SignUpContent = () => {
   const [isAllChecked, setIsAllChecked] = useState(false);
   const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [privacyErrState, setPrivacyErrState] = useState(false);
+  const [isDisableBtn, setIsDisableBtn] = useRecoilState(IsDisableBtnState);
 
   const history = useNavigate();
 
@@ -127,6 +130,11 @@ const SignUpContent = () => {
   // Signup Handler Axios
   const signupHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isDisableBtn) {
+      return;
+    } else {
+      setIsDisableBtn(true);
+    }
     if (!validateAllCheck) {
       setErrMessageName();
       setErrMessageEmail();
@@ -146,12 +154,12 @@ const SignUpContent = () => {
           name: signupInputInfo.name,
         })
         .then((res) => {
-          console.log(res);
+          setIsDisableBtn(false);
           history('/signin');
         })
-        .catch((err) => {
+        .catch(() => {
           // 404페이지로 이동
-          console.log(err);
+          setIsDisableBtn(false);
         });
     }
   };
