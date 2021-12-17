@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PageNation from 'components/PageNation/PageNation';
 import { useComma, convertDeliverStatus } from 'util/functions';
+import { EmptyImageWrap } from 'components/ZzimProducts/styled';
 import instance from 'util/axios';
 import { MypageOrder } from 'util/type';
 import { useRecoilState } from 'recoil';
@@ -148,90 +149,100 @@ const MypageOrderList = () => {
 
   return (
     <OrderListContainer>
-      {orderList.page
-        ? orderList.orders.map((el) => {
-            return (
-              <div key={el._id}>
-                <ListContainer>
-                  <OrderNumberDescription>
-                    <DtDdWrap>
-                      <div>
-                        <dt>주문번호</dt>
-                        <dd>{el.result.id}</dd>
-                      </div>
-                      <div>
-                        <dt>결제일자</dt>
-                        <dd className="smalldd">{el.result.paidAt}</dd>
-                      </div>
-                    </DtDdWrap>
-                    <button
-                      type="button"
-                      className="detailView"
-                      onClick={orderDetailHandler}
-                      data-id={el._id}
-                    >
-                      상세보기
-                    </button>
-                  </OrderNumberDescription>
-                  <AllProductWrap>
-                    {el.orderItems.map((el) => {
-                      return (
-                        <ProductWrap key={el.product}>
-                          <ImgWrap>
-                            <img
-                              src={el.image}
-                              alt={`${el.artist}의 ${el.title}`}
-                            />
-                          </ImgWrap>
-                          <ProductDlWrap>
-                            <dt>{el.title}</dt>
-                            <dd>{el.artist}</dd>
-                            <dd>{el.size}</dd>
-                            <dd>{`${useComma(el.price)}원`}</dd>
-                          </ProductDlWrap>
-                        </ProductWrap>
-                      );
-                    })}
-                  </AllProductWrap>
-                  <TotalPriceWrap>
-                    <div className="mobile-Only shipping">
-                      {`상품 ${useComma(
-                        el.totalPrice - 10000,
-                      )}원 + 배송비 10,000원 `}
+      {orderList.orders[0] !== undefined ? (
+        orderList.orders.map((el) => {
+          return (
+            <div key={el._id}>
+              <ListContainer>
+                <OrderNumberDescription>
+                  <DtDdWrap>
+                    <div>
+                      <dt>주문번호</dt>
+                      <dd>{el.result.id}</dd>
                     </div>
-                    <div className="totalPrice">
-                      <div className="mobile-Only">총 결제 금액</div>
-                      <div className="realtotalPrice">{`${useComma(
-                        el.totalPrice,
-                      )}원`}</div>
+                    <div>
+                      <dt>결제일자</dt>
+                      <dd className="smalldd">{el.result.paidAt}</dd>
                     </div>
-                  </TotalPriceWrap>
-                  <OrderStatus>
-                    <div>{convertDeliverStatus(el.result.status)}</div>
-                  </OrderStatus>
-                  <Management>
-                    <button
-                      type="button"
-                      onClick={cancleOrderHandler}
-                      data-status={el.result.status}
-                      data-order={el._id}
-                    >
-                      취소
-                    </button>
-                    <button
-                      type="button"
-                      onClick={refundOrderHandler}
-                      data-status={el.result.status}
-                      data-order={el._id}
-                    >
-                      반품
-                    </button>
-                  </Management>
-                </ListContainer>
-              </div>
-            );
-          })
-        : null}
+                  </DtDdWrap>
+                  <button
+                    type="button"
+                    className="detailView"
+                    onClick={orderDetailHandler}
+                    data-id={el._id}
+                  >
+                    상세보기
+                  </button>
+                </OrderNumberDescription>
+                <AllProductWrap>
+                  {el.orderItems.map((el) => {
+                    return (
+                      <ProductWrap key={el.product}>
+                        <ImgWrap>
+                          <img
+                            src={el.image}
+                            alt={`${el.artist}의 ${el.title}`}
+                          />
+                        </ImgWrap>
+                        <ProductDlWrap>
+                          <dt>{el.title}</dt>
+                          <dd>{el.artist}</dd>
+                          <dd>{el.size}</dd>
+                          <dd>{`${useComma(el.price)}원`}</dd>
+                        </ProductDlWrap>
+                      </ProductWrap>
+                    );
+                  })}
+                </AllProductWrap>
+                <TotalPriceWrap>
+                  <div className="mobile-Only shipping">
+                    {`상품 ${useComma(
+                      el.totalPrice - 10000,
+                    )}원 + 배송비 10,000원 `}
+                  </div>
+                  <div className="totalPrice">
+                    <div className="mobile-Only">총 결제 금액</div>
+                    <div className="realtotalPrice">{`${useComma(
+                      el.totalPrice,
+                    )}원`}</div>
+                  </div>
+                </TotalPriceWrap>
+                <OrderStatus>
+                  <div>{convertDeliverStatus(el.result.status)}</div>
+                </OrderStatus>
+                <Management>
+                  <button
+                    type="button"
+                    onClick={cancleOrderHandler}
+                    data-status={el.result.status}
+                    data-order={el._id}
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    onClick={refundOrderHandler}
+                    data-status={el.result.status}
+                    data-order={el._id}
+                  >
+                    반품
+                  </button>
+                </Management>
+              </ListContainer>
+            </div>
+          );
+        })
+      ) : (
+        <EmptyImageWrap>
+          <img
+            src={`/images/EmptyZzim/hanging-cat-${
+              Math.floor(Math.random() * 2) + 1
+            }.png`}
+            alt="emptyCat"
+          />
+          <div>아직 아무것도 없네요!</div>
+        </EmptyImageWrap>
+      )}
       <PageNation
         curPage={curPage}
         totalPages={orderList.pages}
