@@ -10,6 +10,7 @@ import { IsSigninState } from 'States/IsLoginState';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import ShareBox from 'components/ShareBox/ShareBox';
 import Introduction from 'components/Introduction/Introduction';
+import Alert from 'components/Alert/Alert';
 import { FiShare2 } from 'react-icons/fi';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
@@ -33,6 +34,9 @@ const ArtDetail = () => {
   const [clickToShare, setClickToShare] = useState(false);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
 
   const history = useNavigate();
   const currentUrl = window.location.href;
@@ -65,12 +69,19 @@ const ArtDetail = () => {
       openLoginModalHandler();
     } else if (!cartItems) {
       localStorage.setItem('cartItems', JSON.stringify([productId]));
+      setSeverity('success');
+      alertOpenHandler();
     } else if (!JSON.parse(cartItems).includes(productId)) {
       const cartArr = JSON.parse(cartItems);
       cartArr.push(productId);
       localStorage.setItem('cartItems', JSON.stringify(cartArr));
+      setSeverity('success');
+      setAlertMessage('작품이 아트 쇼핑백에 담겼습니다!');
+      alertOpenHandler();
     } else {
-      alert('이미 장바구니에 담겨있습니다');
+      setSeverity('warning');
+      setAlertMessage('작품이 이미 아트쇼핑백에 담겨 있습니다!');
+      alertOpenHandler();
     }
   };
 
@@ -125,6 +136,22 @@ const ArtDetail = () => {
           } else window.location.assign('/error');
         });
     }
+  };
+
+  // Alert Handler (Snackbar)
+  const alertOpenHandler = () => {
+    setOpen(true);
+  };
+
+  const alertCloseHandler = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -319,6 +346,13 @@ const ArtDetail = () => {
       )}
       <QuickBtns />
       <Footer />
+      {/* Alert */}
+      <Alert
+        open={open}
+        severity={severity}
+        alertMessage={alertMessage}
+        alertCloseHandler={alertCloseHandler}
+      />
       {/* Modal */}
       {isOpenLoginModal && (
         <LoginGuideModal clickModalHandler={openLoginModalHandler} />
