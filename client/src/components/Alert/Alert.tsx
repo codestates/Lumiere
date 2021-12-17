@@ -26,9 +26,11 @@ const Alert = ({ open, severity, alertMessage, alertCloseHandler }: Props) => {
           autoHideDuration={1000}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           onClose={alertCloseHandler}
+          style={{ background: 'rgba(255, 255, 255, 0.9)' }}
         >
           <Notification
             onClose={alertCloseHandler}
+            variant="outlined"
             severity="success"
             sx={{ width: '100%' }}
           >
@@ -42,9 +44,11 @@ const Alert = ({ open, severity, alertMessage, alertCloseHandler }: Props) => {
           autoHideDuration={1000}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           onClose={alertCloseHandler}
+          style={{ background: 'rgba(255, 255, 255, 0.9)' }}
         >
           <Notification
             onClose={alertCloseHandler}
+            variant="outlined"
             severity="warning"
             sx={{ width: '100%' }}
           >
