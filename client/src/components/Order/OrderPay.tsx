@@ -80,8 +80,6 @@ export const OrderPay = ({
 
   const OrderPaymentHandler = () => {
     if (isDisableBtn) {
-      setIsDisableBtn(false);
-      alert('결제 요청 버튼을 한번만 눌러주세요');
       return;
     } else {
       setIsDisableBtn(true);
