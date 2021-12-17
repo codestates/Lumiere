@@ -2,6 +2,7 @@ import { useState } from 'react';
 import instance from 'util/axios';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
+import { IsDisableBtnState } from 'States/IsDisableBtnState';
 import { UserLeaveContainer } from './styled';
 
 const confirmText = '내용을 확인했습니다';
@@ -11,8 +12,14 @@ const UserLeave = () => {
   const [inputConfirmText, setInputConfirmText] = useState('');
   const [validConfirmMessage, setValidConfirmMessage] = useState('');
   const [confirmTextMatch, setConfirmTextMatch] = useState(false);
+  const [isDisableBtn, setIsDisableBtn] = useRecoilState(IsDisableBtnState);
 
   const userLeaveHandler = () => {
+    if (isDisableBtn) {
+      return;
+    }
+    setIsDisableBtn(true);
+
     if (inputConfirmText === '') {
       setValidConfirmMessage('문구를 입력해주세요');
     } else if (inputConfirmText && confirmTextMatch) {
