@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
 import CartDeleteModal from 'components/Modal/CartDeleteModal';
-import CartNotListModal from 'components/Modal/CartNotListModal';
+import { EmptyImageWrap } from 'components/ZzimArtists/styled';
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { useComma } from 'util/functions';
@@ -12,6 +12,7 @@ import {
   ProductDlWrap,
   ListDeleteBtnWrap,
   ListCheckLabelWrap,
+  NotlistImgWrap,
 } from './styled';
 
 type CartProductsProps = {
@@ -67,7 +68,17 @@ export const CartList = ({
         />
       )}
       {cartProductState.length === 0 ? (
-        <CartNotListModal clickModalHandler={clickModalHandler} />
+        <NotlistImgWrap>
+          <EmptyImageWrap>
+            <img
+              src={`/images/EmptyZzim/hanging-cat-${
+                Math.floor(Math.random() * 2) + 1
+              }.png`}
+              alt="emptyCat"
+            />
+            <div>아직 아무것도 없네요!</div>
+          </EmptyImageWrap>
+        </NotlistImgWrap>
       ) : (
         cartProductState.map((el) => {
           return (
