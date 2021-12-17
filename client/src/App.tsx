@@ -9,6 +9,7 @@ import Artists from 'pages/ArtistListPage/ArtistList';
 import Cart from 'pages/CartPage/Cart';
 import MyPage from 'pages/MyPage/MyPage';
 import Order from 'pages/OrderPage/Order';
+import OrderDetail from 'pages/OrderDetail/OrderDetail';
 import PaymentFinished from 'pages/PaymentFinishedPage/PaymentFinished';
 import AdminOrder from 'pages/AdminOrderPage/AdminOrder';
 import AdminProduct from 'pages/AdminProductPage/AdminProduct';
@@ -43,6 +44,7 @@ function App() {
           <Route path="/artistdetail/:id" element={<ArtistDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<Order />} />
+          <Route path="/orderdetail/:id" element={<OrderDetail />} />
           <Route path="/paymentfinished" element={<PaymentFinished />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/admin/order" element={<AdminOrder />} />
