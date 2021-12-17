@@ -13,11 +13,14 @@ import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import { ArtListMapping } from 'components/ArtListMapping/ArtListMapping';
 import { AdminProductsType } from '../../util/type';
 import { ArtListContainer, ArtListWrap } from './styled';
+import { LoadingArtList } from './Loading';
+import { ArtListDummy } from './dummy';
 
 const ArtList = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [curPage, setCurPage] = useState<number>(1);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [artList, setArtList] = useState<AdminProductsType>({
     products: [
       {
@@ -61,10 +64,12 @@ const ArtList = () => {
   // `/products?keyword=${keyword}&pageNumber=${pageNumber}` 요청 API 주소
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
+    setIsLoading(true);
     instance
       .get<AdminProductsType>('/products', { params: { pageNumber: page } })
       .then((res) => {
         setArtList(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -88,13 +93,14 @@ const ArtList = () => {
     priceMax?: number;
   }) => {
     if (!type) {
+      setIsLoading(true);
       instance
         .get<AdminProductsType>('/products', {
           params: { pageNumber: curPage },
         })
         .then((res) => {
-          console.log(res.data);
           setArtList(res.data);
+          setIsLoading(false);
         })
         .catch((err) => {
           if (err.response.status === 401 && isLogin) {
@@ -106,6 +112,7 @@ const ArtList = () => {
         });
     } else {
       setCurPage(1);
+      setIsLoading(true);
       instance
         .get('/products/filter', {
           params: {
@@ -118,8 +125,8 @@ const ArtList = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
           setArtList(res.data);
+          setIsLoading(false);
         })
         .catch((err) => {
           if (err.response.status === 401 && isLogin) {
@@ -142,23 +149,26 @@ const ArtList = () => {
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column"
         >
-          {artList.products.map((art) => {
-            return (
-              <ArtListMapping
-                art={art}
-                openLoginModalHandler={openLoginModalHandler}
-                key={art._id}
-              />
-            );
-          })}
+          {isLoading
+            ? ArtListDummy.map((art) => <LoadingArtList key={art.id} />)
+            : artList.products.map((art) => {
+                return (
+                  <ArtListMapping
+                    art={art}
+                    openLoginModalHandler={openLoginModalHandler}
+                    key={art._id}
+                  />
+                );
+              })}
         </Masonry>
+
         <PageNation
           curPage={curPage}
           totalPages={artList.pages}
           pageChangeHandler={pageChangeHandler}
         />
       </ArtListWrap>
-      <QuickBtns />
+      <QuickBtns isLoading={isLoading} />
       <Footer />
       {/* Modal */}
       {isOpenLoginModal && (

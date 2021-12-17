@@ -7,7 +7,9 @@ import { EmptyImageWrap } from 'components/ZzimProducts/styled';
 import instance from 'util/axios';
 import { MypageOrder } from 'util/type';
 import { useRecoilState } from 'recoil';
+import { LoadingOrderList } from './Loading';
 import { IsSigninState } from 'States/IsLoginState';
+import { OrderListDummy } from './dummy';
 import {
   OrderListContainer,
   ListContainer,
@@ -26,6 +28,7 @@ const MypageOrderList = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const navigate = useNavigate();
   const [curPage, setCurPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState(true);
   const [orderList, setOrderList] = useState<MypageOrder>({
     orders: [
       {
@@ -60,6 +63,7 @@ const MypageOrderList = () => {
       .then((res) => {
         setOrderList(res.data);
         setCurPage(res.data.page);
+        setIsLoading(false);
       })
       .catch(() => {
         window.location.assign('/error');
@@ -68,11 +72,13 @@ const MypageOrderList = () => {
 
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
+    setIsLoading(true);
     instance
       .get('/orders/mine', { params: { pageNumber: page } })
       .then((res) => {
         setOrderList(res.data);
         setCurPage(res.data.page);
+        setIsLoading(false);
       })
       .catch((err) => {
         if (err.response.status === 401 && isLogin) {
@@ -149,7 +155,9 @@ const MypageOrderList = () => {
 
   return (
     <OrderListContainer>
-      {orderList.orders[0] !== undefined ? (
+      {isLoading ? (
+        OrderListDummy.map((order) => <LoadingOrderList key={order.id} />)
+      ) : orderList.orders[0] !== undefined ? (
         orderList.orders.map((el) => {
           return (
             <div key={el._id}>

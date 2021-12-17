@@ -28,6 +28,9 @@ export const ArtInfoBox = styled.div`
   padding: 0.8rem;
   display: flex;
   flex-direction: row;
+  .loading {
+    margin-right: 0.5rem;
+  }
   .title {
     flex: 7;
   }
@@ -61,4 +64,9 @@ export const ArtInfoBox = styled.div`
     font-size: 1.3rem;
     color: #aaaaaa;
   }
+`;
+
+export const ArtListLoadingWrap = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

@@ -56,7 +56,7 @@ export const ArtistWrap = styled.div`
     }
   }
   &.artistWrapBorder {
-    margin-left: 1rem; /* gutter size */
+    margin-left: 0.5rem; /* gutter size */
     margin-bottom: 0.8rem;
     background-clip: padding-box;
     border: 1px solid #dfdfdf;
@@ -67,7 +67,7 @@ export const ArtistWrap = styled.div`
 
   @media screen and (max-width: 543px) {
     width: 95%;
-    margin: 0 0 3.846154% 0;
+    margin: 0 0 6% 0;
   }
   @media screen and (max-width: 1152px) {
     width: 46%;
@@ -88,7 +88,12 @@ export const ArtistInfoBox = styled.div`
   display: flex;
   padding: 0.8rem;
 
-  h4 {
+  .h4,
+  .p {
+    margin-right: 0.5rem;
+  }
+  h4,
+  .h4 {
     margin-bottom: 0.5rem;
     font-size: 18px;
     font-weight: bold;
@@ -97,7 +102,8 @@ export const ArtistInfoBox = styled.div`
       font-size: 16px;
     }
   }
-  p {
+  p,
+  .p {
     line-height: 1.5;
     font-size: 12px;
     color: #989898;
