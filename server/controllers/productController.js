@@ -129,11 +129,7 @@ const getProducts = asyncHandler(async (req, res) => {
         as: 'artist',
       },
     },
-    {
-      $unwind: {
-        path: '$artist',
-      },
-    },
+    { $unwind: '$artist' },
     { $match: { ...keyword } },
     {
       $project: {
@@ -146,11 +142,10 @@ const getProducts = asyncHandler(async (req, res) => {
         'artist.joinAt': 0,
       },
     },
-  ])
-    .sort({ _id: -1 })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1))
-    .exec();
+    { $sort: { _id: -1 } },
+    { $skip: pageSize * (page - 1) },
+    { $limit: pageSize },
+  ]);
 
   count = await Product.aggregate([
     { $match: { inStock: true } },
@@ -224,9 +219,7 @@ const updateProduct = asyncHandler(async (req, res) => {
   const updatedProduct = await Product.findByIdAndUpdate(
     req.params.id,
     req.body,
-    {
-      new: true,
-    },
+    { new: true },
   );
   res.json(updatedProduct);
 });
