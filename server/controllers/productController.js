@@ -58,7 +58,7 @@ const getProducts = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
   const { pageNumber, isAdmin } = req.query;
   const page = Number(pageNumber) || 1;
-  const keywordqeury = req.query.keyword
+  const keyword = req.query.keyword
     ? {
         $or: [
           {
@@ -67,15 +67,28 @@ const getProducts = asyncHandler(async (req, res) => {
               $options: 'i',
             },
           },
-          // {
-          //   name: {
-          //     $regex: req.query.keyword,
-          //     $options: 'i',
-          //   },
-          // },
+          {
+            'info.details': {
+              $regex: req.query.keyword,
+              $options: 'i',
+            },
+          },
+          {
+            'artist.name': {
+              $regex: req.query.keyword,
+              $options: 'i',
+            },
+          },
+          {
+            'artist.aka': {
+              $regex: req.query.keyword,
+              $options: 'i',
+            },
+          },
         ],
       }
     : {};
+
   let pageSize;
   let count;
   let products;
@@ -103,26 +116,61 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     }
   }
+
   pageSize = 28;
-  count = await Product.countDocuments({ inStock: true, ...keywordqeury });
-  products = await Product.find(
-    { inStock: true, ...keywordqeury },
+
+  products = await Product.aggregate([
+    { $match: { inStock: true } },
     {
-      artCode: 0,
-      'info.details': 0,
-      'info.createdAt': 0,
-      theme: 0,
-      inStock: 0,
+      $lookup: {
+        from: 'artists',
+        localField: 'artist',
+        foreignField: '_id',
+        as: 'artist',
+      },
     },
-  )
-    .populate('artist', ['name'])
-    // .then(console.log('artist'.name))
+    {
+      $unwind: {
+        path: '$artist',
+      },
+    },
+    { $match: { ...keyword } },
+    {
+      $project: {
+        'artist.code': 0,
+        'artist.record': 0,
+        'artist.thumbnail': 0,
+        'artist.likes': 0,
+        'artist.countOfWorks': 0,
+        'artist.isActive': 0,
+        'artist.joinAt': 0,
+      },
+    },
+  ])
     .sort({ _id: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
     .exec();
 
-  res.json({ products, page, pages: Math.ceil(count / pageSize) });
+  count = await Product.aggregate([
+    { $match: { inStock: true } },
+    {
+      $lookup: {
+        from: 'artists',
+        localField: 'artist',
+        foreignField: '_id',
+        as: 'artist',
+      },
+    },
+    { $match: { ...keyword } },
+    { $count: 'of_products' },
+  ]);
+
+  res.json({
+    products,
+    page,
+    pages: Math.ceil(count[0].of_products / pageSize),
+  });
 });
 
 // @desc   Fetch filtered products
@@ -160,7 +208,7 @@ const getProductsByFilter = asyncHandler(async (req, res) => {
 
   const count = await Product.countDocuments({ ...filter, inStock: true });
   const products = await Product.find({ ...filter, inStock: true }, projection)
-    .populate('artist', ['name'])
+    .populate('artist', ['name', 'aka'])
     .sort({ _id: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1))
