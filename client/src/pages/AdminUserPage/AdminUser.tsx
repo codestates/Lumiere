@@ -89,20 +89,13 @@ const AdminUser = () => {
 
   const resignHandler = () => {
     instance
-      .patch(
-        '/users/',
-        {
-          isClosed: true,
-          lastAccessTime: new Date(),
-        },
-        { params: { userId: clickResign._id } },
-      )
-      .then(() => {
-        alert('탈퇴완료');
+      .delete('/users/profile', { params: { userId: clickResign._id } })
+      .then((res) => {
+        alert(`${res.data.message}`);
         window.location.reload();
       })
       .catch((err) => {
-        alert('이미 탈퇴한 회원이거나 일시적인 오류입니다.');
+        alert(`${err.response.data.message}`);
         window.location.reload();
         console.log(err);
       });

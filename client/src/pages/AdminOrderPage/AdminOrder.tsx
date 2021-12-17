@@ -98,8 +98,8 @@ const AdminOrderList = () => {
   const cancleOrder = (id: string) => {
     instance
       .delete(`/orders/${id}`)
-      .then(() => {
-        alert('취소가 완료되었습니다.');
+      .then((res) => {
+        alert(`${res.data.message}`);
         window.location.reload();
       })
       .catch((err) => {
@@ -112,37 +112,37 @@ const AdminOrderList = () => {
       case '준비중':
         return instance
           .patch(`/orders/${id}`, { status: 1 })
-          .then(() => {
-            alert('배송상태가 준비중으로 변경되었습니다.');
+          .then((res) => {
+            alert(`${res.data.message}`);
             window.location.reload();
           })
           .catch((err) => alert(`${err.response.data.message}`));
       case '배송중':
         return instance
           .patch(`/orders/${id}`, { status: 2 })
-          .then(() => {
-            alert('배송상태가 준비중으로 변경되었습니다.');
+          .then((res) => {
+            alert(`${res.data.message}`);
             window.location.reload();
           })
           .catch((err) => alert(`${err.response.data.message}`));
       case '완료':
         return instance
           .patch(`/orders/${id}`, { status: 3 })
-          .then(() => {
-            alert('배송상태가 준비중으로 변경되었습니다.');
+          .then((res) => {
+            alert(`${res.data.message}`);
             window.location.reload();
           })
           .catch((err) => alert(`${err.response.data.message}`));
       case '반품':
         return instance
           .patch(`/orders/${id}`, { status: 4 })
-          .then(() => {
-            alert('배송상태가 반품 요청중으로 변경되었습니다.');
+          .then((res) => {
+            alert(`${res.data.message}`);
             window.location.reload();
           })
           .catch((err) => alert(`${err.response.data.message}`));
       default:
-        return alert('변경실패');
+        return alert('변경실패, 진행 단계가 알맞지 않습니다');
     }
   };
 

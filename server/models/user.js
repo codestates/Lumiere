@@ -24,14 +24,20 @@ const userSchema = mongoose.Schema(
     google: {
       uuid: { type: String },
       email: { type: String },
+      accessToken: { type: String },
+      refreshToken: { type: String },
     },
     naver: {
       uuid: { type: String },
       email: { type: String },
+      accessToken: { type: String },
+      refreshToken: { type: String },
     },
     kakao: {
       uuid: { type: Number },
       email: { type: String },
+      accessToken: { type: String },
+      refreshToken: { type: String },
     },
     name: {
       type: String,
