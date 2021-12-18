@@ -1,9 +1,10 @@
 ---
-name: '[KPT 회고 템플릿]'
-about: ' Keep, Problem, Try 방식으로 기록하는 프로젝트 회고 템플릿입니다.'
-title: '[KPT 회고] N주차 0요일'
+name: "[KPT 회고 템플릿]"
+about: " Keep, Problem, Try 방식으로 기록하는 프로젝트 회고 템플릿입니다."
+title: "[KPT 회고] N주차 0요일"
 labels: KPT
 assignees: ''
+
 ---
 
 > Keep, Problem 항목에 대해서 매주 정기적인 날에 회고를 진행하여 기록하고, 그것을 기반으로 Try (Action Items) 이슈를 생성해주세요.
