@@ -1,5 +1,5 @@
 /* eslint no-underscore-dangle: 0 */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
 import Header from 'components/Header/Header';
@@ -11,6 +11,7 @@ import FilteringTab from 'components/FilteringTab/FilteringTab';
 import PageNation from 'components/PageNation/PageNation';
 import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import { ArtListMapping } from 'components/ArtListMapping/ArtListMapping';
+import { tabTypes } from 'components/FilteringTab/dummy';
 import { AdminProductsType } from '../../util/type';
 import { ArtListContainer, ArtListWrap } from './styled';
 import { LoadingArtList } from './Loading';
@@ -21,6 +22,9 @@ const ArtList = () => {
   const [curPage, setCurPage] = useState<number>(1);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentMenu, setCurrentMenu] = useState(-1);
+  const [lastTabState, setLastTabState] = useState(-1);
+  const [getTypes, setGetTypes] = useState(tabTypes[0]);
   const [artList, setArtList] = useState<AdminProductsType>({
     products: [
       {
@@ -52,7 +56,7 @@ const ArtList = () => {
         _id: '',
       },
     ],
-    page: 0,
+    page: 1,
     pages: 0,
   });
   const breakpointColumnsObj = {
@@ -60,29 +64,71 @@ const ArtList = () => {
     1100: 3,
     767: 2,
   };
+  useEffect(() => {
+    if (lastTabState !== currentMenu) {
+      setCurPage(1);
+    }
+  }, [lastTabState]);
 
   // `/products?keyword=${keyword}&pageNumber=${pageNumber}` 요청 API 주소
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
     setIsLoading(true);
-    instance
-      .get<AdminProductsType>('/products', { params: { pageNumber: page } })
-      .then((res) => {
-        setArtList(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        if (err.response.status === 401) {
-          alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
-          localStorage.removeItem('lumiereUserInfo');
-          setIsLogin(false);
-          window.location.assign('/signin');
-        } else window.location.assign('/error');
-      });
+    if (currentMenu === -1) {
+      console.log(1);
+      instance
+        .get<AdminProductsType>('/products', { params: { pageNumber: page } })
+        .then((res) => {
+          setArtList(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.status === 401) {
+            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+            localStorage.removeItem('lumiereUserInfo');
+            setIsLogin(false);
+            window.location.assign('/signin');
+          } else window.location.assign('/error');
+        });
+    } else {
+      setIsLoading(false);
+    }
   };
-
+  useEffect(() => {
+    if (currentMenu !== -1) {
+      console.log(2);
+      setIsLoading(true);
+      instance
+        .get('/products/filter', {
+          params: {
+            pageNumber: curPage,
+            theme: getTypes.theme,
+            sizeMin: getTypes.sizeMin,
+            sizeMax: getTypes.sizeMax,
+            priceMin: getTypes.priceMin,
+            priceMax: getTypes.priceMax,
+          },
+        })
+        .then((res) => {
+          setArtList(res.data);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          if (err.response.status === 401 && isLogin) {
+            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
+            localStorage.removeItem('lumiereUserInfo');
+            setIsLogin(false);
+            window.location.assign('/signin');
+          } else window.location.assign('/error');
+        });
+    }
+  }, [curPage]);
   const openLoginModalHandler = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
+  };
+
+  const setLastTabStateHandler = (tabNumber: number) => {
+    setLastTabState(tabNumber);
   };
 
   const filteringHandler = (type: {
@@ -93,10 +139,11 @@ const ArtList = () => {
     priceMax?: number;
   }) => {
     if (!type) {
+      console.log(3);
       setIsLoading(true);
       instance
         .get<AdminProductsType>('/products', {
-          params: { pageNumber: curPage },
+          params: { pageNumber: 1 },
         })
         .then((res) => {
           setArtList(res.data);
@@ -111,7 +158,7 @@ const ArtList = () => {
           } else window.location.assign('/error');
         });
     } else {
-      setCurPage(1);
+      console.log(4);
       setIsLoading(true);
       instance
         .get('/products/filter', {
@@ -139,10 +186,19 @@ const ArtList = () => {
     }
   };
 
+  const setCurrentMenuHandler = (tabNumber: number) => {
+    setCurrentMenu(tabNumber);
+  };
   return (
     <ArtListContainer>
       <Header />
-      <FilteringTab filteringHandler={filteringHandler} />
+      <FilteringTab
+        filteringHandler={filteringHandler}
+        setCurrentMenuHandler={setCurrentMenuHandler}
+        currentMenu={currentMenu}
+        setGetTypes={setGetTypes}
+        setLastTabStateHandler={setLastTabStateHandler}
+      />
       <ArtListWrap>
         <Masonry
           breakpointCols={breakpointColumnsObj}
