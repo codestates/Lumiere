@@ -175,6 +175,13 @@ export const ProductDlWrap = styled.dl`
       font-weight: 800;
       font-size: 1.15rem;
     }
+
+    .loading_dd {
+      position: absolute;
+      right: 5rem;
+      font-weight: 800;
+      font-size: 1.15rem;
+    }
   }
 `;
 

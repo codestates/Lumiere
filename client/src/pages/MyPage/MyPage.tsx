@@ -31,7 +31,7 @@ const MyPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const location = useLocation();
-  
+
   useEffect(() => {
     if (location.state === 'ZzimProducts') setCurrentTab(1);
   }, []);
