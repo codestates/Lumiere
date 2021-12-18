@@ -67,13 +67,10 @@ const MyPage = () => {
 
   useEffect(() => {
     instance.get('/orders/mine').then((res) => {
-      console.log(res.data);
       setUserData(res.data);
     });
   }, []);
-  // console.log(userData.map((el) => el.result.status));
-  console.log(userData.orders.find((el) => el.result.status === 4));
-  // console.log(userData.map((el) => el.order));
+  console.log(userData.status);
 
   const selectTabHandler = (id: number) => {
     if (pwdMatch) {
@@ -137,30 +134,22 @@ const MyPage = () => {
           <h1>마이페이지</h1>
           <StatusList>
             <li>
-              <div>
-                {[userData.orders.find((el) => el.result.status === 0)].length}
-              </div>
+              <div>{userData.status?.paid || 0}</div>
               <span>결제완료</span>
             </li>
             <MdOutlineArrowForwardIos />
             <li>
-              <div>
-                {[userData.orders.find((el) => el.result.status === 1)].length}
-              </div>
+              <div>{userData.status?.ready || 0}</div>
               <span>상품/배송준비중</span>
             </li>
             <MdOutlineArrowForwardIos />
             <li>
-              <div>
-                {[userData.orders.find((el) => el.result.status === 2)].length}
-              </div>
+              <div>{userData.status?.coming || 0}</div>
               <span>배송중</span>
             </li>
             <MdOutlineArrowForwardIos />
             <li>
-              <div>
-                {[userData.orders.find((el) => el.result.status === 5)].length}
-              </div>
+              <div>{userData.status?.done || 0}</div>
               <span>배송완료</span>
             </li>
           </StatusList>

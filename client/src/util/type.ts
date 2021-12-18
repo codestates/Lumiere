@@ -346,6 +346,12 @@ export interface MypageOrder {
   ];
   page: number;
   pages: number;
+  status?: {
+    paid?: number;
+    ready?: number;
+    coming?: number;
+    done?: number;
+  };
 }
 
 export interface ZzimArtistsType {
