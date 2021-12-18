@@ -76,7 +76,7 @@ const productSchema = mongoose.Schema(
       default: true,
     },
     updatedAt: {
-      // 상품 등록 일
+      // 상품 등록일
       type: Date,
       required: true,
       default: () => Date.now() + 9 * 60 * 60 * 1000,

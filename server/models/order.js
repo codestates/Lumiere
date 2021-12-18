@@ -3,13 +3,11 @@ import mongoose from 'mongoose';
 const orderSchema = mongoose.Schema(
   {
     user: {
-      // 결제자
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'User',
     },
     orderItems: [
-      // 주문 상품 내역
       {
         image: { type: String, required: true },
         title: { type: String, required: true },
@@ -17,7 +15,6 @@ const orderSchema = mongoose.Schema(
         size: { type: String, required: true }, // 52x73cm(20호)
         price: { type: Number, required: true },
         product: {
-          // 구매한 상품이 어떤 상품인지 파악해야하니 연결한다.
           type: mongoose.Schema.Types.ObjectId,
           required: true,
           ref: 'Product',
@@ -38,8 +35,8 @@ const orderSchema = mongoose.Schema(
     },
     deliveryInfo: {
       address: { type: String, required: true },
-      detailedAddress: { type: String, required: true }, // 상세 주소
-      receiver: { type: String, required: true }, // 김로또
+      detailedAddress: { type: String, required: true },
+      receiver: { type: String, required: true },
       contactNum: { type: String, required: true }, // 010-7777-7777
     },
     deliveryDetails: {

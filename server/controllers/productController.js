@@ -12,7 +12,6 @@ const { ObjectId } = mongoose.Types;
 // @route  POST /api/products
 // @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const {
     artist,
     artCode,
@@ -257,7 +256,6 @@ const getProductById = asyncHandler(async (req, res) => {
       new: true,
     },
   ).populate('artist', ['name', 'code', 'aka', 'record']);
-  // console.log(productDetail);
 
   if (!productDetail) {
     res.status(404).json({ message: '해당 상품이 존재하지 않습니다' });

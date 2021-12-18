@@ -221,7 +221,6 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
 
   if (!order) {
-    console.log(order);
     res.status(404).json({ message: '해당 주문내역이 존재하지 않습니다' });
     return;
   }
@@ -318,7 +317,31 @@ const getMyOrders = asyncHandler(async (req, res) => {
     .skip(pageSize * (page - 1))
     .exec();
 
-  res.json({ orders, page, pages: Math.ceil(count / pageSize) });
+  const status = await Order.aggregate([
+    {
+      $facet: {
+        paid: [{ $match: { 'result.status': { $eq: 0 } } }, { $count: 'paid' }],
+        ready: [{ $match: { 'result.status': 1 } }, { $count: 'ready' }],
+        coming: [{ $match: { 'result.status': 2 } }, { $count: 'coming' }],
+        done: [{ $match: { 'result.status': 3 } }, { $count: 'done' }],
+      },
+    },
+    {
+      $project: {
+        paid: { $arrayElemAt: ['$paid.paid', 0] },
+        ready: { $arrayElemAt: ['$ready.ready', 0] },
+        coming: { $arrayElemAt: ['$coming.coming', 0] },
+        done: { $arrayElemAt: ['$done.done', 0] },
+      },
+    },
+  ]);
+
+  res.json({
+    orders,
+    status: status[0],
+    page,
+    pages: Math.ceil(count / pageSize),
+  });
 });
 
 // @desc    Get latest order of user
