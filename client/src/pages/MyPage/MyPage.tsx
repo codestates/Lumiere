@@ -1,6 +1,7 @@
 /* eslint no-underscore-dangle: 0 */
 import { useState, useEffect } from 'react';
 import instance from 'util/axios';
+import { useLocation } from 'react-router';
 import Header from 'components/Header/Header';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
@@ -35,8 +36,10 @@ const MyPage = () => {
   const [oldPwd, setOldPwd] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
+  const location = useLocation();
+
   useEffect(() => {
-    // axios 요청
+    if (location.state === 'ZzimProducts') setCurrentTab(1);
   }, []);
 
   const selectTabHandler = (id: number) => {
@@ -44,6 +47,7 @@ const MyPage = () => {
       setOldPwd('');
       setPwdMatch(false);
     }
+    location.state = '';
     setCurrentTab(id);
   };
 
@@ -136,7 +140,13 @@ const MyPage = () => {
           </TabContainer>
         </StatusWrap>
         <ContentContainer>
-          <ContentWrap>{tabHandler()}</ContentWrap>
+          <ContentWrap>
+            {location.state === 'ZzimProducts' ? (
+              <ZzimProducts />
+            ) : (
+              tabHandler()
+            )}
+          </ContentWrap>
         </ContentContainer>
       </MyPageWrap>
       <QuickBtns isLoading={isLoading} />
