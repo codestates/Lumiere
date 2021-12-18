@@ -24,6 +24,9 @@ const Cart = () => {
   // CheckBox 상태 관리
   const [checkBoxList, setCheckBoxList] = useState<string[]>([]);
 
+  // CartList 로딩 상태관리
+  const [isLoading, setIsLoading] = useState(true);
+
   // 작품 상태
   const [cartProductState, setCartProductState] = useState<
     Array<OrderProducts>
@@ -47,6 +50,7 @@ const Cart = () => {
 
   const [totalPriceState, setTotalPriceState] = useState<number>(0);
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
+
   // 로컬스토리지 갱신을 위한 useEffect
   useEffect(() => {
     if (!isLogin) {
@@ -62,6 +66,9 @@ const Cart = () => {
       .get('/products/cart-items', { params: { productId: cartListState } })
       .then((res) => {
         setCartProductState(res.data);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 200);
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -104,6 +111,7 @@ const Cart = () => {
             cartProductState={cartProductState}
             checkBoxList={checkBoxList}
             setCheckBoxList={setCheckBoxList}
+            isLoading={isLoading}
           />
         </CartContentLeftWrap>
         <CartPay

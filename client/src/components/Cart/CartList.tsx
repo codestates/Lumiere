@@ -1,10 +1,12 @@
-/* eslint no-underscore-dangle: 0 */
+/* eslint-disable */
 import CartDeleteModal from 'components/Modal/CartDeleteModal';
 import { EmptyImageWrap } from 'components/ZzimArtists/styled';
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import { LoadingDummy } from './dummy';
 import { useComma } from 'util/functions';
 import { OrderProducts } from 'util/type';
+import { CartListLoading } from './Loading';
 import {
   ProductContentWrap,
   ProductContent,
@@ -20,12 +22,14 @@ type CartProductsProps = {
   cartProductState: OrderProducts[];
   checkBoxList: string[];
   setCheckBoxList: (check: string[]) => void;
+  isLoading: boolean;
 };
 
 export const CartList = ({
   cartProductState,
   checkBoxList,
   setCheckBoxList,
+  isLoading,
 }: CartProductsProps) => {
   const [isModal, setIsModal] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | undefined>('');
@@ -67,19 +71,11 @@ export const CartList = ({
           deleteTarget={deleteTarget}
         />
       )}
-      {cartProductState.length === 0 ? (
-        <NotlistImgWrap>
-          <EmptyImageWrap>
-            <img
-              src={`/images/EmptyZzim/hanging-cat-${
-                Math.floor(Math.random() * 2) + 1
-              }.png`}
-              alt="emptyCat"
-            />
-            <div>아직 아무것도 없네요!</div>
-          </EmptyImageWrap>
-        </NotlistImgWrap>
-      ) : (
+      {isLoading ? (
+        LoadingDummy.map((el) => {
+          return <CartListLoading key={el.id} />;
+        })
+      ) : cartProductState[0] !== undefined ? (
         cartProductState.map((el) => {
           return (
             <ProductContent key={el._id}>
@@ -114,6 +110,18 @@ export const CartList = ({
             </ProductContent>
           );
         })
+      ) : (
+        <NotlistImgWrap>
+          <EmptyImageWrap>
+            <img
+              src={`/images/EmptyZzim/hanging-cat-${
+                Math.floor(Math.random() * 2) + 1
+              }.png`}
+              alt="emptyCat"
+            />
+            <div>아직 아무것도 없네요!</div>
+          </EmptyImageWrap>
+        </NotlistImgWrap>
       )}
     </ProductContentWrap>
   );
