@@ -44,7 +44,7 @@ const MyPage = () => {
       return <OrderHistory isLoading={isLoading} setIsLoading={setIsLoading} />;
     }
     if (currentTab === 1) {
-      return <ZzimProducts />;
+      return <ZzimProducts isLoading={isLoading} setIsLoading={setIsLoading} />;
     }
     if (currentTab === 2) {
       return <ZzimArtists />;
