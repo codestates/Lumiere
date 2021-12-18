@@ -2,11 +2,16 @@ import MypageOrderMenu from './MyPageOrderMenu';
 import MypageOrderList from './MyPageOrderList';
 import { OrderHistoryContainer } from './styled';
 
-const OrderHistory = () => {
+interface Props {
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const OrderHistory = ({ isLoading, setIsLoading }: Props) => {
   return (
     <OrderHistoryContainer>
       <MypageOrderMenu />
-      <MypageOrderList />
+      <MypageOrderList isLoading={isLoading} setIsLoading={setIsLoading} />
     </OrderHistoryContainer>
   );
 };

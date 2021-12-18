@@ -1,9 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
-import { useState, useEffect } from 'react';
-import instance from 'util/axios';
+import { useState } from 'react';
 import Header from 'components/Header/Header';
-import { useRecoilState } from 'recoil';
-import { IsSigninState } from 'States/IsLoginState';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import OrderHistory from 'components/OrderHistory/OrderHistory';
@@ -13,7 +10,6 @@ import VerifyPassword from 'components/VerifyPassword/VerifyPassword';
 import ChangePassword from 'components/ChangePassword/ChangePassword';
 import UserLeave from 'components/UserLeave/UserLeave';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
-import { CartMenu } from 'components/Cart/CartMenu';
 import { tabMenus } from './dummy';
 import {
   MyPageContainer,
@@ -25,19 +21,13 @@ import {
   TabContainer,
   TabList,
   TabMenu,
-  MenuListWrap,
 } from './styled';
 
 const MyPage = () => {
-  const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [currentTab, setCurrentTab] = useState(0);
   const [pwdMatch, setPwdMatch] = useState(false);
   const [oldPwd, setOldPwd] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // axios 요청
-  }, []);
 
   const selectTabHandler = (id: number) => {
     if (pwdMatch) {
@@ -51,7 +41,7 @@ const MyPage = () => {
     const userInfo = localStorage.getItem('lumiereUserInfo');
 
     if (currentTab === 0) {
-      return <OrderHistory />;
+      return <OrderHistory isLoading={isLoading} setIsLoading={setIsLoading} />;
     }
     if (currentTab === 1) {
       return <ZzimProducts />;
