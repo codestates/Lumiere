@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { IoMdClose } from 'react-icons/io';
 import { ModalBackdrop, ModalWrap, CloseBtn } from './styled';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 type Props = {
   clickModalHandler: () => void;
@@ -11,7 +11,7 @@ const ContentWrap = styled.div`
   height: 50vh;
   overflow: scroll;
   border-bottom: 1px solid black;
-
+  line-height: 1.3;
   overflow-y: auto;
 `;
 
