@@ -22,6 +22,7 @@ import {
   ButtonWrap,
   NumberOfWorksWrap,
 } from './styled';
+import { LoadingArtistDetail } from './Loading';
 
 const ArtistDetail = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
@@ -36,6 +37,7 @@ const ArtistDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     // axios 요청
     const userInfo = localStorage.getItem('lumiereUserInfo');
     instance
@@ -49,6 +51,7 @@ const ArtistDetail = () => {
             (el) => el === JSON.parse(userInfo || '{}')._id,
           ),
         );
+        setIsLoading(false);
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -101,73 +104,79 @@ const ArtistDetail = () => {
   return (
     <ArtistDeatilContainer>
       <Header />
-      <HeadWrap>
-        <HtagWrap>
-          <div className="htags">
-            <div>
-              <h1>{artistInfo[0] && artistInfo[0].artistDetail.name}</h1>
-            </div>
-            <div>
-              <h2>{artistInfo[0] && artistInfo[0].artistDetail.aka}</h2>
-            </div>
-          </div>
-          <div className="buttonswrap">
-            {clickToShare && (
-              <div>
-                <ShareBox clickToShareHandler={clickToShareHandler} />
+      {isLoading ? (
+        <LoadingArtistDetail />
+      ) : (
+        <>
+          <HeadWrap>
+            <HtagWrap>
+              <div className="htags">
+                <div>
+                  <h1>{artistInfo[0] && artistInfo[0].artistDetail.name}</h1>
+                </div>
+                <div>
+                  <h2>{artistInfo[0] && artistInfo[0].artistDetail.aka}</h2>
+                </div>
               </div>
-            )}
-            <FiShare2 onClick={clickToShareHandler} />
-            {isLiked ? (
-              <AiFillHeart onClick={likedHandler} className="likeit" />
-            ) : (
-              <AiOutlineHeart onClick={likedHandler} />
-            )}
-          </div>
-        </HtagWrap>
-        <h2>작가의 말</h2>
-        <ArtistRecordWrap>
-          {artistInfo[0] && artistInfo[0].artistDetail.record}
-        </ArtistRecordWrap>
-      </HeadWrap>
-      <ButtonWrap>
-        <div className="circle" />
-        <div className="soldout">판매완료</div>
-        <div className="filter">
-          <label htmlFor="solding">
-            <input
-              type="checkbox"
-              id="solding"
-              onClick={clickCheckboxHandler}
-            />
-          </label>
-          판매 중인 작품 우선 보기
-        </div>
-      </ButtonWrap>
-      <NumberOfWorksWrap>
-        {artistInfo[0] && artistInfo[0].products.length}개의 작품
-      </NumberOfWorksWrap>
-      <ArtListWrap>
-        {artistInfo[0] &&
-          (isClickCheckbox ? productFilter : artistInfo[0].products).map(
-            (art, idx) => {
-              const { _id, inStock, image } = art;
-              return (
-                <ArtistWrap key={_id} className="artistWrapBorder">
-                  <Link to={`/artdetail/${_id}`} state={{ id: _id }}>
-                    <div className="imageDiv">
-                      <img
-                        src={image}
-                        alt={`최신작 ${idx}`}
-                        className={inStock ? '' : 'notInStock'}
-                      />
-                    </div>
-                  </Link>
-                </ArtistWrap>
-              );
-            },
-          )}
-      </ArtListWrap>
+              <div className="buttonswrap">
+                {clickToShare && (
+                  <div>
+                    <ShareBox clickToShareHandler={clickToShareHandler} />
+                  </div>
+                )}
+                <FiShare2 onClick={clickToShareHandler} />
+                {isLiked ? (
+                  <AiFillHeart onClick={likedHandler} className="likeit" />
+                ) : (
+                  <AiOutlineHeart onClick={likedHandler} />
+                )}
+              </div>
+            </HtagWrap>
+            <h2>작가의 말</h2>
+            <ArtistRecordWrap>
+              {artistInfo[0] && artistInfo[0].artistDetail.record}
+            </ArtistRecordWrap>
+          </HeadWrap>
+          <ButtonWrap>
+            <div className="circle" />
+            <div className="soldout">판매완료</div>
+            <div className="filter">
+              <label htmlFor="solding">
+                <input
+                  type="checkbox"
+                  id="solding"
+                  onClick={clickCheckboxHandler}
+                />
+              </label>
+              판매 중인 작품 우선 보기
+            </div>
+          </ButtonWrap>
+          <NumberOfWorksWrap>
+            {artistInfo[0] && artistInfo[0].products.length}개의 작품
+          </NumberOfWorksWrap>
+          <ArtListWrap>
+            {artistInfo[0] &&
+              (isClickCheckbox ? productFilter : artistInfo[0].products).map(
+                (art, idx) => {
+                  const { _id, inStock, image } = art;
+                  return (
+                    <ArtistWrap key={_id}>
+                      <Link to={`/artdetail/${_id}`} state={{ id: _id }}>
+                        <div>
+                          <img
+                            src={image}
+                            alt={`최신작 ${idx}`}
+                            className={inStock ? '' : 'notInStock'}
+                          />
+                        </div>
+                      </Link>
+                    </ArtistWrap>
+                  );
+                },
+              )}
+          </ArtListWrap>
+        </>
+      )}
       <QuickBtns isLoading={isLoading} />
       <Footer />
       {/* Modal */}

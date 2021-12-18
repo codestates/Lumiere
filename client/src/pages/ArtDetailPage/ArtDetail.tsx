@@ -27,6 +27,7 @@ import {
   SuggestionSection,
   SuggestionImgWrap,
 } from './styled';
+import { LoadingArtDetail } from './Loading';
 
 const ArtDetail = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
@@ -43,6 +44,7 @@ const ArtDetail = () => {
   const currentUrl = window.location.href;
 
   useEffect(() => {
+    setIsLoading(true);
     const userInfo = localStorage.getItem('lumiereUserInfo');
     instance
       .get<ProductDetail>(`/products/${currentUrl.split('artdetail/')[1]}`)
@@ -53,6 +55,7 @@ const ArtDetail = () => {
             (el) => el === JSON.parse(userInfo || '{}')._id,
           ),
         );
+        setIsLoading(false);
       })
       .catch((err) => {
         if (err.response.status === 401) {
@@ -158,193 +161,202 @@ const ArtDetail = () => {
   return (
     <ArtDetailContainer>
       <Header />
-      {productDetail[0] && (
-        <ArtDetailWrap>
-          <DetailInfoWrap>
-            <DetailImgBox>
-              <img
-                src={productDetail[0].productDetail.image}
-                alt={productDetail[0].productDetail.title}
-              />
-            </DetailImgBox>
-            <DetailInfoBox>
-              <div>
-                <h4>{productDetail[0].productDetail.title}</h4>
+      {isLoading ? (
+        <LoadingArtDetail />
+      ) : (
+        productDetail[0] && (
+          <ArtDetailWrap>
+            <DetailInfoWrap>
+              <DetailImgBox>
+                <img
+                  src={productDetail[0].productDetail.image}
+                  alt={productDetail[0].productDetail.title}
+                />
+              </DetailImgBox>
+              <DetailInfoBox>
                 <div>
-                  {clickToShare && (
+                  <h4>{productDetail[0].productDetail.title}</h4>
+                  <div>
+                    {clickToShare && (
+                      <div>
+                        <ShareBox clickToShareHandler={clickToShareHandler} />
+                      </div>
+                    )}
+                    <FiShare2 onClick={clickToShareHandler} />
+                    {isLiked ? (
+                      <AiFillHeart onClick={likedHandler} className="likeit" />
+                    ) : (
+                      <AiOutlineHeart onClick={likedHandler} />
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <span>작가</span>
+                  <div>
+                    <Link
+                      to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
+                    >
+                      {productDetail[0].productDetail.artist.name}(
+                      {productDetail[0].productDetail.artist.aka})
+                      <MdOutlineArrowForwardIos />
+                    </Link>
+                  </div>
+                </div>
+                <div>
+                  <span>작품정보</span>
+                  <div>
+                    {productDetail[0].productDetail.info.details}
+                    <br />
+                    {productDetail[0].productDetail.info.size}(
+                    {productDetail[0].productDetail.info.canvas}호),
+                    {productDetail[0].productDetail.info.createdAt}
+                  </div>
+                </div>
+                <div>
+                  <span>작품코드</span>
+                  <div>
+                    A{productDetail[0].productDetail.artist.code}-
+                    {productDetail[0].productDetail.artCode}
+                  </div>
+                </div>
+                <div>
+                  <span>작품금액</span>
+                  {productDetail[0].productDetail.inStock ? (
                     <div>
-                      <ShareBox clickToShareHandler={clickToShareHandler} />
+                      {useComma(productDetail[0].productDetail.price)}원
                     </div>
-                  )}
-                  <FiShare2 onClick={clickToShareHandler} />
-                  {isLiked ? (
-                    <AiFillHeart onClick={likedHandler} className="likeit" />
                   ) : (
-                    <AiOutlineHeart onClick={likedHandler} />
+                    <div>품절</div>
                   )}
                 </div>
-              </div>
-              <div>
-                <span>작가</span>
-                <div>
-                  <Link
-                    to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
+                <OrderBtnBox>
+                  <div
+                    onClick={() =>
+                      addToCartHandler(productDetail[0].productDetail._id)
+                    }
+                    onKeyPress={() =>
+                      addToCartHandler(productDetail[0].productDetail._id)
+                    }
+                    className={
+                      productDetail[0].productDetail.inStock
+                        ? 'addShoppingBag'
+                        : 'buttonDisplayNone'
+                    }
+                    role="button"
+                    tabIndex={0}
                   >
-                    {productDetail[0].productDetail.artist.name}(
-                    {productDetail[0].productDetail.artist.aka})
-                    <MdOutlineArrowForwardIos />
+                    아트 쇼핑백
+                  </div>
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    className={
+                      productDetail[0].productDetail.inStock
+                        ? 'primary_button'
+                        : 'buttonDisplayNone '
+                    }
+                    onClick={() =>
+                      purchaseHandler(productDetail[0].productDetail._id)
+                    }
+                    onKeyDown={() =>
+                      purchaseHandler(productDetail[0].productDetail._id)
+                    }
+                  >
+                    바로구매
+                  </div>
+                  <div
+                    className={
+                      productDetail[0].productDetail.inStock
+                        ? 'buttonDisplayNone'
+                        : 'primary_button cursorNone'
+                    }
+                  >
+                    품절 되었습니다
+                  </div>
+                  <Link to="#top" onClick={clickToShareHandler}>
+                    {clickToShare && (
+                      <div>
+                        <ShareBox clickToShareHandler={clickToShareHandler} />
+                      </div>
+                    )}
+                    <FiShare2 />
                   </Link>
-                </div>
-              </div>
-              <div>
-                <span>작품정보</span>
-                <div>
-                  {productDetail[0].productDetail.info.details}
-                  <br />
-                  {productDetail[0].productDetail.info.size}(
-                  {productDetail[0].productDetail.info.canvas}호),
-                  {productDetail[0].productDetail.info.createdAt}
-                </div>
-              </div>
-              <div>
-                <span>작품코드</span>
-                <div>
-                  A{productDetail[0].productDetail.artist.code}-
-                  {productDetail[0].productDetail.artCode}
-                </div>
-              </div>
-              <div>
-                <span>작품금액</span>
-                {productDetail[0].productDetail.inStock ? (
-                  <div>{useComma(productDetail[0].productDetail.price)}원</div>
-                ) : (
-                  <div>품절</div>
-                )}
-              </div>
-              <OrderBtnBox>
-                <div
-                  onClick={() =>
-                    addToCartHandler(productDetail[0].productDetail._id)
-                  }
-                  onKeyPress={() =>
-                    addToCartHandler(productDetail[0].productDetail._id)
-                  }
-                  className={
-                    productDetail[0].productDetail.inStock
-                      ? 'addShoppingBag'
-                      : 'buttonDisplayNone'
-                  }
-                  role="button"
-                  tabIndex={0}
-                >
-                  아트 쇼핑백
-                </div>
-                <div
-                  role="button"
-                  tabIndex={0}
-                  className={
-                    productDetail[0].productDetail.inStock
-                      ? 'primary_button'
-                      : 'buttonDisplayNone '
-                  }
-                  onClick={() =>
-                    purchaseHandler(productDetail[0].productDetail._id)
-                  }
-                  onKeyDown={() =>
-                    purchaseHandler(productDetail[0].productDetail._id)
-                  }
-                >
-                  바로구매
-                </div>
-                <div
-                  className={
-                    productDetail[0].productDetail.inStock
-                      ? 'buttonDisplayNone'
-                      : 'primary_button cursorNone'
-                  }
-                >
-                  품절 되었습니다
-                </div>
-                <Link to="#top" onClick={clickToShareHandler}>
-                  {clickToShare && (
-                    <div>
-                      <ShareBox clickToShareHandler={clickToShareHandler} />
-                    </div>
-                  )}
-                  <FiShare2 />
-                </Link>
-                <Link to="#top">
-                  {isLiked ? (
-                    <AiFillHeart onClick={likedHandler} className="likeit" />
-                  ) : (
-                    <AiOutlineHeart onClick={likedHandler} />
-                  )}
-                </Link>
-              </OrderBtnBox>
-            </DetailInfoBox>
-            {/* 서비스소개 섹션 */}
-            <IntroductionSection>
-              <Introduction
-                image={productDetail[0].productDetail.image}
-                title={productDetail[0].productDetail.title}
-              />
-            </IntroductionSection>
-          </DetailInfoWrap>
+                  <Link to="#top">
+                    {isLiked ? (
+                      <AiFillHeart onClick={likedHandler} className="likeit" />
+                    ) : (
+                      <AiOutlineHeart onClick={likedHandler} />
+                    )}
+                  </Link>
+                </OrderBtnBox>
+              </DetailInfoBox>
+              {/* 서비스소개 섹션 */}
+              <IntroductionSection>
+                <Introduction
+                  image={productDetail[0].productDetail.image}
+                  title={productDetail[0].productDetail.title}
+                />
+              </IntroductionSection>
+            </DetailInfoWrap>
 
-          <SuggestionSection>
-            <h2>이 작가의 다른 작품</h2>
-            <Link
-              to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
-            >
-              더보기
-              <MdOutlineArrowForwardIos />
-            </Link>
-            <SuggestionImgWrap>
-              {productDetail[0].productsByArtist.map((product, idx) => {
-                return (
-                  <div
-                    key={product._id}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() =>
-                      window.location.assign(`/artdetail/${product._id}`)
-                    }
-                    onKeyDown={() =>
-                      window.location.assign(`/artdetail/${product._id}`)
-                    }
-                  >
-                    <img src={product.image} alt={`작가의 다른 작품 ${idx}`} />
-                  </div>
-                );
-              })}
-            </SuggestionImgWrap>
-          </SuggestionSection>
-          <SuggestionSection>
-            <h2>Lumiere의 추천 작품</h2>
-            <SuggestionImgWrap>
-              {productDetail[0].productsByRandom.map((product, idx) => {
-                return (
-                  <div
-                    key={product._id}
-                    role="button"
-                    tabIndex={0}
-                    onClick={() =>
-                      window.location.assign(`/artdetail/${product._id}`)
-                    }
-                    onKeyDown={() =>
-                      window.location.assign(`/artdetail/${product._id}`)
-                    }
-                  >
-                    <img
-                      src={product.image}
-                      alt={`Lumiere의 추천 작품 ${idx}`}
-                    />
-                  </div>
-                );
-              })}
-            </SuggestionImgWrap>
-          </SuggestionSection>
-        </ArtDetailWrap>
+            <SuggestionSection>
+              <h2>이 작가의 다른 작품</h2>
+              <Link
+                to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
+              >
+                더보기
+                <MdOutlineArrowForwardIos />
+              </Link>
+              <SuggestionImgWrap>
+                {productDetail[0].productsByArtist.map((product, idx) => {
+                  return (
+                    <div
+                      key={product._id}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        window.location.assign(`/artdetail/${product._id}`)
+                      }
+                      onKeyDown={() =>
+                        window.location.assign(`/artdetail/${product._id}`)
+                      }
+                    >
+                      <img
+                        src={product.image}
+                        alt={`작가의 다른 작품 ${idx}`}
+                      />
+                    </div>
+                  );
+                })}
+              </SuggestionImgWrap>
+            </SuggestionSection>
+            <SuggestionSection>
+              <h2>Lumiere의 추천 작품</h2>
+              <SuggestionImgWrap>
+                {productDetail[0].productsByRandom.map((product, idx) => {
+                  return (
+                    <div
+                      key={product._id}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        window.location.assign(`/artdetail/${product._id}`)
+                      }
+                      onKeyDown={() =>
+                        window.location.assign(`/artdetail/${product._id}`)
+                      }
+                    >
+                      <img
+                        src={product.image}
+                        alt={`Lumiere의 추천 작품 ${idx}`}
+                      />
+                    </div>
+                  );
+                })}
+              </SuggestionImgWrap>
+            </SuggestionSection>
+          </ArtDetailWrap>
+        )
       )}
       <QuickBtns isLoading={isLoading} />
       <Footer />

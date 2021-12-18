@@ -15,27 +15,22 @@ export const ArtListWrap = styled.div`
   padding-bottom: 3rem;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-
-  @media screen and (min-width: 768px) {
-    justify-content: space-between;
-  }
+  justify-content: flex-start;
 `;
 
 export const ArtistWrap = styled.div`
-  border-radius: 0.2rem;
-  overflow: hidden;
-  margin-top: 1%;
   width: 33%;
-  &.artistWrapBorder {
-    background-clip: padding-box;
-    border: 1px solid #dfdfdf;
-  }
-  .imageDiv {
-    height: 100%;
+  padding: 0.2rem;
+  background-clip: padding-box;
+  overflow: hidden;
+
+  > a > div {
     position: relative;
     width: 100%;
+    height: 100%;
     padding-bottom: 100%;
+    border: 1px solid #dfdfdf;
+    border-radius: 0.2rem;
     overflow: hidden;
   }
   .notInStock {

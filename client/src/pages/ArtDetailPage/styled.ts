@@ -146,7 +146,8 @@ export const OrderBtnBox = styled.div`
   .addShoppingBag {
     cursor: pointer;
   }
-  .buttonDisplayNone {
+  .buttonDisplayNone,
+  .loading_btn {
     display: none;
   }
 
