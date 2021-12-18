@@ -42,7 +42,6 @@ export const CartMenu = ({
       })
       .catch((err) => {
         window.location.assign('/error');
-        console.log(err);
       });
   };
 

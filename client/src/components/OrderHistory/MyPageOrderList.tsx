@@ -122,7 +122,6 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
 
   const refundOrderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { status, order } = e.currentTarget.dataset;
-    console.log(status);
 
     if (
       status === '0' ||

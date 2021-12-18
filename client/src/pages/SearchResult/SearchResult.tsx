@@ -1,5 +1,5 @@
 /* eslint no-underscore-dangle: 0 */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import instance from 'util/axios';
 import Masonry from 'react-masonry-css';
 import Header from 'components/Header/Header';
@@ -95,7 +95,6 @@ const SearchResult = () => {
           )}&pageNumber=${1}`,
         )
         .then((res) => {
-          console.log(res.data);
           setArtList(res.data);
         })
         .catch((err) => {
@@ -120,7 +119,6 @@ const SearchResult = () => {
           },
         })
         .then((res) => {
-          console.log(res.data);
           setArtList(res.data);
         })
         .catch((err) => {

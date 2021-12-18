@@ -154,16 +154,12 @@ const AdminProduct = () => {
       .then(() => {
         window.location.reload();
       })
-      .catch((err) => {
-        console.log(clickProduct._id);
-        console.log(err);
+      .catch(() => {
         alert('버그발생 콘솔로그 확인');
         isDeleteHandler();
       });
-    // console.log(clickProduct._id);
   };
 
-  console.log(productList);
   return (
     <AdminHeaderWrap>
       <Header />

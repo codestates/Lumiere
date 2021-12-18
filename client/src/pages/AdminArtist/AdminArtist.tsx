@@ -68,6 +68,7 @@ const AdminArtist = () => {
     isActive: true,
     _id: '',
   });
+
   useEffect(() => {
     const userInfo = localStorage.getItem('lumiereUserInfo');
     instance
@@ -78,7 +79,6 @@ const AdminArtist = () => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setArtistList(res.data);
       })
       .catch((err) => {
@@ -143,9 +143,8 @@ const AdminArtist = () => {
         alert(el.isActive ? '비활성화 완료' : '활성화 완료');
         window.location.reload();
       })
-      .catch((err) => {
+      .catch(() => {
         alert('에러발생');
-        console.log(err);
       });
   };
 

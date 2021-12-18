@@ -26,7 +26,7 @@ const UserLeave = () => {
       // axios요청
       instance
         .delete('/users/profile', { params: { userId: inputConfirmText } })
-        .then((res) => {
+        .then(() => {
           alert('탈퇴되었습니다. 저희 Lumiere를 이용해주셔서 감사합니다.');
           setInputConfirmText('');
           setValidConfirmMessage('');
@@ -36,7 +36,7 @@ const UserLeave = () => {
           setIsLogin(false);
           window.location.replace('/');
         })
-        .catch((err) => {
+        .catch(() => {
           window.location.assign('/error');
         });
     }

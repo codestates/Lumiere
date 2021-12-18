@@ -59,8 +59,8 @@ const Landing = () => {
   return (
     <LandingContainer>
       <Header />
+      {isLoading ? <LoadingSlide /> : <Slider banners={banners} />}
       <LandingWrap>
-        {isLoading ? <LoadingSlide /> : <Slider banners={banners} />}
         <LatestSection>
           <h1>최신작 소개</h1>
           <LatestImgWrap>

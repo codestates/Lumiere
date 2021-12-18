@@ -133,9 +133,6 @@ const Order = () => {
       .get('/products/cart-items', { params: { productId: orderProduct } })
       .then((res) => {
         setProductState(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
       });
   }, []);
 

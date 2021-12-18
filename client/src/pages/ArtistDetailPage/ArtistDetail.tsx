@@ -100,7 +100,6 @@ const ArtistDetail = () => {
 
   return (
     <ArtistDeatilContainer>
-      {console.log(artistInfo)}
       <Header />
       <HeadWrap>
         <HtagWrap>

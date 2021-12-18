@@ -18,12 +18,12 @@ const VerifyPassword = ({ pwdMatch, setPwdMatch, setOldPwd }: Props) => {
     } else {
       instance
         .post('/users/profile', { password: inputVerifyPwd })
-        .then((res) => {
+        .then(() => {
           setOldPwd(inputVerifyPwd);
           setInputVerifyPwd('');
           setPwdMatch(true);
         })
-        .catch((err) => {
+        .catch(() => {
           setPwdConfirmMessage('비밀번호를 다시 확인 해주세요');
           setPwdMatch(false);
         });

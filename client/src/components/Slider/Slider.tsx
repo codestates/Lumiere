@@ -6,6 +6,7 @@ import {
   SlideContainer,
   SlideWrap,
   SlideInfoBox,
+  SliderButtonBox,
   SliderButton,
   DotsContainer,
   Dot,
@@ -23,8 +24,6 @@ type Props = {
 };
 
 const Slider = ({ banners }: Props) => {
-  // const currentIndex = useState(0);
-  // const slideMoveHandler = () => {};
   const [slideIndex, setSlideIndex] = useState(0);
 
   const nextSlideHandler = () => {
@@ -43,8 +42,6 @@ const Slider = ({ banners }: Props) => {
     }
   };
 
-  // const linkToHandler = () => {};
-
   return (
     <SlideContainer>
       {banners.map((banner, idx) => {
@@ -56,20 +53,24 @@ const Slider = ({ banners }: Props) => {
             <img src={banner.image} alt={banner.heading} />
             <SlideInfoBox>
               <div>
-                <h3>{banner.heading}</h3>
-                <p>{banner.content}</p>
+                <div>
+                  <h3>{banner.heading}</h3>
+                  <p>{banner.content}</p>
+                </div>
+                <Link to={banners[slideIndex].link}>{banner.linkname}</Link>
               </div>
-              <Link to={banners[slideIndex].link}>{banner.linkname}</Link>
             </SlideInfoBox>
           </SlideWrap>
         );
       })}
-      <SliderButton onClick={prevSlideHandler}>
-        <GrPrevious />
-      </SliderButton>
-      <SliderButton onClick={nextSlideHandler}>
-        <GrNext />
-      </SliderButton>
+      <SliderButtonBox>
+        <SliderButton onClick={prevSlideHandler}>
+          <GrPrevious />
+        </SliderButton>
+        <SliderButton onClick={nextSlideHandler}>
+          <GrNext />
+        </SliderButton>
+      </SliderButtonBox>
       <DotsContainer>
         {Array.from({ length: banners.length }).map((item, idx) => {
           return (

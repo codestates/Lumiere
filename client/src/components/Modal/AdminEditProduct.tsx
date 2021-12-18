@@ -77,7 +77,6 @@ const AdminEditProduct = ({ NO, el }: GreetingProps) => {
       })
       .then(() => window.location.reload())
       .catch((err) => {
-        console.log(err);
         alert('오류발생 담당자에게 문의바랍니다.');
       });
   };

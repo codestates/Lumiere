@@ -49,7 +49,6 @@ const AdminUser = () => {
     instance
       .get<AdminUsersType>('/users')
       .then((res) => {
-        console.log(res.data);
         setUserList(res.data);
       })
       .catch((err) => {
@@ -97,13 +96,11 @@ const AdminUser = () => {
       .catch((err) => {
         alert(`${err.response.data.message}`);
         window.location.reload();
-        console.log(err);
       });
   };
   return (
     <AdminHeaderWrap>
       <Header />
-      {/* <Link to="/"></Link> */}
       <h1>유저 관리</h1>
       <PageNation
         curPage={curPage}
