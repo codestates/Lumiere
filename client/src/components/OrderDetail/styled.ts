@@ -78,6 +78,7 @@ export const BtnWrap = styled.div`
   }
 
   @media screen and (min-width: 768px) {
+    padding: 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -339,6 +340,7 @@ export const Menu = styled.div`
   display: none;
 
   @media screen and (min-width: 768px) {
+    border-top: 0.5px solid #eeeeee;
     display: flex;
     min-height: 3rem;
     font-weight: 700;

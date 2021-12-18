@@ -30,7 +30,7 @@ import {
 const Order = () => {
   // Cart에서 histtory로 받아온값
   const location = useLocation();
-  const orderProduct: string[] = location.state.id || [];
+  const orderProduct: string[] = location.state?.id || [];
 
   const localInfo = localStorage.getItem('lumiereUserInfo');
   const userName = JSON.parse(localInfo || '{}').name;
@@ -114,7 +114,7 @@ const Order = () => {
         setPriceState({
           ...priceState,
           shippingPrice: 10000,
-          totalPrice: price - 10000,
+          totalPrice: price * 1000 - 10000,
         });
       })
       .catch((err) => {
@@ -176,6 +176,11 @@ const Order = () => {
               productState={productState}
               orderProduct={orderProduct}
             />
+             <p>
+            * 본 프로젝트 결제 기능은 일부 금액 결제 후 다음날 자동 환불 처리
+            됩니다.
+            <br />* 즉시 환불을 원하시면 마이페이지에서 주문취소를 진행해주세요
+          </p>
           </ContentRight>
         </ContentWrap>
       )}

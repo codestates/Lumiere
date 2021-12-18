@@ -84,12 +84,19 @@ export const ContentLeft = styled.div`
 
 export const ContentRight = styled.div`
   display: block;
-
   @media screen and (min-width: 768px) {
     position: sticky;
     top: 0;
     display: block;
     flex: 3;
     margin-left: 1rem;
+  }
+  p {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ff3333;
+    word-break: keep-all;
+    padding: 0 0.5rem;
+    line-height: 1.3;
   }
 `;
