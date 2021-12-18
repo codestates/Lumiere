@@ -109,7 +109,7 @@ const Order = () => {
         setPriceState({
           ...priceState,
           shippingPrice: 10000,
-          totalPrice: price - 10000,
+          totalPrice: price * 1000 - 10000,
         });
       })
       .catch((err) => {
@@ -168,6 +168,10 @@ const Order = () => {
             productState={productState}
             orderProduct={orderProduct}
           />
+          <p>
+            * 테스트 버전으로 결제금액/1000 원으로 환산된 금액만 결제되며,
+            마이페이지에서 취소 버튼을 누르면 환불 가능합니다.
+          </p>
         </ContentRight>
       </ContentWrap>
       <Footer />
