@@ -17,7 +17,7 @@ export const QuickBtnsContainer = styled.div`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
   > a:first-child {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.8);
     img {
       width: 50px;
     }

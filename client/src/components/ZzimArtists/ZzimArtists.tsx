@@ -4,14 +4,23 @@ import { ZzimArtistsType } from 'util/type';
 import { ZzimArtistsList } from './ZzimArtistsList';
 import { ZzimArtistsFilter } from './ZzimArtistsFilter';
 import { ZzimArtistsContainer } from './styled';
+import { LoadingZzimArtists } from './Loading';
+import { ZzimArtistsDummy } from './dummy';
 
-const ZzimArtists = () => {
+interface Props {
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ZzimArtists = ({ isLoading, setIsLoading }: Props) => {
   const [checkBoxList, setCheckBoxList] = useState<string[]>([]);
   const [artistsState, setArtistsState] = useState<Array<ZzimArtistsType>>([]);
+
   useEffect(() => {
+    setIsLoading(true);
     instance.get('/artists/zzim').then((res) => {
-      console.log(res.data);
       setArtistsState(res.data);
+      setIsLoading(false);
     });
   }, []);
 
@@ -23,12 +32,18 @@ const ZzimArtists = () => {
         setArtistsState={setArtistsState}
         artistsState={artistsState}
       />
-      <ZzimArtistsList
-        artistsState={artistsState}
-        checkBoxList={checkBoxList}
-        setCheckBoxList={setCheckBoxList}
-        setArtistsState={setArtistsState}
-      />
+      {isLoading ? (
+        ZzimArtistsDummy.map((product) => (
+          <LoadingZzimArtists key={product.id} />
+        ))
+      ) : (
+        <ZzimArtistsList
+          artistsState={artistsState}
+          checkBoxList={checkBoxList}
+          setCheckBoxList={setCheckBoxList}
+          setArtistsState={setArtistsState}
+        />
+      )}
     </ZzimArtistsContainer>
   );
 };

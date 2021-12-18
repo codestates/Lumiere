@@ -24,11 +24,15 @@ import {
   AllProductWrap,
 } from './styled';
 
-const MypageOrderList = () => {
+interface Props {
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const navigate = useNavigate();
   const [curPage, setCurPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState(true);
   const [orderList, setOrderList] = useState<MypageOrder>({
     orders: [
       {
@@ -58,6 +62,7 @@ const MypageOrderList = () => {
   });
 
   useEffect(() => {
+    setIsLoading(true);
     instance
       .get('/orders/mine', { params: { pageNumber: curPage } })
       .then((res) => {
