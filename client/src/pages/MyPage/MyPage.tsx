@@ -47,7 +47,7 @@ const MyPage = () => {
       return <ZzimProducts isLoading={isLoading} setIsLoading={setIsLoading} />;
     }
     if (currentTab === 2) {
-      return <ZzimArtists />;
+      return <ZzimArtists isLoading={isLoading} setIsLoading={setIsLoading} />;
     }
     if (currentTab === 3) {
       if (userInfo) {
