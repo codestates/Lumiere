@@ -155,7 +155,7 @@ const oAuthLogin = asyncHandler(async (req, res) => {
       [`${corp}.refreshToken`]: refresh_token,
       name,
     });
-    console.log('새 유저', newUser);
+
     await newUser.save();
     res.json({
       _id: newUser._id,
