@@ -21,6 +21,8 @@ import Error from 'pages/ErrorPage/Error';
 import Callback from 'pages/CallbackPage/Callback';
 import { GlobalStyle } from 'styles/global-style';
 import SearchResult from 'pages/SearchResult/SearchResult';
+import * as ROUTES from './util/constants/routes';
+import { IsUserRedirect, PrivateRoute } from './util/helpers/protect';
 
 function App() {
   useEffect(() => {
@@ -34,26 +36,52 @@ function App() {
       <GlobalStyle />
       <Router>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path={ROUTES.LANDING} element={<Landing />} />
+          <Route path={ROUTES.SIGNIN} element={<IsUserRedirect />}>
+            <Route path="/signin" element={<SignIn />} />
+          </Route>
+          <Route path={ROUTES.SIGNUP} element={<IsUserRedirect />}>
+            <Route path={ROUTES.SIGNUP} element={<SignUp />} />
+          </Route>
           <Route path="/artlist" element={<ArtList />} />
           <Route path="/search/" element={<SearchResult />} />
           <Route path="/artdetail/:id" element={<ArtDetail />} />
           <Route path="/artists" element={<Artists />} />
           <Route path="/artistdetail/:id" element={<ArtistDetail />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/orderdetail/:id" element={<OrderDetail />} />
-          <Route path="/paymentfinished" element={<PaymentFinished />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/admin/order" element={<AdminOrder />} />
-          <Route path="/admin/product" element={<AdminProduct />} />
-          <Route path="/admin/user" element={<AdminUser />} />
-          <Route path="/admin/artist" element={<AdminArtist />} />
-          <Route path="/admin/banner" element={<AdminBanner />} />
+          <Route path={ROUTES.CART} element={<PrivateRoute />}>
+            <Route path={ROUTES.CART} element={<Cart />} />
+          </Route>
+          <Route path={ROUTES.ORDER} element={<PrivateRoute />}>
+            <Route path={ROUTES.ORDER} element={<Order />} />
+          </Route>
+          <Route path={ROUTES.ORDERDETAIL} element={<PrivateRoute />}>
+            <Route path="/orderdetail/:id" element={<OrderDetail />} />
+          </Route>
+          <Route path={ROUTES.PAYMENTFINISHED} element={<PrivateRoute />}>
+            <Route path="/paymentfinished" element={<PaymentFinished />} />
+          </Route>
+          <Route path={ROUTES.MYPAGE} element={<PrivateRoute />}>
+            <Route path="/mypage" element={<MyPage />} />
+          </Route>
+          <Route path={ROUTES.ADMINORDER} element={<PrivateRoute />}>
+            <Route path="/admin/order" element={<AdminOrder />} />
+          </Route>
+          <Route path={ROUTES.ADMINPRODUCT} element={<PrivateRoute />}>
+            <Route path="/admin/product" element={<AdminProduct />} />
+          </Route>
+          <Route path={ROUTES.ADMINUSER} element={<PrivateRoute />}>
+            <Route path="/admin/user" element={<AdminUser />} />
+          </Route>
+          <Route path={ROUTES.ADMINARTIST} element={<PrivateRoute />}>
+            <Route path="/admin/artist" element={<AdminArtist />} />
+          </Route>
+          <Route path={ROUTES.ADMINBANNER} element={<PrivateRoute />}>
+            <Route path="/admin/banner" element={<AdminBanner />} />
+          </Route>
           <Route path="/error" element={<Error />} />
-          <Route path="/oauth/:corp" element={<Callback />} />
+          <Route path={ROUTES.CALLBACK} element={<IsUserRedirect />}>
+            <Route path="/oauth/:corp" element={<Callback />} />
+          </Route>
         </Routes>
       </Router>
     </>

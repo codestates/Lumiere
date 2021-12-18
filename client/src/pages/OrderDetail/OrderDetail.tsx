@@ -10,7 +10,7 @@ import {
 
 const OrderDetail = () => {
   const location = useLocation();
-  const orderDetailId = location.state.id;
+  const orderDetailId = location.state?.id;
 
   return (
     <OrderDetailContainer>
