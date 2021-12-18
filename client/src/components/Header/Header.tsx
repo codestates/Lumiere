@@ -6,16 +6,16 @@ import { saveAs } from 'file-saver';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import { HiMenuAlt1 } from 'react-icons/hi';
-import { BiHeart } from 'react-icons/bi';
 import { AiOutlinePoweroff } from 'react-icons/ai';
+import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import {
+  RiHeartLine,
   RiUserLine,
   RiShoppingCart2Line,
   RiSearchLine,
   RiCloseFill,
 } from 'react-icons/ri';
 import { UserInfoBox, NavButtonBox } from 'components/Nav/styled';
-import LoginGuideModal from 'components/Modal/LoginGuideModal';
 import Nav from '../Nav/Nav';
 import {
   HeaderContainer,
@@ -74,6 +74,14 @@ const Header = () => {
       setClickModal(!clickModal);
     } else {
       history('/cart');
+    }
+  };
+
+  const heartMoveHandler = () => {
+    if (!isLogin) {
+      setClickModal(!clickModal);
+    } else {
+      history('/mypage', { state: 'ZzimProducts' });
     }
   };
 
@@ -203,9 +211,9 @@ const Header = () => {
             <button type="button" onClick={cartMoveHandler}>
               <RiShoppingCart2Line />
             </button>
-            <div>
-              <BiHeart />
-            </div>
+            <button type="button" onClick={heartMoveHandler}>
+              <RiHeartLine />
+            </button>
           </IconBox>
           {isLogin ? (
             <HeaderInfoBox>
