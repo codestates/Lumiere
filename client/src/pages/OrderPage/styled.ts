@@ -92,6 +92,11 @@ export const ContentRight = styled.div`
     margin-left: 1rem;
   }
   p {
-    color: #808080;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ff3333;
+    word-break: keep-all;
+    padding: 0 0.5rem;
+    line-height: 1.3;
   }
 `;
