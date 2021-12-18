@@ -17,16 +17,36 @@ type GreetingProps = {
     priceMin?: number;
     priceMax?: number;
   }) => void;
+  setCurrentMenuHandler: (tabNumber: number) => void;
+  currentMenu: number;
+  setGetTypes: (tabTypes: {
+    [key: number]: {
+      theme?: string;
+      sizeMin?: number;
+      sizeMax?: number;
+      priceMin?: number;
+      priceMax?: number;
+    };
+  }) => void;
+  setLastTabStateHandler: (tabNumber: number) => void;
 };
-const FilteringTab = ({ filteringHandler }: GreetingProps) => {
+
+const FilteringTab = ({
+  filteringHandler,
+  setCurrentMenuHandler,
+  currentMenu,
+  setGetTypes,
+  setLastTabStateHandler,
+}: GreetingProps) => {
   const [currentTab, setCurrentTab] = useState(1);
-  const [currentMenu, setCurrentMenu] = useState(-1);
 
   useEffect(() => {
     if (currentMenu <= 5) filteringHandler(tabTypes[currentMenu]);
     else if (currentMenu <= 16) {
+      setGetTypes(tabTypes[currentMenu]);
       filteringHandler(tabTypes[currentMenu]);
     } else {
+      setGetTypes(tabTypes[currentMenu]);
       filteringHandler(tabTypes[currentMenu]);
     }
   }, [currentMenu]);
@@ -36,9 +56,11 @@ const FilteringTab = ({ filteringHandler }: GreetingProps) => {
   };
   const selectMenuHandler = (id: number) => {
     if (currentMenu === id) {
-      setCurrentMenu(-1);
+      setLastTabStateHandler(currentMenu);
+      setCurrentMenuHandler(-1);
     } else {
-      setCurrentMenu(id);
+      setLastTabStateHandler(currentMenu);
+      setCurrentMenuHandler(id);
     }
   };
 
