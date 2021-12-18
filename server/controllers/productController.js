@@ -334,7 +334,7 @@ const getTotalPrice = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  totalPrice[0].totalPrice += 10000;
+  totalPrice[0].totalPrice = (totalPrice[0].totalPrice + 10000) / 1000;
   res.json(totalPrice[0]);
 });
 
