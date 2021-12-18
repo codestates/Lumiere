@@ -1,5 +1,6 @@
 /* eslint no-underscore-dangle: 0 */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
 import Header from 'components/Header/Header';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
@@ -29,11 +30,18 @@ const MyPage = () => {
   const [oldPwd, setOldPwd] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state === 'ZzimProducts') setCurrentTab(1);
+  }, []);
+
   const selectTabHandler = (id: number) => {
     if (pwdMatch) {
       setOldPwd('');
       setPwdMatch(false);
     }
+    location.state = '';
     setCurrentTab(id);
   };
 
@@ -126,7 +134,13 @@ const MyPage = () => {
           </TabContainer>
         </StatusWrap>
         <ContentContainer>
-          <ContentWrap>{tabHandler()}</ContentWrap>
+          <ContentWrap>
+            {location.state === 'ZzimProducts' ? (
+              <ZzimProducts isLoading={isLoading} setIsLoading={setIsLoading} />
+            ) : (
+              tabHandler()
+            )}
+          </ContentWrap>
         </ContentContainer>
       </MyPageWrap>
       <QuickBtns isLoading={isLoading} />

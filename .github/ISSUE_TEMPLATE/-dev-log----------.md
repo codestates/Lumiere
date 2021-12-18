@@ -1,9 +1,10 @@
 ---
-name: '[Dev-Log 마크다운 템플릿]'
+name: "[Dev-Log 마크다운 템플릿]"
 about: Dev-Log를 작성하는 마크다운 템플릿 입니다.
-title: '[Dev-Log]'
+title: "[Dev-Log]"
 labels: dev-log
 assignees: ''
+
 ---
 
 > ### 오늘은 어떻게 프로젝트에 기여했나요?
