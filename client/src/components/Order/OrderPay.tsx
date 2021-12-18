@@ -88,6 +88,7 @@ export const OrderPay = ({
     // input창 입력 status
     if (!inputAllCheck) {
       alert('배송지 주문자 정보, 배송 요청사항을 모두 입력해주세요');
+      setIsDisableBtn(false);
       return;
     }
 
@@ -112,6 +113,7 @@ export const OrderPay = ({
                 res.data.totalPrice !==
                 priceState.totalPrice + priceState.shippingPrice
               ) {
+                alert('결제금액이 다릅니다.');
                 return window.location.assign('/error');
               } else {
                 // 임시 주문서 생성
@@ -142,7 +144,7 @@ export const OrderPay = ({
                     // 임시주문서 order id
                     const orderid = res.data.orderId;
                     setIsDisableBtn(false);
-                    hanldePayment(orderid);
+                    handlePayment(orderid);
                   })
                   .catch((err) => {
                     // 임시 주문서 생성 실패
@@ -158,7 +160,7 @@ export const OrderPay = ({
   };
 
   // IAMPORT 핸들러
-  const hanldePayment = (orderid: string) => {
+  const handlePayment = (orderid: string) => {
     // 가맹점 식별코드 이용하여 IMP객체 초기화
     setIsDisableBtn(false);
     const IMP = window.IMP; // 생략 가능
@@ -186,22 +188,7 @@ export const OrderPay = ({
     };
 
     const callback = (response: RequestPayResponse) => {
-      const {
-        success,
-        merchant_uid,
-        error_msg,
-        imp_uid,
-        error_code,
-        paid_amount,
-        name,
-        pg_tid,
-        buyer_name,
-        buyer_email,
-        buyer_tel,
-        paid_at,
-        receipt_url,
-        status,
-      } = response;
+      const { success } = response;
 
       if (success) {
         // 아임포트 결제 성공했으니 서버에 주문 정보 전달
@@ -229,9 +216,6 @@ export const OrderPay = ({
               alert(`${err.response.data.message}`);
               window.location.assign('/error');
             });
-        } else {
-          alert('결제금액이 다릅니다.');
-          window.location.assign('/error');
         }
       } else {
         // 아임포트 결제 취소 : 임시 주문서 삭제 필요
