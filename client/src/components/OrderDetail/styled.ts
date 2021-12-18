@@ -26,6 +26,7 @@ export const OrderNumberDescription = styled.dl`
     min-height: 5rem;
     .orderstatus {
       font-size: 1rem;
+      padding-right: 0;
     }
   }
 `;
@@ -193,7 +194,7 @@ export const TotalPriceWrap = styled.div`
   border-bottom: 1px solid #eeeeee;
 
   .mobile-Only.shipping {
-    min-height: 2rem;
+    min-height: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -203,6 +204,8 @@ export const TotalPriceWrap = styled.div`
   .totalPrice {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    min-height: 3rem;
   }
 
   .realtotalPrice {
@@ -220,6 +223,10 @@ export const TotalPriceWrap = styled.div`
 
     .realtotalPrice {
       font-weight: 700;
+    }
+
+    .totalPrice {
+      padding: 0 5rem;
     }
   }
 `;
@@ -356,7 +363,7 @@ export const Menu = styled.div`
     > div {
       flex: 1;
       display: flex;
-      padding: 1rem 102px 1rem 1rem;
+      padding: 1rem 6rem 1rem 1rem;
     }
 
     div div:first-child {
