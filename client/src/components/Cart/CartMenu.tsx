@@ -84,10 +84,10 @@ export const CartMenu = ({
       </AllSelectLabelWrap>
       <SelectBtnWrap>
         <button type="button" onClick={soldoutDeleteHandler}>
-          품절상품삭제
+          품절작품삭제
         </button>
         <button type="button" onClick={clickModalHandler}>
-          선택상품삭제
+          선택작품삭제
         </button>
       </SelectBtnWrap>
     </CartMenuWrap>
