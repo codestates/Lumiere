@@ -1,12 +1,14 @@
 import styled from 'styled-components';
 
-export const LandingContainer = styled.div``;
+export const LandingContainer = styled.div`
+  position: relative;
+  padding: 6vh 0 0 0;
+`;
 
 export const LandingWrap = styled.div`
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
-  padding: 6vh 0 0 0;
 
   h1 {
     margin: 2.5rem 0 1.5rem;

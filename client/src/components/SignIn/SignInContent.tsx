@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
 import instance from 'util/axios';
 import { emailValidate, passwordValidate } from 'util/validate';
 import { IsSigninState } from 'States/IsLoginState';
@@ -19,7 +18,6 @@ const SignInContent = () => {
   });
   const [errMessage, setErrMessage] = useState('nothing');
 
-  const history = useNavigate();
   const signinStateHandler = useSetRecoilState(IsSigninState);
 
   const inputValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,8 +44,7 @@ const SignInContent = () => {
           signinStateHandler(true);
           window.history.go(-1);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           setErrMessage(`*아이디와 비밀번호를 정확히 입력해 주세요`);
           setSigninInputInfo({ ...signinInputInfo, password: '' });
           signinStateHandler(false);

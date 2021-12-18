@@ -200,7 +200,7 @@ export const OrderPay = ({
             .patch(`/orders/pay`, {
               imp_uid: response.imp_uid,
             })
-            .then((res) => {
+            .then(() => {
               const localInfo = localStorage.getItem('cartItems');
               const newArr = JSON.parse(localInfo || '[]').filter(
                 (el: string) => {
@@ -221,11 +221,11 @@ export const OrderPay = ({
         // 아임포트 결제 취소 : 임시 주문서 삭제 필요
         instance
           .delete(`/orders/${response.merchant_uid}`)
-          .then((res) => {
+          .then(() => {
             alert('주문을 취소 하셨습니다');
             setIsDisableBtn(false);
           })
-          .catch((err) => {
+          .catch(() => {
             window.location.assign('/error');
           });
       }

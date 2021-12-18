@@ -39,7 +39,7 @@ const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
     inStock: true,
     updatedAt: new Date(),
   });
-  useEffect(() => console.log(productInfo));
+
   useEffect(
     () =>
       setProductInfo({
@@ -48,8 +48,10 @@ const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
       }),
     [],
   );
+
   const [editImage, setEditImage] = useState(productInfo.image);
   const [isThumbnail, setIsThumbNail] = useState<boolean>(false);
+
   const productInfoHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.className === 'productTitle') {
       setProductInfo({ ...productInfo, title: e.target.value });
@@ -111,8 +113,7 @@ const AdminEnrollProduct = ({ NO, el }: GreetingProps) => {
         alert('작품이 등록되었습니다.');
         window.location.reload();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         alert('오류발생 담당자에게 문의바랍니다.');
       });
   };

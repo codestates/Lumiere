@@ -70,7 +70,7 @@ const OrderDetailContent = ({ orderDetailId }: { orderDetailId: string }) => {
       .then((res) => {
         setUserOrder([res.data]);
       })
-      .catch((err) => {
+      .catch(() => {
         window.location.assign('/error');
       });
   }, []);

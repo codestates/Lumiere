@@ -133,8 +133,7 @@ const AdminEnrollArtist = ({ NO, el, HowManyArtists }: GreetingProps) => {
             price: artistInfo.price,
           },
         })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           alert('작가 등록이 완료되었습니다.');
           window.location.reload();
         });
@@ -161,7 +160,7 @@ const AdminEnrollArtist = ({ NO, el, HowManyArtists }: GreetingProps) => {
           thumbnail: data.location,
         });
       })
-      .catch((err) => console.log(err));
+      .catch(() => window.location.assign('/error'));
   };
 
   const themeHandler = (e: string) => {

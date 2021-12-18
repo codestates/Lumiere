@@ -27,52 +27,68 @@ export const SlideInfoBox = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   width: 100%;
   height: 26vh;
   min-height: 126px;
   padding: 1.5rem;
   background-color: rgba(255, 255, 255, 0.5);
 
-  h3 {
-    margin-bottom: 0.4rem;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #111111;
-  }
-  p {
-    font-size: 1.2rem;
-    line-height: 1.2;
-    color: #111111;
-  }
-  a {
-    width: 10rem;
-    height: 3rem;
-    text-align: center;
-    line-height: 3rem;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #ffffff;
-    background-color: var(--color-black);
-    border-radius: 0.4rem;
-    transition: all 0.5s;
-  }
-  a:hover {
-    background-color: #555555;
+  > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    h3 {
+      margin-bottom: 0.4rem;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #111111;
+    }
+    p {
+      font-size: 1.2rem;
+      line-height: 1.2;
+      color: #111111;
+    }
+    a {
+      width: 10rem;
+      height: 3rem;
+      text-align: center;
+      line-height: 3rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      background-color: var(--color-black);
+      border-radius: 0.4rem;
+      transition: all 0.5s;
+    }
+    a:hover {
+      background-color: #555555;
+    }
   }
 
   @media screen and (min-width: 768px) {
-    flex-direction: row;
     height: 20vh;
     min-height: 150px;
     padding: 2rem;
 
-    h3 {
-      margin-bottom: 1rem;
+    > div {
+      flex-direction: row;
+      h3 {
+        margin-bottom: 1rem;
+      }
     }
   }
+`;
+
+export const SliderButtonBox = styled.div`
+  position: relative;
+  max-width: 1200px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
 `;
 
 export const SliderButton = styled.button`

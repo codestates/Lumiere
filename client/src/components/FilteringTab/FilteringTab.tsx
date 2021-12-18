@@ -17,7 +17,6 @@ type GreetingProps = {
     priceMin?: number;
     priceMax?: number;
   }) => void;
-  // setTabFilter: (active: string) => void;
 };
 const FilteringTab = ({ filteringHandler }: GreetingProps) => {
   const [currentTab, setCurrentTab] = useState(1);

@@ -58,7 +58,6 @@ const AdminEditArtist = ({ NO, el }: GreetingProps) => {
           record: artistInfo.record,
         })
         .then((res) => {
-          console.log(res);
           alert('작가 수정이 완료되었습니다.');
           window.location.reload();
         });

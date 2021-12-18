@@ -105,10 +105,6 @@ const Header = () => {
     setSearchInput(e.target.value);
   };
 
-  const searchResultHandler = () => {
-    console.log(searchInput);
-  };
-
   const fileSaveHandler = () => {
     saveAs('/files/LUMIERE.docx', 'LUMIERE');
   };

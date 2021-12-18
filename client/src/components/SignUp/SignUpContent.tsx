@@ -153,12 +153,11 @@ const SignUpContent = () => {
           password: signupInputInfo.password,
           name: signupInputInfo.name,
         })
-        .then((res) => {
+        .then(() => {
           setIsDisableBtn(false);
           history('/signin');
         })
         .catch(() => {
-          // 404페이지로 이동
           setIsDisableBtn(false);
         });
     }
