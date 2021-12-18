@@ -3,17 +3,14 @@ import mongoose from 'mongoose';
 const eventSchema = mongoose.Schema(
   {
     heading: {
-      // 배너 타이틀
       type: String,
       required: true,
     },
     content: {
-      // 내용
       type: String,
       required: true,
     },
     linkname: {
-      // 링크명
       type: String,
       required: true,
     },

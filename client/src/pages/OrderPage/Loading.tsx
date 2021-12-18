@@ -15,7 +15,6 @@ import {
   DescriptionWrap,
   ClickBtn,
   PayTitle,
-  ClickBtnSpan,
 } from 'components/Order/styled';
 import { ContentWrap, ContentLeft, ContentRight } from './styled';
 

@@ -8,9 +8,11 @@ import OrderHistory from 'components/OrderHistory/OrderHistory';
 import ZzimProducts from 'components/ZzimProducts/ZzimProducts';
 import ZzimArtists from 'components/ZzimArtists/ZzimArtists';
 import VerifyPassword from 'components/VerifyPassword/VerifyPassword';
+import instance from 'util/axios';
 import ChangePassword from 'components/ChangePassword/ChangePassword';
 import UserLeave from 'components/UserLeave/UserLeave';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import { MypageOrder } from 'util/type';
 import { tabMenus } from './dummy';
 import {
   MyPageContainer,
@@ -29,12 +31,46 @@ const MyPage = () => {
   const [pwdMatch, setPwdMatch] = useState(false);
   const [oldPwd, setOldPwd] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<MypageOrder>({
+    orders: [
+      {
+        orderItems: [
+          {
+            artist: '',
+            image: '',
+            price: 0,
+            product: '',
+            size: '',
+            title: '',
+          },
+        ],
+        result: {
+          id: '',
+          paidAt: '',
+          status: 0,
+          updatedAt: '',
+        },
+        totalPrice: 0,
+        user: '',
+        _id: '',
+      },
+    ],
+    page: 1,
+    pages: 1,
+  });
 
   const location = useLocation();
 
   useEffect(() => {
     if (location.state === 'ZzimProducts') setCurrentTab(1);
   }, []);
+
+  useEffect(() => {
+    instance.get('/orders/mine').then((res) => {
+      setUserData(res.data);
+    });
+  }, []);
+  console.log(userData.status);
 
   const selectTabHandler = (id: number) => {
     if (pwdMatch) {
@@ -98,22 +134,22 @@ const MyPage = () => {
           <h1>마이페이지</h1>
           <StatusList>
             <li>
-              <div>1</div>
+              <div>{userData.status?.paid || 0}</div>
               <span>결제완료</span>
             </li>
             <MdOutlineArrowForwardIos />
             <li>
-              <div>0</div>
+              <div>{userData.status?.ready || 0}</div>
               <span>상품/배송준비중</span>
             </li>
             <MdOutlineArrowForwardIos />
             <li>
-              <div>0</div>
+              <div>{userData.status?.coming || 0}</div>
               <span>배송중</span>
             </li>
             <MdOutlineArrowForwardIos />
             <li>
-              <div>0</div>
+              <div>{userData.status?.done || 0}</div>
               <span>배송완료</span>
             </li>
           </StatusList>

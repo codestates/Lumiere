@@ -47,7 +47,7 @@ const userSchema = mongoose.Schema(
     },
     active: {
       lastAccessTime: {
-        // 마지막 접속 시간 -> 로그아웃 시 수정해주기 patch
+        // 마지막 접속 시간 -> 로그아웃 시
         type: Date,
       },
       isClosed: {
@@ -58,7 +58,6 @@ const userSchema = mongoose.Schema(
       },
     },
     isAdmin: {
-      // 관리자 권한은 일반유저만
       type: Boolean,
       required: true,
       default: false,
