@@ -320,7 +320,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
   const status = await Order.aggregate([
     {
       $facet: {
-        paid: [{ $match: { 'result.status': { $eq: 0 } } }, { $count: 'paid' }],
+        paid: [{ $match: { 'result.status': 0 } }, { $count: 'paid' }],
         ready: [{ $match: { 'result.status': 1 } }, { $count: 'ready' }],
         coming: [{ $match: { 'result.status': 2 } }, { $count: 'coming' }],
         done: [{ $match: { 'result.status': 3 } }, { $count: 'done' }],

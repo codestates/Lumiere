@@ -57,6 +57,35 @@ const getProducts = asyncHandler(async (req, res) => {
   // 관리자 권한일 때와 분기 나눠 주기
   const { pageNumber, isAdmin } = req.query;
   const page = Number(pageNumber) || 1;
+
+  let pageSize;
+  let count;
+  let products;
+
+  if (isAdmin === 'true') {
+    const decodedData = isAuthorized(req);
+    if (decodedData) {
+      // 토큰이 유효할 경우
+      req.user = await User.findById(decodedData.id).select(
+        '-general.password',
+      );
+      if (req.user.isAdmin === true) {
+        // 관리자인 경우
+        pageSize = 10;
+        count = await Product.countDocuments({});
+        products = await Product.find({})
+          .populate('artist', ['name', 'aka', 'code', 'record'])
+          .sort({ _id: -1 })
+          .limit(pageSize)
+          .skip(pageSize * (page - 1))
+          .exec();
+
+        res.json({ products, page, pages: Math.ceil(count / pageSize) });
+        return;
+      }
+    }
+  }
+
   const keyword = req.query.keyword
     ? {
         $or: [
@@ -88,32 +117,18 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {};
 
-  let pageSize;
-  let count;
-  let products;
+  const { theme, sizeMin, sizeMax, priceMin, priceMax } = req.query;
 
-  if (isAdmin === 'true') {
-    const decodedData = isAuthorized(req);
-    if (decodedData) {
-      // 토큰이 유효할 경우
-      req.user = await User.findById(decodedData.id).select(
-        '-general.password',
-      );
-      if (req.user.isAdmin === true) {
-        // 관리자인 경우
-        pageSize = 10;
-        count = await Product.countDocuments({});
-        products = await Product.find({})
-          .populate('artist', ['name', 'aka', 'code', 'record'])
-          .sort({ _id: -1 })
-          .limit(pageSize)
-          .skip(pageSize * (page - 1))
-          .exec();
+  let filter;
 
-        res.json({ products, page, pages: Math.ceil(count / pageSize) });
-        return;
-      }
-    }
+  if (theme) {
+    filter = { theme };
+  } else if (sizeMin && sizeMax) {
+    filter = { 'info.canvas': { $gte: sizeMin, $lte: sizeMax } };
+  } else if (priceMin && priceMax) {
+    filter = { price: { $gte: priceMin, $lte: priceMax } };
+  } else if (priceMin) {
+    filter = { price: { $gte: priceMin } };
   }
 
   pageSize = 28;
@@ -129,9 +144,14 @@ const getProducts = asyncHandler(async (req, res) => {
       },
     },
     { $unwind: '$artist' },
-    { $match: { ...keyword } },
+    { $match: { ...keyword, ...filter } },
     {
       $project: {
+        artCode: 0,
+        theme: 0,
+        inStock: 0,
+        'info.details': 0,
+        'info.createdAt': 0,
         'artist.code': 0,
         'artist.record': 0,
         'artist.thumbnail': 0,
@@ -156,7 +176,7 @@ const getProducts = asyncHandler(async (req, res) => {
         as: 'artist',
       },
     },
-    { $match: { ...keyword } },
+    { $match: { ...keyword, ...filter } },
     { $count: 'of_products' },
   ]);
 
@@ -165,50 +185,6 @@ const getProducts = asyncHandler(async (req, res) => {
     page,
     pages: Math.ceil(count[0].of_products / pageSize),
   });
-});
-
-// @desc   Fetch filtered products
-// @route  GET /api/products/filter
-// @access Public
-const getProductsByFilter = asyncHandler(async (req, res) => {
-  // 품절 제외
-  const { theme, sizeMin, sizeMax, priceMin, priceMax } = req.query;
-
-  let filter;
-
-  if (theme) {
-    filter = { theme };
-  } else if (sizeMin && sizeMax) {
-    filter = { 'info.canvas': { $gte: sizeMin, $lte: sizeMax } };
-  } else if (priceMin && priceMax) {
-    filter = { price: { $gte: priceMin, $lte: priceMax } };
-  } else if (priceMin) {
-    filter = { price: { $gte: priceMin } };
-  } else {
-    res.status(400).json({ message: '필터할 정보가 명확하지 않습니다' });
-    return;
-  }
-
-  const pageSize = 28;
-  const page = Number(req.query.pageNumber) || 1;
-
-  const projection = {
-    artCode: 0,
-    theme: 0,
-    'info.details': 0,
-    'info.createdAt': 0,
-    inStock: 0,
-  };
-
-  const count = await Product.countDocuments({ ...filter, inStock: true });
-  const products = await Product.find({ ...filter, inStock: true }, projection)
-    .populate('artist', ['name', 'aka'])
-    .sort({ _id: -1 })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1))
-    .exec();
-
-  res.json({ products, page, pages: Math.ceil(count / pageSize) });
 });
 
 // @desc    Update a product
@@ -397,7 +373,6 @@ export {
   updateProduct,
   deleteProduct,
   getProducts,
-  getProductsByFilter,
   getProductById,
   getLatestProducts,
   zzimProduct,
