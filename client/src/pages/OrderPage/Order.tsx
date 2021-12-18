@@ -1,9 +1,15 @@
 import Footer from 'components/Footer/Footer';
+import Header from 'components/Header/Header';
 import { useLocation } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
-import Header from 'components/Header/Header';
 import { useEffect, useState } from 'react';
+import instance from 'util/axios';
+import { OrderAddress } from 'components/Order/OrderAddress';
+import { OrderPay } from 'components/Order/OrderPay';
+import { OrderUser } from 'components/Order/OrderUser';
+import { OrderProduct } from 'components/Order/OrderProduct';
+import { OrderRequestInfo } from 'components/Order/OrderRequestInfo';
 import {
   OrderDeliver,
   OrdererUserInfo,
@@ -11,12 +17,7 @@ import {
   OrderPrice,
   OrderProducts,
 } from 'util/type';
-import instance from 'util/axios';
-import { OrderAddress } from 'components/Order/OrderAddress';
-import { OrderPay } from 'components/Order/OrderPay';
-import { OrderUser } from 'components/Order/OrderUser';
-import { OrderProduct } from 'components/Order/OrderProduct';
-import { OrderRequestInfo } from 'components/Order/OrderRequestInfo';
+import { OrderLoading } from './Loading';
 import {
   OrderContainer,
   TitleWrap,
@@ -33,6 +34,9 @@ const Order = () => {
 
   const localInfo = localStorage.getItem('lumiereUserInfo');
   const userName = JSON.parse(localInfo || '{}').name;
+
+  // OrderPage Loading State
+  const [isLoading, setIsLoading] = useState(true);
 
   // 배송지 State
   const [shippingState, setShippingState] = useState<OrderDeliver>({
@@ -94,6 +98,7 @@ const Order = () => {
         setOrdererInfoState({ name, email, phoneNum, refundTerms });
         setShippingState({ address, detailedAddress, receiver, contactNum });
         setDeliveryReqState({ receiveAt, requestedTerms });
+        setIsLoading(false);
       })
       .catch(() => {
         window.location.assign('/error');
@@ -140,41 +145,45 @@ const Order = () => {
       <TitleWrap>
         <Title>결제</Title>
       </TitleWrap>
-      <ContentWrap>
-        <ContentLeft>
-          <OrderAddress
-            shippingState={shippingState}
-            setShippingState={setShippingState}
-          />
-          <OrderUser
-            ordererInfoState={ordererInfoState}
-            setOrdererInfoState={setOrdererInfoState}
-          />
-          <OrderRequestInfo
-            deliveryReqState={deliveryReqState}
-            setDeliveryReqState={setDeliveryReqState}
-          />
-          <OrderProduct
-            productState={productState}
-            setProductState={setProductState}
-          />
-        </ContentLeft>
-        <ContentRight>
-          <OrderPay
-            shippingState={shippingState}
-            ordererInfoState={ordererInfoState}
-            deliveryReqState={deliveryReqState}
-            priceState={priceState}
-            productState={productState}
-            orderProduct={orderProduct}
-          />
-          <p>
+      {isLoading ? (
+        <OrderLoading />
+      ) : (
+        <ContentWrap>
+          <ContentLeft>
+            <OrderAddress
+              shippingState={shippingState}
+              setShippingState={setShippingState}
+            />
+            <OrderUser
+              ordererInfoState={ordererInfoState}
+              setOrdererInfoState={setOrdererInfoState}
+            />
+            <OrderRequestInfo
+              deliveryReqState={deliveryReqState}
+              setDeliveryReqState={setDeliveryReqState}
+            />
+            <OrderProduct
+              productState={productState}
+              setProductState={setProductState}
+            />
+          </ContentLeft>
+          <ContentRight>
+            <OrderPay
+              shippingState={shippingState}
+              ordererInfoState={ordererInfoState}
+              deliveryReqState={deliveryReqState}
+              priceState={priceState}
+              productState={productState}
+              orderProduct={orderProduct}
+            />
+             <p>
             * 본 프로젝트 결제 기능은 일부 금액 결제 후 다음날 자동 환불 처리
             됩니다.
             <br />* 즉시 환불을 원하시면 마이페이지에서 주문취소를 진행해주세요
           </p>
-        </ContentRight>
-      </ContentWrap>
+          </ContentRight>
+        </ContentWrap>
+      )}
       <Footer />
     </OrderContainer>
   );
