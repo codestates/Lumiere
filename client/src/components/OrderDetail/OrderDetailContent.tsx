@@ -2,6 +2,7 @@
 import instance from 'util/axios';
 import { OrderdetailType } from 'util/type';
 import { useComma, convertDeliverStatus } from 'util/functions';
+import { OrderDetailLoading } from './Loading';
 import { useRecoilState } from 'recoil';
 import { IsSigninState } from 'States/IsLoginState';
 import { useEffect, useState } from 'react';
@@ -21,7 +22,17 @@ import {
   Menu,
 } from './styled';
 
-const OrderDetailContent = ({ orderDetailId }: { orderDetailId: string }) => {
+type OrderDetailProps = {
+  orderDetailId: string;
+  setIsLoading: (loading: boolean) => void;
+  isLoading: boolean;
+};
+
+const OrderDetailContent = ({
+  orderDetailId,
+  setIsLoading,
+  isLoading,
+}: OrderDetailProps) => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const [userOrder, setUserOrder] = useState<Array<OrderdetailType>>([
     {
@@ -69,6 +80,7 @@ const OrderDetailContent = ({ orderDetailId }: { orderDetailId: string }) => {
       .get(`/orders/${orderDetailId}`)
       .then((res) => {
         setUserOrder([res.data]);
+        setIsLoading(false);
       })
       .catch(() => {
         window.location.assign('/error');
@@ -133,136 +145,138 @@ const OrderDetailContent = ({ orderDetailId }: { orderDetailId: string }) => {
 
   return (
     <>
-      {userOrder
-        ? userOrder.map((el) => {
-            return (
-              <div key={el._id}>
-                <OrderNumberDescription>
-                  <DtDdWrap>
-                    <div>
-                      <div>
-                        <dt>주문번호</dt>
-                        <dd>{el.result.id}</dd>
-                      </div>
-                      <div>
-                        <dt>결제일자</dt>
-                        <dd className="smalldd">{el.result.paidAt}</dd>
-                      </div>
-                    </div>
-                    <div>
-                      <button type="button" className="orderstatus">
-                        {convertDeliverStatus(el.result.status)}
-                      </button>
-                    </div>
-                  </DtDdWrap>
-                  <BtnWrap>
-                    <button
-                      type="button"
-                      onClick={cancleOrderHandler}
-                      data-status={el.result.status}
-                      data-order={el._id}
-                    >
-                      취소
-                    </button>
-                    <button
-                      type="button"
-                      onClick={refundOrderHandler}
-                      data-status={el.result.status}
-                      data-order={el._id}
-                    >
-                      반품
-                    </button>
-                  </BtnWrap>
-                </OrderNumberDescription>
-                <Menu>
+      {!isLoading ? (
+        userOrder.map((el) => {
+          return (
+            <div key={el._id}>
+              <OrderNumberDescription>
+                <DtDdWrap>
                   <div>
-                    <div>상품정보</div>
-                    <div>주문금액</div>
-                  </div>
-                </Menu>
-                <AllProductWrap>
-                  {el.orderItems.map((el) => {
-                    return (
-                      <ProductWrap key={el.product}>
-                        <ImgWrap>
-                          <img
-                            src={el.image}
-                            alt={`${el.artist}의 ${el.title}`}
-                          />
-                        </ImgWrap>
-                        <ProductDlWrap>
-                          <dt>{el.title}</dt>
-                          <dd>{el.artist}</dd>
-                          <dd>{el.size}</dd>
-                          <dd>{`${useComma(el.price)}원`}</dd>
-                        </ProductDlWrap>
-                      </ProductWrap>
-                    );
-                  })}
-                </AllProductWrap>
-                <TotalPriceWrap>
-                  <div className="mobile-Only shipping">
-                    {`상품 ${useComma(
-                      el.totalPrice * 1000 - 10000,
-                    )}원 + 배송비 10,000원 `}
-                  </div>
-                  <div className="totalPrice">
-                    <div className="mobile-Only">총 결제 금액</div>
-                    <div className="realtotalPrice">{`${useComma(
-                      el.totalPrice * 1000,
-                    )}원`}</div>
-                  </div>
-                </TotalPriceWrap>
-                <OrderInfoWrap>
-                  <DeliveryInfo>
-                    <h2>배송지</h2>
                     <div>
-                      <div>
-                        {`${el.deliveryInfo.address} ${el.deliveryInfo.detailedAddress}`}
-                      </div>
-                      <div>{el.deliveryInfo.receiver}</div>
-                      <div>{el.deliveryInfo.contactNum}</div>
+                      <dt>주문번호</dt>
+                      <dd>{el.result.id}</dd>
                     </div>
-                  </DeliveryInfo>
-                  <UserInfo>
-                    <h2>주문자 정보</h2>
                     <div>
-                      <div>
-                        <dt>주문자명</dt>
-                        <dd>{el.ordererInfo.name}</dd>
-                      </div>
-                      <div>
-                        <dt>연락처</dt>
-                        <dd>{el.ordererInfo.phoneNum}</dd>
-                      </div>
-                      <div>
-                        <dt>이메일</dt>
-                        <dd>{el.ordererInfo.email}</dd>
-                      </div>
-                      <div>
-                        <dt>품절시 환불</dt>
-                        <dd>{el.ordererInfo.refundTerms}</dd>
-                      </div>
+                      <dt>결제일자</dt>
+                      <dd className="smalldd">{el.result.paidAt}</dd>
                     </div>
-                  </UserInfo>
-                  <DeleveryReq>
-                    <h2>배송 요청사항</h2>
+                  </div>
+                  <div>
+                    <button type="button" className="orderstatus">
+                      {convertDeliverStatus(el.result.status)}
+                    </button>
+                  </div>
+                </DtDdWrap>
+                <BtnWrap>
+                  <button
+                    type="button"
+                    onClick={cancleOrderHandler}
+                    data-status={el.result.status}
+                    data-order={el._id}
+                  >
+                    취소
+                  </button>
+                  <button
+                    type="button"
+                    onClick={refundOrderHandler}
+                    data-status={el.result.status}
+                    data-order={el._id}
+                  >
+                    반품
+                  </button>
+                </BtnWrap>
+              </OrderNumberDescription>
+              <Menu>
+                <div>
+                  <div>상품정보</div>
+                  <div>주문금액</div>
+                </div>
+              </Menu>
+              <AllProductWrap>
+                {el.orderItems.map((el) => {
+                  return (
+                    <ProductWrap key={el.product}>
+                      <ImgWrap>
+                        <img
+                          src={el.image}
+                          alt={`${el.artist}의 ${el.title}`}
+                        />
+                      </ImgWrap>
+                      <ProductDlWrap>
+                        <dt>{el.title}</dt>
+                        <dd>{el.artist}</dd>
+                        <dd>{el.size}</dd>
+                        <dd>{`${useComma(el.price)}원`}</dd>
+                      </ProductDlWrap>
+                    </ProductWrap>
+                  );
+                })}
+              </AllProductWrap>
+              <TotalPriceWrap>
+                <div className="mobile-Only shipping">
+                  {`상품 ${useComma(
+                    el.totalPrice * 1000 - 10000,
+                  )}원 + 배송비 10,000원 `}
+                </div>
+                <div className="totalPrice">
+                  <div className="mobile-Only">총 결제 금액</div>
+                  <div className="realtotalPrice">{`${useComma(
+                    el.totalPrice * 1000,
+                  )}원`}</div>
+                </div>
+              </TotalPriceWrap>
+              <OrderInfoWrap>
+                <DeliveryInfo>
+                  <h2>배송지</h2>
+                  <div>
                     <div>
-                      <div>
-                        <dt>수령위치</dt>
-                        <dd>{el.deliveryDetails.receiveAt}</dd>
-                      </div>
-                      <div>
-                        <dt>택배배송 요청사항</dt>
-                        <dd>{el.deliveryDetails.requestedTerms}</dd>
-                      </div>
+                      {`${el.deliveryInfo.address} ${el.deliveryInfo.detailedAddress}`}
                     </div>
-                  </DeleveryReq>
-                </OrderInfoWrap>
-              </div>
-            );
-          })
-        : null}
+                    <div>{el.deliveryInfo.receiver}</div>
+                    <div>{el.deliveryInfo.contactNum}</div>
+                  </div>
+                </DeliveryInfo>
+                <UserInfo>
+                  <h2>주문자 정보</h2>
+                  <div>
+                    <div>
+                      <dt>주문자명</dt>
+                      <dd>{el.ordererInfo.name}</dd>
+                    </div>
+                    <div>
+                      <dt>연락처</dt>
+                      <dd>{el.ordererInfo.phoneNum}</dd>
+                    </div>
+                    <div>
+                      <dt>이메일</dt>
+                      <dd>{el.ordererInfo.email}</dd>
+                    </div>
+                    <div>
+                      <dt>품절시 환불</dt>
+                      <dd>{el.ordererInfo.refundTerms}</dd>
+                    </div>
+                  </div>
+                </UserInfo>
+                <DeleveryReq>
+                  <h2>배송 요청사항</h2>
+                  <div>
+                    <div>
+                      <dt>수령위치</dt>
+                      <dd>{el.deliveryDetails.receiveAt}</dd>
+                    </div>
+                    <div>
+                      <dt>택배배송 요청사항</dt>
+                      <dd>{el.deliveryDetails.requestedTerms}</dd>
+                    </div>
+                  </div>
+                </DeleveryReq>
+              </OrderInfoWrap>
+            </div>
+          );
+        })
+      ) : (
+        <OrderDetailLoading />
+      )}
     </>
   );
 };

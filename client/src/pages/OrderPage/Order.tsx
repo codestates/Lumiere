@@ -173,11 +173,12 @@ const Order = () => {
               productState={productState}
               orderProduct={orderProduct}
             />
-             <p>
-            * 본 프로젝트 결제 기능은 일부 금액 결제 후 다음날 자동 환불 처리
-            됩니다.
-            <br />* 즉시 환불을 원하시면 마이페이지에서 주문취소를 진행해주세요
-          </p>
+            <p>
+              * 본 프로젝트 결제 기능은 일부 금액 결제 후 다음날 자동 환불 처리
+              됩니다.
+              <br />* 즉시 환불을 원하시면 마이페이지에서 주문취소를
+              진행해주세요
+            </p>
           </ContentRight>
         </ContentWrap>
       )}
