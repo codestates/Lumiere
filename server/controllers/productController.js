@@ -124,11 +124,13 @@ const getProducts = asyncHandler(async (req, res) => {
   if (theme) {
     filter = { theme };
   } else if (sizeMin && sizeMax) {
-    filter = { 'info.canvas': { $gte: sizeMin, $lte: sizeMax } };
+    filter = {
+      'info.canvas': { $gte: Number(sizeMin), $lte: Number(sizeMax) },
+    };
   } else if (priceMin && priceMax) {
-    filter = { price: { $gte: priceMin, $lte: priceMax } };
+    filter = { price: { $gte: Number(priceMin), $lte: Number(priceMax) } };
   } else if (priceMin) {
-    filter = { price: { $gte: priceMin } };
+    filter = { price: { $gte: Number(priceMin) } };
   }
 
   pageSize = 28;
@@ -144,7 +146,8 @@ const getProducts = asyncHandler(async (req, res) => {
       },
     },
     { $unwind: '$artist' },
-    { $match: { ...keyword, ...filter } },
+    { $match: { ...keyword } },
+    { $match: { ...filter } },
     {
       $project: {
         artCode: 0,
@@ -166,6 +169,11 @@ const getProducts = asyncHandler(async (req, res) => {
     { $limit: pageSize },
   ]);
 
+  if (!products.length) {
+    res.json({ message: '해당하는 상품이 없습니다.' });
+    return;
+  }
+
   count = await Product.aggregate([
     { $match: { inStock: true } },
     {
@@ -176,7 +184,8 @@ const getProducts = asyncHandler(async (req, res) => {
         as: 'artist',
       },
     },
-    { $match: { ...keyword, ...filter } },
+    { $match: { ...keyword } },
+    { $match: { ...filter } },
     { $count: 'of_products' },
   ]);
 
