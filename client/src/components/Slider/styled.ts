@@ -84,10 +84,13 @@ export const SlideInfoBox = styled.div`
 `;
 
 export const SliderButtonBox = styled.div`
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   max-width: 1200px;
   width: 100%;
-  height: 100%;
+  height: 5rem;
   margin: 0 auto;
 `;
 
