@@ -115,7 +115,6 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
             window.location.assign('/signin');
           }
           alert(`${err.response.data.message}`);
-          window.location.assign('/error');
         });
     }
   };

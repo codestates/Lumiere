@@ -66,7 +66,7 @@ export const ZzimArtistsFilter = ({
       </AllSelectLabelWrap>
       <SelectBtnWrap>
         <button type="button" onClick={clickModalHandler}>
-          선택상품삭제
+          선택작가삭제
         </button>
       </SelectBtnWrap>
     </FilterMenuWrap>
