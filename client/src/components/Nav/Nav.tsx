@@ -44,7 +44,7 @@ const Nav = () => {
         </li>
         <li>
           {isLogin && <Link to="/cart">장바구니</Link>}
-          <Link to="/">1 : 1 문의하기</Link>
+          <a href="https://pf.kakao.com/_Sxhxexbb/chat">1 : 1 문의하기</a>
           <a href="#top" onClick={fileSaveHandler}>
             작가 신청
           </a>
