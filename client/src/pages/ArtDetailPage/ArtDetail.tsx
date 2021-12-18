@@ -190,7 +190,8 @@ const ArtDetail = () => {
                   <Link
                     to={`/artistdetail/${productDetail[0].productDetail.artist._id}`}
                   >
-                    {productDetail[0].productDetail.artist.name}
+                    {productDetail[0].productDetail.artist.name}(
+                    {productDetail[0].productDetail.artist.aka})
                     <MdOutlineArrowForwardIos />
                   </Link>
                 </div>

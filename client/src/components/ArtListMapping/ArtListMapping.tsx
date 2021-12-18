@@ -18,7 +18,7 @@ export const ArtListMapping = ({
 }: GreetingProps) => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   const { _id, title, image, artist, info } = art;
-  const { name } = artist;
+  const { name, aka } = artist;
   const { size } = info;
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
@@ -70,7 +70,7 @@ export const ArtListMapping = ({
         >
           <h4>{title}</h4>
           <p>
-            {name}
+            {name}({aka})
             <br />
             {size} ({art.info.canvas}호)
           </p>
