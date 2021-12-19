@@ -131,11 +131,13 @@ const SignUpContent = () => {
   const signupHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isDisableBtn) {
+      setIsDisableBtn(false);
       return;
     } else {
       setIsDisableBtn(true);
     }
     if (!validateAllCheck) {
+      setIsDisableBtn(false);
       setErrMessageName();
       setErrMessageEmail();
       setErrMessagePassword();
@@ -154,7 +156,6 @@ const SignUpContent = () => {
           name: signupInputInfo.name,
         })
         .then(() => {
-          setIsDisableBtn(false);
           history('/signin');
         })
         .catch(() => {
