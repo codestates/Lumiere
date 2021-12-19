@@ -131,6 +131,8 @@ const getProducts = asyncHandler(async (req, res) => {
     filter = { price: { $gte: Number(priceMin), $lte: Number(priceMax) } };
   } else if (priceMin) {
     filter = { price: { $gte: Number(priceMin) } };
+  } else {
+    filter = '';
   }
 
   pageSize = 28;
@@ -170,7 +172,11 @@ const getProducts = asyncHandler(async (req, res) => {
   ]);
 
   if (!products.length) {
-    res.json({ message: '해당하는 상품이 없습니다.' });
+    res.json({
+      products,
+      page,
+      pages: Math.ceil(count ? count[0].of_products : 1 / pageSize),
+    });
     return;
   }
 

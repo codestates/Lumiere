@@ -70,12 +70,10 @@ const ArtList = () => {
     }
   }, [lastTabState]);
 
-  // `/products?keyword=${keyword}&pageNumber=${pageNumber}` 요청 API 주소
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
     setIsLoading(true);
     if (currentMenu === -1) {
-      console.log(1);
       instance
         .get<AdminProductsType>('/products', { params: { pageNumber: page } })
         .then((res) => {
@@ -96,10 +94,9 @@ const ArtList = () => {
   };
   useEffect(() => {
     if (currentMenu !== -1) {
-      console.log(2);
       setIsLoading(true);
       instance
-        .get('/products/filter', {
+        .get('/products', {
           params: {
             pageNumber: curPage,
             theme: getTypes.theme,
@@ -139,7 +136,6 @@ const ArtList = () => {
     priceMax?: number;
   }) => {
     if (!type) {
-      console.log(3);
       setIsLoading(true);
       instance
         .get<AdminProductsType>('/products', {
@@ -158,10 +154,9 @@ const ArtList = () => {
           } else window.location.assign('/error');
         });
     } else {
-      console.log(4);
       setIsLoading(true);
       instance
-        .get('/products/filter', {
+        .get('/products', {
           params: {
             pageNumber: 1,
             theme: type.theme,

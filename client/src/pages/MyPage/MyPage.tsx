@@ -70,7 +70,6 @@ const MyPage = () => {
       setUserData(res.data);
     });
   }, []);
-  console.log(userData.status);
 
   const selectTabHandler = (id: number) => {
     if (pwdMatch) {
