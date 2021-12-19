@@ -21,6 +21,7 @@ import Error from 'pages/ErrorPage/Error';
 import Callback from 'pages/CallbackPage/Callback';
 import { GlobalStyle } from 'styles/global-style';
 import SearchResult from 'pages/SearchResult/SearchResult';
+import ScrollToTop from 'components/ScrollToTop/ScrollToTop';
 import * as ROUTES from './util/constants/routes';
 import { IsUserRedirect, PrivateRoute } from './util/helpers/protect';
 
@@ -35,6 +36,7 @@ function App() {
     <>
       <GlobalStyle />
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path={ROUTES.LANDING} element={<Landing />} />
           <Route path={ROUTES.SIGNIN} element={<IsUserRedirect />}>
