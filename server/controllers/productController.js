@@ -324,7 +324,7 @@ const getTotalPrice = asyncHandler(async (req, res) => {
     },
   ]);
   const realPrice = totalPrice[0].totalPrice;
-  let fakePrice = (realPrice + 10000) / 100;
+  const fakePrice = (realPrice + 10000) / 100;
   totalPrice[0].totalPrice =
     totalPrice[0].totalPrice < 100000 ? fakePrice : fakePrice / 10;
   res.json({
