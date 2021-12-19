@@ -23,10 +23,11 @@ const Callback = () => {
         }
         localStorage.setItem('lumiereUserInfo', JSON.stringify(userInfo));
         setIsLogin(true);
-        window.history.go(-2); // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
+        // window.history.go(-2); // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
       })
-      .catch(() => {
+      .catch((err) => {
         alert('로그인에 실패하였습니다.');
+        console.log(err);
         window.location.replace('/signin'); // 로그인 실패하면 로그인화면으로 돌려보냄
       });
   }, []);
