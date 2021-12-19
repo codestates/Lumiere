@@ -106,8 +106,12 @@ export const SliderButton = styled.button`
   width: 3rem;
   height: 5rem;
   font-size: 1.5rem;
-  background: none;
+  background: rgba(0, 0, 0, 0.4);
   border: none;
+
+  > svg polyline {
+    stroke: rgba(255, 255, 255, 0.8);
+  }
 
   &:last-of-type {
     right: 0;
