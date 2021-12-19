@@ -8,6 +8,7 @@ import { IsSigninState } from 'States/IsLoginState';
 import Footer from 'components/Footer/Footer';
 import QuickBtns from 'components/QuickBtns/QuickBtns';
 import ShareBox from 'components/ShareBox/ShareBox';
+import Alert from 'components/Alert/Alert';
 import { FiShare2 } from 'react-icons/fi';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import LoginGuideModal from 'components/Modal/LoginGuideModal';
@@ -34,6 +35,9 @@ const ArtistDetail = () => {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState<boolean>(false);
   const [clickToShare, setClickToShare] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState('success');
+  const [alertMessage, setAlertMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -101,6 +105,29 @@ const ArtistDetail = () => {
     setClickToShare(!clickToShare);
   };
 
+  // Alert Handler (Snackbar)
+  const alertOpenHandler = () => {
+    setOpen(true);
+  };
+
+  const alertCloseHandler = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  // ShareBox 링크복사 Alert Handler
+  const linkCopyAlertHandler = () => {
+    setSeverity('success');
+    setAlertMessage('링크가 복사되었습니다 :-)');
+    alertOpenHandler();
+  };
+
   return (
     <ArtistDeatilContainer>
       <Header />
@@ -121,7 +148,10 @@ const ArtistDetail = () => {
               <div className="buttonswrap">
                 {clickToShare && (
                   <div>
-                    <ShareBox clickToShareHandler={clickToShareHandler} />
+                    <ShareBox
+                      clickToShareHandler={clickToShareHandler}
+                      linkCopyAlertHandler={linkCopyAlertHandler}
+                    />
                   </div>
                 )}
                 <FiShare2 onClick={clickToShareHandler} />
@@ -179,6 +209,13 @@ const ArtistDetail = () => {
       )}
       <QuickBtns isLoading={isLoading} />
       <Footer />
+      {/* Alert */}
+      <Alert
+        open={open}
+        severity={severity}
+        alertMessage={alertMessage}
+        alertCloseHandler={alertCloseHandler}
+      />
       {/* Modal */}
       {isOpenLoginModal && (
         <LoginGuideModal clickModalHandler={openLoginModalHandler} />

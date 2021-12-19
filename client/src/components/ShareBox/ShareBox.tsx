@@ -10,9 +10,10 @@ import { ShareContainer, ShareBtnWrap } from './styled';
 
 interface Props {
   clickToShareHandler: () => void;
+  linkCopyAlertHandler: () => void;
 }
 
-const ShareBox = ({ clickToShareHandler }: Props) => {
+const ShareBox = ({ clickToShareHandler, linkCopyAlertHandler }: Props) => {
   const currentUrl = window.location.href;
 
   const sendKakaoMessage = () => {
@@ -56,10 +57,7 @@ const ShareBox = ({ clickToShareHandler }: Props) => {
           <img src="/images/kakao.png" alt="카카오 공유하기" />
         </button>
         <CopyToClipboard text={currentUrl}>
-          <button
-            type="button"
-            onClick={() => alert('링크가 복사되었습니다 :-)')}
-          >
+          <button type="button" onClick={linkCopyAlertHandler}>
             <ImLink />
           </button>
         </CopyToClipboard>
