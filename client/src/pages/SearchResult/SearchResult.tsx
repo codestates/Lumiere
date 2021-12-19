@@ -70,13 +70,17 @@ const ArtList = () => {
     }
   }, [lastTabState]);
 
-  // `/products?keyword=${keyword}&pageNumber=${pageNumber}` 요청 API 주소
   const pageChangeHandler = (page: number) => {
     setCurPage(page);
     setIsLoading(true);
     if (currentMenu === -1) {
       instance
-        .get<AdminProductsType>('/products', { params: { pageNumber: page } })
+        .get<AdminProductsType>('/products', {
+          params: {
+            keyword: decodeURI(window.location.search.slice(4)),
+            pageNumber: page,
+          },
+        })
         .then((res) => {
           setArtList(res.data);
           setIsLoading(false);
@@ -95,8 +99,9 @@ const ArtList = () => {
     if (currentMenu !== -1) {
       setIsLoading(true);
       instance
-        .get('/products/filter', {
+        .get('/products', {
           params: {
+            keyword: decodeURI(window.location.search.slice(4)),
             pageNumber: curPage,
             theme: getTypes.theme,
             sizeMin: getTypes.sizeMin,
@@ -138,7 +143,10 @@ const ArtList = () => {
       setIsLoading(true);
       instance
         .get<AdminProductsType>('/products', {
-          params: { pageNumber: 1 },
+          params: {
+            keyword: decodeURI(window.location.search.slice(4)),
+            pageNumber: 1,
+          },
         })
         .then((res) => {
           setArtList(res.data);
@@ -155,8 +163,9 @@ const ArtList = () => {
     } else {
       setIsLoading(true);
       instance
-        .get('/products/filter', {
+        .get('/products', {
           params: {
+            keyword: decodeURI(window.location.search.slice(4)),
             pageNumber: 1,
             theme: type.theme,
             sizeMin: type.sizeMin,

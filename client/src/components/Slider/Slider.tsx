@@ -34,7 +34,6 @@ const Slider = ({ banners }: Props) => {
     }
   };
   const prevSlideHandler = () => {
-    console.log('prev');
     if (slideIndex > 0) {
       setSlideIndex(slideIndex - 1);
     } else if (slideIndex === 0) {

@@ -39,7 +39,6 @@ const FilteringTab = ({
   setLastTabStateHandler,
 }: GreetingProps) => {
   const [currentTab, setCurrentTab] = useState(1);
-
   useEffect(() => {
     if (currentMenu <= 5) filteringHandler(tabTypes[currentMenu]);
     else if (currentMenu <= 16) {
