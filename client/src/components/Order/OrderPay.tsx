@@ -184,8 +184,8 @@ export const OrderPay = ({
       buyer_name: ordererInfoState.name,
       buyer_tel: ordererInfoState.phoneNum,
       buyer_email: ordererInfoState.email,
-      m_redirect_url: 'http:localhost:3000',
-      app_scheme: 'http:localhost:3000',
+      m_redirect_url: 'https://www.lumieregallery.site/',
+      app_scheme: 'https://www.lumieregallery.site/',
     };
 
     const callback = (response: RequestPayResponse) => {
