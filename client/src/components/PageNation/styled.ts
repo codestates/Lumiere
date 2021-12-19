@@ -4,7 +4,7 @@ export const PaginatorWrap = styled.div`
   .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 15px;
+    margin: 1rem 0;
   }
   ul {
     list-style: none;
