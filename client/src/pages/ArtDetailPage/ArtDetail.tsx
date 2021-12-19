@@ -74,6 +74,7 @@ const ArtDetail = () => {
     } else if (!cartItems) {
       localStorage.setItem('cartItems', JSON.stringify([productId]));
       setSeverity('success');
+      setAlertMessage('작품이 아트 쇼핑백에 담겼습니다!');
       alertOpenHandler();
     } else if (!JSON.parse(cartItems).includes(productId)) {
       const cartArr = JSON.parse(cartItems);
@@ -158,6 +159,13 @@ const ArtDetail = () => {
     setOpen(false);
   };
 
+  // ShareBox 링크복사 Alert Handler
+  const linkCopyAlertHandler = () => {
+    setSeverity('success');
+    setAlertMessage('링크가 복사되었습니다 :-)');
+    alertOpenHandler();
+  };
+
   return (
     <ArtDetailContainer>
       <Header />
@@ -179,7 +187,10 @@ const ArtDetail = () => {
                   <div>
                     {clickToShare && (
                       <div>
-                        <ShareBox clickToShareHandler={clickToShareHandler} />
+                        <ShareBox
+                          clickToShareHandler={clickToShareHandler}
+                          linkCopyAlertHandler={linkCopyAlertHandler}
+                        />
                       </div>
                     )}
                     <FiShare2 onClick={clickToShareHandler} />
@@ -276,7 +287,10 @@ const ArtDetail = () => {
                   <Link to="#top" onClick={clickToShareHandler}>
                     {clickToShare && (
                       <div>
-                        <ShareBox clickToShareHandler={clickToShareHandler} />
+                        <ShareBox
+                          clickToShareHandler={clickToShareHandler}
+                          linkCopyAlertHandler={linkCopyAlertHandler}
+                        />
                       </div>
                     )}
                     <FiShare2 />

@@ -123,6 +123,7 @@ export const DetailInfoBox = styled.div`
         position: absolute;
         top: 0.4rem;
         right: 2rem;
+        z-index: var(--nav-index);
       }
       > svg {
         width: 2rem;
@@ -191,6 +192,7 @@ export const OrderBtnBox = styled.div`
       position: absolute;
       bottom: 0.5rem;
       right: 4rem;
+      z-index: var(--nav-index);
     }
   }
 

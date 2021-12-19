@@ -137,7 +137,7 @@ export const HtagWrap = styled.div`
       position: absolute;
       bottom: 0.2rem;
       right: 2rem;
-      z-index: var(--button-index);
+      z-index: var(--nav-index);
       @media screen and (min-width: 768px) {
         top: 0.2rem;
       }
