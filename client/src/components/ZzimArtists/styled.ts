@@ -184,9 +184,9 @@ export const ArtistDlWrap = styled.dl`
   flex: 6;
   padding: 1rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   text-align: left;
-  justify-content: space-around;
+  justify-content: space-between;
 
   & dt {
     font-weight: 900;
@@ -201,6 +201,16 @@ export const ArtistDlWrap = styled.dl`
   }
   & dd:nth-child(3) {
     padding-bottom: 3rem;
+  }
+  .ddwrap {
+    cursor: pointer;
+    flex: 9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .blankwrap {
+    flex: 1;
   }
   @media screen and (min-width: 768px) {
     flex: 7;

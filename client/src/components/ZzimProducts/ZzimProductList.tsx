@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { useComma } from 'util/functions';
 import { OrderProducts } from 'util/type';
+import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import {
   ProductContentWrap,
@@ -104,13 +105,26 @@ export const ZzimProductList = ({
                 </label>
               </ListCheckLabelWrap>
               <ImgWrap>
-                <img src={el.image} alt={`${el.artist} ${el.image}`} />
+                <Link to={`/artdetail/${el._id}`}>
+                  <img src={el.image} alt={`${el.artist} ${el.image}`} />
+                </Link>
               </ImgWrap>
               <ProductDlWrap>
-                <dt>{el.title}</dt>
-                <dd>{el.artist.name}</dd>
-                <dd>{`${el.info.size} (${el.info.canvas}호)`}</dd>
-                <dd>{el.inStock ? `${useComma(el.price)} 원` : `품절`}</dd>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className="ddwrap"
+                  onClick={() => window.location.assign(`/artdetail/${el._id}`)}
+                  onKeyDown={() =>
+                    window.location.assign(`/artdetail/${el._id}`)
+                  }
+                >
+                  <dt>{el.title}</dt>
+                  <dd>{el.artist.name}</dd>
+                  <dd>{`${el.info.size} (${el.info.canvas}호)`}</dd>
+                  <dd>{el.inStock ? `${useComma(el.price)} 원` : `품절`}</dd>
+                </div>
+                <div className="blankwrap"> </div>
               </ProductDlWrap>
             </ProductContent>
           );
