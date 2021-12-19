@@ -47,8 +47,12 @@ export const LabelWrap = styled.div`
   label {
     width: 65%;
     font-size: 0.9rem;
-    border: 1px solid #ffffff;
+  }
 
+  input {
+    width: 100%;
+    border: none;
+    border: 1px solid #bbb4b4;
     &:hover {
       border: 1px solid #bbb4b4;
     }
@@ -58,24 +62,12 @@ export const LabelWrap = styled.div`
     }
   }
 
-  input {
-    width: 100%;
-  }
-
   @media screen and (min-width: 768px) {
     margin-bottom: 0.8rem;
 
     label {
       width: 80%;
       font-size: 0.9rem;
-
-      &:hover {
-        border: 1px solid #bbb4b4;
-      }
-
-      &:focus {
-        outline: 1px solid #bbb4b4;
-      }
     }
 
     input {
@@ -284,9 +276,9 @@ export const OrderUserInfo = styled.div`
 
   input {
     width: 100%;
-    border: none;
     font-size: 0.9rem;
-    border: 1px solid #ffffff;
+    border: none;
+    border: 1px solid #bbb4b4;
 
     &:hover {
       border: 1px solid #bbb4b4;
