@@ -18,7 +18,8 @@ const addEvent = asyncHandler(async (req, res) => {
 // @route  GET /api/events
 // @access Public
 const getEvents = asyncHandler(async (req, res) => {
-  const events = await Event.find({}).sort({ _id: -1 });
+  // const events = await Event.find({});
+  const events = await Event.aggregate([{ $sample: { size: 4 } }]);
   res.json(events);
 });
 
