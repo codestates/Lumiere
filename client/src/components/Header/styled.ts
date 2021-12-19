@@ -12,6 +12,7 @@ export const HeaderContainer = styled.div`
 
 export const HeaderWrap = styled.header`
   display: flex;
+  justify-content: flex-end;
   max-width: 1200px;
   min-width: 320px;
   width: 100%;
@@ -51,18 +52,23 @@ export const HambugerBtn = styled.div`
 `;
 
 export const LogoBox = styled.div`
-  flex: 1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  margin-left: 3rem;
 
   img {
     height: 1.5rem;
   }
 
   @media screen and (min-width: 768px) {
-    flex: 0;
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
     justify-content: flex-start;
     margin: 0;
   }
