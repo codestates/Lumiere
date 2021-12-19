@@ -20,7 +20,7 @@ export const convertDeliverStatus = (param: number) => {
     case 5:
       return '결제취소';
     default:
-      return '오류';
+      return '결제오류';
   }
 };
 

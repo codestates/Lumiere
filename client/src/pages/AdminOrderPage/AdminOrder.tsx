@@ -44,15 +44,6 @@ const AdminOrderList = () => {
           general: {
             email: '',
           },
-          kakao: {
-            email: '',
-          },
-          naver: {
-            email: '',
-          },
-          google: {
-            email: '',
-          },
           name: '',
           _id: '',
         },
@@ -66,9 +57,11 @@ const AdminOrderList = () => {
     instance
       .get<Order>('/orders')
       .then((res) => {
+        console.log(res.data);
         setOrderList(res.data);
       })
       .catch((err) => {
+        console.log(err.response);
         if (err.response.status === 401 && isLogin) {
           alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
           localStorage.removeItem('lumiereUserInfo');
@@ -83,6 +76,7 @@ const AdminOrderList = () => {
     instance
       .get<Order>('/orders', { params: { pageNumber: page } })
       .then((res) => {
+        console.log(res.data);
         setOrderList(res.data);
       })
       .catch((err) => {
@@ -149,6 +143,7 @@ const AdminOrderList = () => {
   return (
     <AdminHeaderWrap>
       <Header />
+      {console.log(orderList.orders)}
       <h1>결제/배송 관리</h1>
       <PageNation
         curPage={curPage}
@@ -173,20 +168,25 @@ const AdminOrderList = () => {
               <tbody key={uuidv4()}>
                 <tr>
                   <td>
-                    <div>{el.user.general.email}</div>
+                    <div>{el.user.general?.email}</div>
+                    <div>{el.user.kakao?.email}</div>
+                    <div>{el.user.google?.email}</div>
+                    <div>{el.user.naver?.email}</div>
                     <div>{el.user.name}</div>
                     <div>{el.user._id}</div>
                   </td>
                   <td>
                     <div>
-                      {el.result.paidAt
-                        .toString()
-                        .split('-')
-                        .join('/')
-                        .split('T')
-                        .join(' ')
-                        .slice(2)
-                        .slice(0, -5)}
+                      {el.result?.paidAt
+                        ? el.result?.paidAt
+                            .toString()
+                            .split('-')
+                            .join('/')
+                            .split('T')
+                            .join(' ')
+                            .slice(2)
+                            .slice(0, -5)
+                        : ''}
                     </div>
                     <div>주문번호: {el.result.id}</div>
                   </td>

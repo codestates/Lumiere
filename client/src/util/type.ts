@@ -152,13 +152,13 @@ export interface Order {
       ];
       result: {
         id: string;
-        paidAt: string;
+        paidAt?: string;
         status: number;
         updatedAt: string;
       };
       totalPrice: number;
       user: {
-        general: {
+        general?: {
           email: string;
         };
         kakao?: {
