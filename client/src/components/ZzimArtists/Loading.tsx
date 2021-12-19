@@ -40,19 +40,26 @@ export const LoadingZzimArtists = () => {
           />
         </ImgWrap>
         <ArtistDlWrap>
-          <Skeleton variant="text" animation="wave" width="90%" height="3rem" />
-          <Skeleton
-            variant="text"
-            animation="wave"
-            width="90%"
-            height="1.5rem"
-          />
-          <Skeleton
-            variant="text"
-            animation="wave"
-            width="90%"
-            height="1.5rem"
-          />
+          <Stack spacing={1} className="ddwrap">
+            <Skeleton
+              variant="text"
+              animation="wave"
+              width="90%"
+              height="3rem"
+            />
+            <Skeleton
+              variant="text"
+              animation="wave"
+              width="90%"
+              height="1.5rem"
+            />
+            <Skeleton
+              variant="text"
+              animation="wave"
+              width="90%"
+              height="1.5rem"
+            />
+          </Stack>
         </ArtistDlWrap>
       </ArtistsContent>
     </ArtistsContentWrap>
