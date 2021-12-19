@@ -30,17 +30,30 @@ export const NavContainer = styled.nav`
     flex-direction: column;
     padding: 1rem 0.5rem;
   }
+  li > button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+  }
   li:nth-child(1) {
     border-bottom: 0.5px solid #666666;
   }
-  li a {
+  li a,
+  li > button {
     padding: 1rem;
     font-size: 1.1rem;
     color: #ffffff;
     border: 1px solid var(--color-black);
     transition: all 0.5s;
   }
+  li > button {
+    border: none;
+  }
   li a:hover,
+  li > button:hover,
+  li > button:focus,
   li a:focus {
     border-radius: 2rem;
     border: 1px solid #ffffff;

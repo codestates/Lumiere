@@ -97,7 +97,15 @@ export const MainMenu = styled.nav`
           cursor: pointer;
         }
       }
+      > li > button {
+        border: none;
+        background: none;
+        display: inline-block;
+        font-size: 1rem;
+        cursor: pointer;
+      }
       > li > a,
+      > li > button,
       > li > div {
         padding: 0.2rem 0.4rem;
         font-weight: 700;
@@ -105,7 +113,8 @@ export const MainMenu = styled.nav`
         border-bottom: 2px solid #ffffff;
         transition: all 0.5s;
       }
-      > li > a:hover {
+      > li > a:hover,
+      > li > button:hover {
         color: var(--color-black);
         border-bottom: 2px solid #eeeeee;
       }
