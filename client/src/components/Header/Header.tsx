@@ -258,7 +258,7 @@ const Header = () => {
                     type="search"
                     name="sq"
                     id="header-searchBar-sq"
-                    placeholder="작가 이름, 작품 제목"
+                    placeholder="작가 이름, 작가 활동명, 작품 제목, 작품 재료"
                     onChange={searchInputHandler}
                   />
                   <label htmlFor="header-searchBar-submit">
