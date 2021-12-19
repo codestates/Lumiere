@@ -239,6 +239,7 @@ export const ProductContent = styled.div`
 
   &:last-child {
     margin-bottom: 0;
+    border-bottom: 0;
   }
 `;
 
