@@ -106,7 +106,7 @@ const Header = () => {
   };
 
   const fileSaveHandler = () => {
-    saveAs('/files/LUMIERE.docx', 'LUMIERE');
+    saveAs('/files/LUMIERE.zip', 'LUMIERE');
   };
 
   return (
