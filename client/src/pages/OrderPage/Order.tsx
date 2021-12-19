@@ -111,11 +111,12 @@ const Order = () => {
     instance
       .get('/products/total-price', { params: { productId: orderProduct } })
       .then((res) => {
-        const price = res.data.totalPrice;
+        const price = res.data.total.totalPrice;
+        const { isOver } = res.data;
         setPriceState({
           ...priceState,
           shippingPrice: 10000,
-          totalPrice: price * 1000 - 10000,
+          totalPrice: isOver ? price * 1000 - 10000 : price * 100 - 10000,
         });
       })
       .catch((err) => {
