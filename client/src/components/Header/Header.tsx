@@ -158,9 +158,9 @@ const Header = () => {
                 </Link>
               </li>
               <li>
-                <a href="#top" onClick={fileSaveHandler}>
+                <button type="button" onClick={fileSaveHandler}>
                   작가 신청
-                </a>
+                </button>
               </li>
               <li>
                 <div
