@@ -74,8 +74,6 @@ export const SelectBtnWrap = styled.div`
 
 export const ArtistsContentWrap = styled.div`
   padding: 1rem 1rem 0;
-  overflow: scroll;
-  overflow-x: hidden;
 
   @media screen and (min-width: 768px) {
     height: 100%;
