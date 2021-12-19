@@ -357,6 +357,8 @@ const getLatestOrder = asyncHandler(async (req, res) => {
 
   if (order) {
     res.json(order);
+  } else {
+    res.json({});
   }
 });
 
