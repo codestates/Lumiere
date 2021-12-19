@@ -105,6 +105,7 @@ const Order = () => {
       });
   }, []);
 
+  // useEffect(() => setIsLoading(false), [productState]);
   // 주문 가격 확인
   useEffect(() => {
     instance
@@ -132,6 +133,7 @@ const Order = () => {
     instance
       .get('/products/cart-items', { params: { productId: orderProduct } })
       .then((res) => {
+        setIsLoading(false);
         setProductState(res.data);
       });
   }, []);

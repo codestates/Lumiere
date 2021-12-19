@@ -3,6 +3,7 @@ import ZzimDeleteModal from 'components/Modal/ZzimDeleteModal';
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { ZzimArtistsType } from 'util/type';
+import { Link } from 'react-router-dom';
 import instance from 'util/axios';
 import {
   ArtistsContentWrap,
@@ -103,12 +104,27 @@ export const ZzimArtistsList = ({
                 </label>
               </ListCheckLabelWrap>
               <ImgWrap>
-                <img src={el.thumbnail} alt={`${el.name} ${el.thumbnail}`} />
+                <Link to={`/artistdetail/${el._id}`}>
+                  <img src={el.thumbnail} alt={`${el.name} ${el.thumbnail}`} />
+                </Link>
               </ImgWrap>
               <ArtistDlWrap>
-                <dt>{el.name}</dt>
-                <dd>{el.aka}</dd>
-                <dd>{`작품 수 : ${el.countOfWorks}`}</dd>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  className="ddwrap"
+                  onClick={() =>
+                    window.location.assign(`/artistdetail/${el._id}`)
+                  }
+                  onKeyDown={() =>
+                    window.location.assign(`/artistdetail/${el._id}`)
+                  }
+                >
+                  <dt>{el.name}</dt>
+                  <dd>{el.aka}</dd>
+                  <dd>{`작품 수 : ${el.countOfWorks}`}</dd>
+                </div>
+                <div className="blankwrap"> </div>
               </ArtistDlWrap>
             </ArtistsContent>
           );

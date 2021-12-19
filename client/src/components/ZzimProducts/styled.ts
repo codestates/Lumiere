@@ -201,9 +201,9 @@ export const ProductDlWrap = styled.dl`
   flex: 6;
   padding: 1rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   text-align: left;
-  justify-content: space-around;
+  justify-content: space-between;
 
   & dt {
     font-weight: 700;
@@ -219,6 +219,16 @@ export const ProductDlWrap = styled.dl`
 
   dd:nth-child(4) {
     font-weight: 700;
+  }
+  .ddwrap {
+    cursor: pointer;
+    flex: 9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  .blankwrap {
+    flex: 1;
   }
 
   @media screen and (min-width: 768px) {

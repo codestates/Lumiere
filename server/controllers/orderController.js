@@ -93,7 +93,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
         checksum: amount,
       },
     });
-    console.log('결제 취소 답변', getCancelData.data);
+    // console.log('결제 취소 답변', getCancelData.data);
     if (getCancelData.data.code === 0) {
       // 상품 품절 원위치 및 주문 삭제
       const itemsId = order.orderItems.map((item) => item.product);
@@ -129,7 +129,6 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
 // @access  Private & Private/Admin
 const cancelOrder = asyncHandler(async (req, res) => {
   // 주문 취소
-
   const order = await Order.findById(req.params.id);
 
   if (!order) {
@@ -183,7 +182,7 @@ const cancelOrder = asyncHandler(async (req, res) => {
         checksum: order.totalPrice,
       },
     });
-    console.log('결제 취소 답변', getCancelData.data);
+    // console.log('결제 취소 답변', getCancelData.data);
 
     if (getCancelData.data.code === 0) {
       await Product.updateMany(
@@ -287,7 +286,6 @@ const getOrders = asyncHandler(async (req, res) => {
 const getOrderById = asyncHandler(async (req, res) => {
   // 주문 상세 정보
   const order = await Order.findById(req.params.id);
-
   if (order) {
     res.json(order);
   } else {
@@ -301,7 +299,6 @@ const getOrderById = asyncHandler(async (req, res) => {
 const getMyOrders = asyncHandler(async (req, res) => {
   const pageSize = 3;
   const page = Number(req.query.pageNumber) || 1;
-
   const count = await Order.countDocuments({ user: req.user._id });
   const orders = await Order.find(
     { user: req.user._id },
@@ -316,8 +313,8 @@ const getMyOrders = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .skip(pageSize * (page - 1))
     .exec();
-
   const status = await Order.aggregate([
+    { $match: { user: req.user._id } },
     {
       $facet: {
         paid: [{ $match: { 'result.status': 0 } }, { $count: 'paid' }],
