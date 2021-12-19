@@ -87,10 +87,10 @@ const Order = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
   // 최초 렌더링시 주문이력 여부 확인
   useEffect(() => {
-    instance
-      .get('/orders/latest')
-      .then((res) => {
-        // 주문이력 O
+    instance.get('/orders/latest').then((res) => {
+      console.log(res.data);
+      // 주문이력 O
+      if (Object.keys(res.data).length) {
         const { name, email, phoneNum, refundTerms } = res.data.ordererInfo;
         const { address, detailedAddress, receiver, contactNum } =
           res.data.deliveryInfo;
@@ -99,10 +99,13 @@ const Order = () => {
         setShippingState({ address, detailedAddress, receiver, contactNum });
         setDeliveryReqState({ receiveAt, requestedTerms });
         setIsLoading(false);
-      })
-      .catch(() => {
-        window.location.assign('/error');
-      });
+      }
+    });
+    // .catch((err) => {
+    //   console.log(err);
+    //   console.log(1);
+    //   // window.location.assign('/error');
+    // });
   }, []);
 
   // useEffect(() => setIsLoading(false), [productState]);
