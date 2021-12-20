@@ -211,7 +211,7 @@ const AdminOrderList = () => {
                       );
                     })}
                   </td>
-                  <td>{useComma(el.totalPrice)}</td>
+                  <td>{useComma(el.totalPrice * 1000)}</td>
                   <td>{convertDeliverStatus(el.result.status)}</td>
                   <td>
                     <button type="button" onClick={() => cancelOrder(el._id)}>
