@@ -208,7 +208,7 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
                 <TotalPriceWrap>
                   <div className="mobile-Only shipping">
                     {`상품 ${useComma(
-                      el.totalPrice - 10000,
+                      el.totalPrice * 1000 - 10000,
                     )}원 + 배송비 10,000원`}
                   </div>
                   <div className="totalPrice">
