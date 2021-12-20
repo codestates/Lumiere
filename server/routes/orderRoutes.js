@@ -21,7 +21,7 @@ router.route('/mine').get(protect, getMyOrders);
 router
   .route('/:id')
   .get(protect, getOrderById)
-  .patch(protect, admin, updateOrderStatus)
+  .patch(protect, updateOrderStatus)
   .delete(protect, cancelOrder);
 
 export default router;

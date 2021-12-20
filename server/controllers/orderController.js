@@ -213,18 +213,34 @@ const cancelOrder = asyncHandler(async (req, res) => {
 
 // @desc    Update order status
 // @route   PATCH /api/orders/:id
-// @access  Private/Admin
+// @access  Private & Private/Admin
 const updateOrderStatus = asyncHandler(async (req, res) => {
   // 주문 진행단계 변경
-  const { status } = req.body;
+  const { status, isAdmin } = req.body;
   const order = await Order.findById(req.params.id);
 
   if (!order) {
     res.status(404).json({ message: '해당 주문내역이 존재하지 않습니다' });
     return;
   }
-  let message;
+
   const { result } = order;
+  if (
+    isAdmin === false &&
+    status === 4 &&
+    (result.status === 1 || result.status === 2 || result.status === 3)
+  ) {
+    await Order.updateOne(
+      { _id: req.params.id },
+      { 'result.status': status, 'result.updatedAt': localTime() },
+    );
+    res
+      .status(200)
+      .json({ message: '해당 주문의 반품 요청 단계로 변경되었습니다' });
+    return;
+  }
+
+  let message;
   if (status === 1 && result.status === 0)
     message = '해당 주문이 발송 준비 중 단계로 변경되었습니다';
   else if (status === 2 && result.status === 1)
