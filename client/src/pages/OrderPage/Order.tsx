@@ -88,7 +88,6 @@ const Order = () => {
   // 최초 렌더링시 주문이력 여부 확인
   useEffect(() => {
     instance.get('/orders/latest').then((res) => {
-      console.log(res.data);
       // 주문이력 O
       if (Object.keys(res.data).length) {
         const { name, email, phoneNum, refundTerms } = res.data.ordererInfo;
@@ -101,11 +100,6 @@ const Order = () => {
         setIsLoading(false);
       }
     });
-    // .catch((err) => {
-    //   console.log(err);
-    //   console.log(1);
-    //   // window.location.assign('/error');
-    // });
   }, []);
 
   // useEffect(() => setIsLoading(false), [productState]);

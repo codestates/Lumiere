@@ -57,11 +57,9 @@ const AdminOrderList = () => {
     instance
       .get<Order>('/orders')
       .then((res) => {
-        console.log(res.data);
         setOrderList(res.data);
       })
       .catch((err) => {
-        console.log(err.response);
         if (err.response.status === 401 && isLogin) {
           alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
           localStorage.removeItem('lumiereUserInfo');
@@ -76,7 +74,6 @@ const AdminOrderList = () => {
     instance
       .get<Order>('/orders', { params: { pageNumber: page } })
       .then((res) => {
-        console.log(res.data);
         setOrderList(res.data);
       })
       .catch((err) => {
@@ -143,7 +140,6 @@ const AdminOrderList = () => {
   return (
     <AdminHeaderWrap>
       <Header />
-      {console.log(orderList.orders)}
       <h1>결제/배송 관리</h1>
       <PageNation
         curPage={curPage}

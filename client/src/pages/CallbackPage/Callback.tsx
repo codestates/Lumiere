@@ -27,7 +27,6 @@ const Callback = () => {
       })
       .catch((err) => {
         alert('로그인에 실패하였습니다.');
-        console.log(err);
         window.location.replace('/signin'); // 로그인 실패하면 로그인화면으로 돌려보냄
       });
   }, []);
