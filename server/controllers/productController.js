@@ -323,14 +323,8 @@ const getTotalPrice = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  const realPrice = totalPrice[0].totalPrice;
-  const fakePrice = (realPrice + 10000) / 100;
-  totalPrice[0].totalPrice =
-    totalPrice[0].totalPrice < 100000 ? fakePrice : fakePrice / 10;
-  res.json({
-    total: totalPrice[0],
-    isOver: fakePrice * 100 > 100000,
-  });
+  totalPrice[0].totalPrice = (totalPrice[0].totalPrice + 10000) / 1000;
+  res.json(totalPrice[0]);
 });
 
 // @desc   Zzim or unZzim the product

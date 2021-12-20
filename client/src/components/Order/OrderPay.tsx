@@ -111,9 +111,7 @@ export const OrderPay = ({
             .then((res) => {
               if (
                 res.data.total.totalPrice !==
-                (priceState.totalPrice < 100000
-                  ? (priceState.totalPrice + priceState.shippingPrice) / 100
-                  : (priceState.totalPrice + priceState.shippingPrice) / 1000)
+                (priceState.totalPrice + priceState.shippingPrice) / 1000
               ) {
                 alert('결제금액이 다릅니다.');
                 return window.location.assign('/error');
@@ -140,11 +138,7 @@ export const OrderPay = ({
                     ordererInfo: ordererInfoState,
                     shippingPrice: priceState.shippingPrice,
                     totalPrice:
-                      priceState.totalPrice + priceState.shippingPrice < 100000
-                        ? (priceState.totalPrice + priceState.shippingPrice) /
-                          100
-                        : (priceState.totalPrice + priceState.shippingPrice) /
-                          1000,
+                      (priceState.totalPrice + priceState.shippingPrice) / 1000,
                   })
                   .then((res) => {
                     // 임시주문서 order id
@@ -174,9 +168,7 @@ export const OrderPay = ({
 
     // 결제 금액
     const amount: number =
-      priceState.totalPrice + priceState.shippingPrice < 100000
-        ? (priceState.totalPrice + priceState.shippingPrice) / 100
-        : (priceState.totalPrice + priceState.shippingPrice) / 1000;
+      (priceState.totalPrice + priceState.shippingPrice) / 1000;
     if (!amount) {
       alert('결제 금액을 확인해주세요');
       return;
@@ -202,10 +194,8 @@ export const OrderPay = ({
       if (success) {
         // 아임포트 결제 성공했으니 서버에 주문 정보 전달
         if (
-          priceState.totalPrice < 100000
-            ? (priceState.totalPrice + priceState.shippingPrice) / 100
-            : (priceState.totalPrice + priceState.shippingPrice) / 1000 ===
-              response.paid_amount
+          (priceState.totalPrice + priceState.shippingPrice) / 1000 ===
+          response.paid_amount
         ) {
           instance
             .patch(`/orders/pay`, {

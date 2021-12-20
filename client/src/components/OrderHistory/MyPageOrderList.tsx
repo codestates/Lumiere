@@ -95,7 +95,7 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
       });
   };
 
-  const cancleOrderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const cancelOrderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { status, order } = e.currentTarget.dataset;
 
     if (status === '3' || status === '4' || status === '5') {
@@ -209,10 +209,11 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
                   <div className="mobile-Only shipping">
                     {`상품 ${useComma(
                       el.totalPrice - 10000,
-                    )}원 + 배송비 10,000원 `}
+                    )}원 + 배송비 10,000원`}
                   </div>
                   <div className="totalPrice">
                     <div className="mobile-Only">총 결제 금액</div>
+                    {console.log(el)}
                     <div className="realtotalPrice">{`${useComma(
                       el.totalPrice * 1000,
                     )}원`}</div>
@@ -224,7 +225,7 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
                 <Management>
                   <button
                     type="button"
-                    onClick={cancleOrderHandler}
+                    onClick={cancelOrderHandler}
                     data-status={el.result.status}
                     data-order={el._id}
                   >

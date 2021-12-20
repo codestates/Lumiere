@@ -87,7 +87,7 @@ const OrderDetailContent = ({
       });
   }, []);
 
-  const cancleOrderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const cancelOrderHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { status, order } = e.currentTarget.dataset;
 
     if (status === '3' || status === '4' || status === '5') {
@@ -169,7 +169,7 @@ const OrderDetailContent = ({
                 <BtnWrap>
                   <button
                     type="button"
-                    onClick={cancleOrderHandler}
+                    onClick={cancelOrderHandler}
                     data-status={el.result.status}
                     data-order={el._id}
                   >
