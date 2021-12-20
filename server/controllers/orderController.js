@@ -19,6 +19,7 @@ const createOrder = asyncHandler(async (req, res) => {
     return;
   }
   // 주문 생성
+  req.body.totalPrice *= 1000;
   const newOrder = await Order.create({ user: req.user._id, ...req.body });
   // 상품 재고 0으로 수정
   const itemsId = orderItems.map((item) => item.product);
