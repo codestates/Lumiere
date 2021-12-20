@@ -86,7 +86,7 @@ const AdminOrderList = () => {
       });
   };
 
-  const cancleOrder = (id: string) => {
+  const cancelOrder = (id: string) => {
     instance
       .delete(`/orders/${id}`)
       .then((res) => {
@@ -214,7 +214,7 @@ const AdminOrderList = () => {
                   <td>{useComma(el.totalPrice)}</td>
                   <td>{convertDeliverStatus(el.result.status)}</td>
                   <td>
-                    <button type="button" onClick={() => cancleOrder(el._id)}>
+                    <button type="button" onClick={() => cancelOrder(el._id)}>
                       취소
                     </button>
                     <button
