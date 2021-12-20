@@ -40,8 +40,10 @@ const FilteringTab = ({
 }: GreetingProps) => {
   const [currentTab, setCurrentTab] = useState(1);
   useEffect(() => {
-    if (currentMenu <= 5) filteringHandler(tabTypes[currentMenu]);
-    else if (currentMenu <= 16) {
+    if (currentMenu <= 5) {
+      setGetTypes(tabTypes[currentMenu]);
+      filteringHandler(tabTypes[currentMenu]);
+    } else if (currentMenu <= 16) {
       setGetTypes(tabTypes[currentMenu]);
       filteringHandler(tabTypes[currentMenu]);
     } else {
