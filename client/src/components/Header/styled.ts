@@ -303,4 +303,7 @@ export const SearchBarInputWrapper = styled.div`
       display: none;
     }
   }
+  svg {
+    cursor: pointer;
+  }
 `;

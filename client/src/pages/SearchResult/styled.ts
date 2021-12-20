@@ -8,6 +8,7 @@ export const ArtListContainer = styled.div`
   }
 `;
 export const ArtListWrap = styled.div`
+  position: relative;
   max-width: 1152px;
   width: 100%;
   margin: 0 auto;
@@ -25,5 +26,31 @@ export const ArtListWrap = styled.div`
 
   @media screen and (min-width: 768px) {
     padding: 0;
+  }
+`;
+
+export const BlankResultWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1152px;
+  width: 100vw;
+  height: 30vh;
+  margin-top: -2rem;
+  line-height: 1.5;
+  > h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  > p {
+    margin-bottom: 0.5rem;
+  }
+  > p:last-child {
+    color: #aaaaaa;
+  }
+  @media screen and (min-width: 768px) {
+    margin-left: 1rem;
   }
 `;
