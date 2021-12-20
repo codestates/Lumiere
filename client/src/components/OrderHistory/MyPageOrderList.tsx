@@ -139,13 +139,10 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
         })
         .catch((err) => {
           if (err.response.status === 401 && isLogin) {
-            alert('로그인이 만료되었습니다. 다시 로그인해주세요.');
-            localStorage.removeItem('lumiereUserInfo');
-            setIsLogin(false);
-            window.location.assign('/signin');
+            alert('현재 반품신청은 관리자만 가능합니다. 카카오톡 1:1 문의를 이용해주세요.');
           }
-          alert(`${err.response.data.message}`);
-          window.location.assign('/error');
+          // alert(`${err.response.data.message}`);
+          // window.location.assign('/error');
         });
     }
   };

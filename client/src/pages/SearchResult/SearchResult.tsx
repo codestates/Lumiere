@@ -111,6 +111,7 @@ const ArtList = () => {
           },
         })
         .then((res) => {
+          console.log(res.data);
           setArtList(res.data);
           setIsLoading(false);
         })
