@@ -15,7 +15,7 @@ import { tabTypes } from 'components/FilteringTab/dummy';
 import { LoadingArtList } from 'pages/ArtListPage/Loading';
 import { ArtListDummy } from 'pages/ArtListPage/dummy';
 import { AdminProductsType } from '../../util/type';
-import { ArtListContainer, ArtListWrap } from './styled';
+import { ArtListContainer, ArtListWrap, BlankResultWrap } from './styled';
 
 const ArtList = () => {
   const [isLogin, setIsLogin] = useRecoilState(IsSigninState);
@@ -192,6 +192,31 @@ const ArtList = () => {
   const setCurrentMenuHandler = (tabNumber: number) => {
     setCurrentMenu(tabNumber);
   };
+
+  const blankResult = () => {
+    if (artList.products.length) {
+      return artList.products.map((art) => {
+        return (
+          <ArtListMapping
+            art={art}
+            openLoginModalHandler={openLoginModalHandler}
+            key={art._id}
+          />
+        );
+      });
+    }
+    return (
+      <BlankResultWrap>
+        <h3>검색 결과가 없습니다.</h3>
+        <p>
+          입력하신 검색어에 오타가 있는지 확인해주세요. <br /> 아래와 같은
+          주제의 관련 검색어로 입력해보세요.
+        </p>
+        <p>작가 이름, 작가 활동명, 작품 제목, 작품 재료</p>
+      </BlankResultWrap>
+    );
+  };
+
   return (
     <ArtListContainer>
       <Header />
@@ -210,15 +235,7 @@ const ArtList = () => {
         >
           {isLoading
             ? ArtListDummy.map((art) => <LoadingArtList key={art.id} />)
-            : artList.products.map((art) => {
-                return (
-                  <ArtListMapping
-                    art={art}
-                    openLoginModalHandler={openLoginModalHandler}
-                    key={art._id}
-                  />
-                );
-              })}
+            : blankResult()}
         </Masonry>
 
         <PageNation
