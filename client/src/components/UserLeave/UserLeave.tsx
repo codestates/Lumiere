@@ -18,11 +18,11 @@ const UserLeave = () => {
     if (isDisableBtn) {
       return;
     }
-    setIsDisableBtn(true);
 
     if (inputConfirmText === '') {
       setValidConfirmMessage('문구를 입력해주세요');
     } else if (inputConfirmText && confirmTextMatch) {
+      setIsDisableBtn(true);
       // axios요청
       instance
         .delete('/users/profile', { params: { userId: inputConfirmText } })
