@@ -130,12 +130,24 @@ export const SignInSocialWrap = styled.ul`
     position: relative;
     width: 4rem;
     height: 4rem;
-    border-radius: 50%;
-    border: 1px solid #aaaaaa;
-    font-size: 2rem;
-    border-radius: 50%;
     margin: 0 0.6rem;
     padding: 0.2rem;
+    font-size: 2rem;
+    background-color: #ffffff;
+    border: 1px solid #aaaaaa;
+    border-radius: 50%;
+    transition: all 1s;
+    a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &:hover {
+      background-color: var(--color-black);
+      svg {
+        color: #fff;
+      }
+    }
   }
 
   li:nth-child(1) {
@@ -147,8 +159,10 @@ export const SignInSocialWrap = styled.ul`
     li {
       margin: 0 1rem;
     }
-
     li svg {
+      font-size: 2.2rem;
+    }
+    li:nth-child(1) svg {
       font-size: 2.5rem;
     }
   }
@@ -157,5 +171,5 @@ export const SocailBtn = styled.button`
   width: 100%;
   height: 100%;
   border: none;
-  background: none; ;
+  background: none;
 `;
