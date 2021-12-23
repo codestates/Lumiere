@@ -12,6 +12,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name : add Env
+        env:
+          REACT_APP_ACCESS_ID: ${{ secrets.REACT_APP_ACCESS_ID }}
+          REACT_APP_ACCESS_KEY: ${{ secrets.REACT_APP_ACCESS_KEY }}
+          REACT_APP_BUCKET_NAME: ${{ secrets.REACT_APP_BUCKET_NAME }}
+          REACT_APP_REGION: ${{ secrets.REACT_APP_REGION }}
+          REACT_APP_REDIRECT_URI: ${{ secrets.REACT_APP_REDIRECT_URI }}
+          REACT_APP_KAKAO: ${{ secrets.REACT_APP_KAKAO }}
+          REACT_APP_IMPORT: ${{ secrets.REACT_APP_IMPORT }}
+          REACT_APP_IMPORT_REST_API: ${{ secrets.REACT_APP_IMPORT_REST_API }}
+          REACT_APP_IMPORT_REST_API_SECRET: ${{ secrets.REACT_APP_IMPORT_REST_API_SECRET }}
         run: |
           echo "REACT_APP_ACCESS_ID=$REACT_APP_ACCESS_ID" >> .env
           echo "REACT_APP_ACCESS_KEY=$REACT_APP_ACCESS_KEY" >> .env
@@ -23,17 +33,6 @@ jobs:
           echo "REACT_APP_IMPORT_REST_API=$REACT_APP_IMPORT_REST_API" >> .env
           echo "REACT_APP_IMPORT_REST_API_SECRET=$REACT_APP_IMPORT_REST_API_SECRET" >> .env
           echo "GENERATE_SOURCEMAP=false >> .env
-        env:
-          REACT_APP_ACCESS_ID: ${{ secrets.REACT_APP_ACCESS_ID }}
-          REACT_APP_ACCESS_KEY: ${{ secrets.REACT_APP_ACCESS_KEY }}
-          REACT_APP_BUCKET_NAME: ${{ secrets.REACT_APP_BUCKET_NAME }}
-          REACT_APP_REGION: ${{ secrets.REACT_APP_REGION }}
-          REACT_APP_REDIRECT_URI: ${{ secrets.REACT_APP_REDIRECT_URI }}
-          REACT_APP_KAKAO: ${{ secrets.REACT_APP_KAKAO }}
-          REACT_APP_IMPORT: ${{ secrets.REACT_APP_IMPORT }}
-          REACT_APP_IMPORT_REST_API: ${{ secrets.REACT_APP_IMPORT_REST_API }}
-          REACT_APP_IMPORT_REST_API_SECRET: ${{ secrets.REACT_APP_IMPORT_REST_API_SECRET }}
-          
       - name: npm install for eslint
         run: npm install
 
