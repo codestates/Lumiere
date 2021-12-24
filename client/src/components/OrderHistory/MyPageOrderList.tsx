@@ -213,7 +213,6 @@ const MypageOrderList = ({ isLoading, setIsLoading }: Props) => {
                   </div>
                   <div className="totalPrice">
                     <div className="mobile-Only">총 결제 금액</div>
-                    {console.log(el)}
                     <div className="realtotalPrice">{`${useComma(
                       el.totalPrice,
                     )}원`}</div>
