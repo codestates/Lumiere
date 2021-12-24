@@ -109,7 +109,6 @@ const Order = () => {
       .get('/products/total-price', { params: { productId: orderProduct } })
       .then((res) => {
         const price = res.data.total.totalPrice;
-        console.log(res.data.total);
         setPriceState({
           ...priceState,
           shippingPrice: 10000,

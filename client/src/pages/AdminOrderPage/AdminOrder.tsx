@@ -164,12 +164,14 @@ const AdminOrderList = () => {
               <tbody key={uuidv4()}>
                 <tr>
                   <td>
-                    <div>{el.user.general?.email}</div>
-                    <div>{el.user.kakao?.email}</div>
-                    <div>{el.user.google?.email}</div>
-                    <div>{el.user.naver?.email}</div>
-                    <div>{el.user.name}</div>
-                    <div>{el.user._id}</div>
+                    <div>{el.user === null ? '탈퇴한 회원입니다.' : ''}</div>
+                    <div>{el.user === null ? el._id : ''}</div>
+                    <div>{el.user?.general?.email}</div>
+                    <div>{el.user?.kakao?.email}</div>
+                    <div>{el.user?.google?.email}</div>
+                    <div>{el.user?.naver?.email}</div>
+                    <div>{el.user?.name}</div>
+                    <div>{el.user?._id}</div>
                   </td>
                   <td>
                     <div>
