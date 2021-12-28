@@ -195,4 +195,3 @@ https://github.com/codestates/Lumiere/wiki
      <td> 💻 Front-end </td>
    </tr>
   </tbody>
-
