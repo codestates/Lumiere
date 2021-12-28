@@ -37,6 +37,9 @@ Lumiere에서 아래와 같은 서비스를 즐겨보세요!
 ## 배포 링크
 https://www.lumieregallery.site
 
+## 위키
+https://github.com/codestates/Lumiere/wiki
+
 
 ***
 ##  사용한 기술 스택
