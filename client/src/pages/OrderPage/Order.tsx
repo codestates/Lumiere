@@ -108,7 +108,7 @@ const Order = () => {
     instance
       .get('/products/total-price', { params: { productId: orderProduct } })
       .then((res) => {
-        const price = res.data.total.totalPrice;
+        const price = res.data.totalPrice;
         setPriceState({
           ...priceState,
           shippingPrice: 10000,

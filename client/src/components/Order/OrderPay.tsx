@@ -110,7 +110,7 @@ export const OrderPay = ({
             })
             .then((res) => {
               if (
-                res.data.total.totalPrice !==
+                res.data.totalPrice !==
                 (priceState.totalPrice + priceState.shippingPrice) / 1000
               ) {
                 alert('결제금액이 다릅니다.');
