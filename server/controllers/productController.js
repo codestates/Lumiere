@@ -119,7 +119,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const { theme, sizeMin, sizeMax, priceMin, priceMax } = req.query;
 
-  let filter;
+  let filter = '';
 
   if (theme) {
     filter = { theme };
@@ -131,8 +131,6 @@ const getProducts = asyncHandler(async (req, res) => {
     filter = { price: { $gte: Number(priceMin), $lte: Number(priceMax) } };
   } else if (priceMin) {
     filter = { price: { $gte: Number(priceMin) } };
-  } else {
-    filter = '';
   }
 
   pageSize = 28;
@@ -175,7 +173,7 @@ const getProducts = asyncHandler(async (req, res) => {
     res.json({
       products,
       page,
-      pages: Math.ceil(count ? count[0].of_products : 1 / pageSize),
+      pages: 1,
     });
     return;
   }
