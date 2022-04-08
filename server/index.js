@@ -23,13 +23,17 @@ const combined =
 const morganFormat = process.env.NODE_ENV !== 'production' ? 'dev' : combined;
 
 const app = express();
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // qs
 app.use(morgan(morganFormat, { stream: logger.stream })); // morgan 로그 설정
 
 app.use(
   cors({
-    origin: '*',
+    origin: [
+      'https://lumiereimage.s3.ap-northeast-2.amazonaws.com',
+      'https://www.lumieregallery.site',
+      'http://localhost:3000',
+    ],
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   }),
 );
