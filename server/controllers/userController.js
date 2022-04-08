@@ -71,7 +71,7 @@ const generalLogin = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       isAdmin: user.isAdmin,
-      token: generateAccessToken(user._id),
+      token: generateAccessToken(user._id, user.isAdmin),
     });
   } else {
     res.status(401).json({ message: '비밀번호를 다시 확인해주세요' });
@@ -85,7 +85,7 @@ const logout = asyncHandler(async (req, res) => {
   // 로그아웃 시간 저장 -> 추후 휴먼 계정 전환 가능
 
   await User.updateOne(
-    { _id: req.user._id },
+    { _id: req.user.id },
     { 'active.lastAccessTime': localTime() },
     {
       upsert: true,
@@ -145,7 +145,7 @@ const oAuthLogin = asyncHandler(async (req, res) => {
       _id: user._id,
       name: user.name,
       isAdmin: user.isAdmin,
-      token: generateAccessToken(user._id),
+      token: generateAccessToken(user._id, user.isAdmin),
     });
   } else {
     const newUser = new User({
@@ -161,7 +161,7 @@ const oAuthLogin = asyncHandler(async (req, res) => {
       _id: newUser._id,
       name: newUser.name,
       isAdmin: newUser.isAdmin,
-      token: generateAccessToken(newUser._id),
+      token: generateAccessToken(newUser._id, newUser.isAdmin),
     });
   }
 });
@@ -172,7 +172,7 @@ const oAuthLogin = asyncHandler(async (req, res) => {
 const checkPwd = asyncHandler(async (req, res) => {
   const { password } = req.body;
 
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.user.id);
   // 일반, 소설 유저 구분
   if (!user.general) {
     res.status(401).json({ message: '소셜 유저는 변경이 불가합니다' });
@@ -194,7 +194,7 @@ const updatePwd = asyncHandler(async (req, res) => {
     password = await bcrypt.hash(password, 10);
 
     const updatedUser = await User.findByIdAndUpdate(
-      req.user._id,
+      req.user.id,
       { 'general.password': password },
       {
         new: true,
@@ -202,7 +202,7 @@ const updatePwd = asyncHandler(async (req, res) => {
     );
     res.status(200).json({
       message: '비밀번호가 성공적으로 변경되었습니다',
-      token: generateAccessToken(updatedUser._id),
+      token: generateAccessToken(updatedUser._id, updatedUser.isAdmin),
     });
   } else {
     res.status(400).json({
@@ -248,10 +248,10 @@ const dropout = asyncHandler(async (req, res) => {
   }
 
   if (req.user.isAdmin === false) {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
     if (user.general.email) {
       await User.updateOne(
-        { _id: req.user._id },
+        { _id: req.user.id },
         {
           'active.lastAccessTime': localTime(),
           'active.isClosed': true,
@@ -291,7 +291,7 @@ const dropout = asyncHandler(async (req, res) => {
       message = '구글 계정과 연결 끊기 완료';
     }
     await User.updateOne(
-      { _id: req.user._id },
+      { _id: req.user.id },
       {
         'active.lastAccessTime': localTime(),
         'active.isClosed': true,
@@ -341,8 +341,6 @@ export {
   register,
   generalLogin,
   oAuthLogin,
-  // naverUserInfo,
-  // googleUserInfo,
   checkPwd,
   updatePwd,
   logout,

@@ -20,7 +20,9 @@ const createOrder = asyncHandler(async (req, res) => {
   }
   // 주문 생성
   req.body.totalPrice *= 1000;
-  const newOrder = await Order.create({ user: req.user._id, ...req.body });
+  // console.log('진짜', req.body.totalPrice);
+  // console.log(req.body);
+  const newOrder = await Order.create({ user: req.user.id, ...req.body });
   // 상품 재고 0으로 수정
   const itemsId = orderItems.map((item) => item.product);
   await Product.updateMany(
@@ -315,9 +317,9 @@ const getOrderById = asyncHandler(async (req, res) => {
 const getMyOrders = asyncHandler(async (req, res) => {
   const pageSize = 3;
   const page = Number(req.query.pageNumber) || 1;
-  const count = await Order.countDocuments({ user: req.user._id });
+  const count = await Order.countDocuments({ user: req.user.id });
   const orders = await Order.find(
-    { user: req.user._id },
+    { user: req.user.id },
     {
       deliveryInfo: 0,
       deliveryDetails: 0,
@@ -330,7 +332,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
     .skip(pageSize * (page - 1))
     .exec();
   const status = await Order.aggregate([
-    { $match: { user: req.user._id } },
+    { $match: { user: req.user.id } },
     {
       $facet: {
         paid: [{ $match: { 'result.status': 0 } }, { $count: 'paid' }],
@@ -362,7 +364,7 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @access  Private
 const getLatestOrder = asyncHandler(async (req, res) => {
   const order = await Order.findOne(
-    { user: req.user._id },
+    { user: req.user.id },
     {
       deliveryInfo: 1,
       deliveryDetails: 1,
