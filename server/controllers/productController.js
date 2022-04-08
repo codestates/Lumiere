@@ -1,7 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
 import mongoose from 'mongoose';
-import User from '../models/user.js';
 import Product from '../models/product.js';
 import Artist from '../models/artist.js';
 import isAuthorized from '../utils/isAuthorized.js';
@@ -63,12 +62,9 @@ const getProducts = asyncHandler(async (req, res) => {
   let products;
 
   if (isAdmin === 'true') {
-    const decodedData = isAuthorized(req);
-    if (decodedData) {
+    req.user = isAuthorized(req);
+    if (req.user) {
       // 토큰이 유효할 경우
-      req.user = await User.findById(decodedData.id).select(
-        '-general.password',
-      );
       if (req.user.isAdmin === true) {
         // 관리자인 경우
         pageSize = 10;
@@ -119,7 +115,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
   const { theme, sizeMin, sizeMax, priceMin, priceMax } = req.query;
 
-  let filter;
+  let filter = '';
 
   if (theme) {
     filter = { theme };
@@ -131,8 +127,6 @@ const getProducts = asyncHandler(async (req, res) => {
     filter = { price: { $gte: Number(priceMin), $lte: Number(priceMax) } };
   } else if (priceMin) {
     filter = { price: { $gte: Number(priceMin) } };
-  } else {
-    filter = '';
   }
 
   pageSize = 28;
@@ -175,7 +169,7 @@ const getProducts = asyncHandler(async (req, res) => {
     res.json({
       products,
       page,
-      pages: Math.ceil(count ? count[0].of_products : 1 / pageSize),
+      pages: 1,
     });
     return;
   }
@@ -343,7 +337,7 @@ const zzimProduct = asyncHandler(async (req, res) => {
     await Product.updateOne(
       { _id: productId },
       {
-        $addToSet: { likes: req.user._id },
+        $addToSet: { likes: req.user.id },
       },
       { upsert: true },
     ); // likes 배열에 유저 고유 아이디 넣기
@@ -354,7 +348,7 @@ const zzimProduct = asyncHandler(async (req, res) => {
     await Product.updateMany(
       { _id: { $in: productId } },
       {
-        $pull: { likes: req.user._id },
+        $pull: { likes: req.user.id },
       },
       { multi: true },
     );
@@ -367,7 +361,7 @@ const zzimProduct = asyncHandler(async (req, res) => {
 // @access Private
 const getZzimProducts = asyncHandler(async (req, res) => {
   const products = await Product.find(
-    { likes: req.user._id },
+    { likes: req.user.id },
     {
       title: 1,
       image: 1,

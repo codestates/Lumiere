@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 import asyncHandler from 'express-async-handler';
-import User from '../models/user.js';
 import Artist from '../models/artist.js';
 import Product from '../models/product.js';
 import isAuthorized from '../utils/isAuthorized.js';
@@ -69,12 +68,9 @@ const getArtists = asyncHandler(async (req, res) => {
   let artists;
 
   if (isAdmin === 'true') {
-    const decodedData = isAuthorized(req);
-    if (decodedData) {
+    req.user = isAuthorized(req);
+    if (req.user) {
       // 토큰이 유효할 경우
-      req.user = await User.findById(decodedData.id).select(
-        '-general.password',
-      );
       if (req.user.isAdmin === true) {
         // 관리자인 경우
         count = await Artist.countDocuments({});
@@ -186,7 +182,7 @@ const zzimArtist = asyncHandler(async (req, res) => {
     await Artist.updateOne(
       { _id: artistId },
       {
-        $addToSet: { likes: req.user._id },
+        $addToSet: { likes: req.user.id },
       },
       { upsert: true },
     ); // likes 배열에 유저 고유 아이디 넣기
@@ -197,7 +193,7 @@ const zzimArtist = asyncHandler(async (req, res) => {
     await Artist.updateMany(
       { _id: { $in: artistId } },
       {
-        $pull: { likes: req.user._id },
+        $pull: { likes: req.user.id },
       },
       { multi: true },
     ); // likes 배열에 유저 고유 아이디 제거
@@ -210,7 +206,7 @@ const zzimArtist = asyncHandler(async (req, res) => {
 // @access Private
 const getZzimArtists = asyncHandler(async (req, res) => {
   const artists = await Artist.find(
-    { likes: req.user._id },
+    { likes: req.user.id },
     {
       name: 1,
       aka: 1,

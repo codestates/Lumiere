@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
-import User from '../models/user.js';
 
 // 로그인 유저만 private route 접근을 허락해주는 함수
-// 토큰 정보를 받아서 해독하고 검증한다.
+// 토큰 유무와 유효성 검사
 
 const protect = asyncHandler(async (req, res, next) => {
   let token;
@@ -13,12 +12,7 @@ const protect = asyncHandler(async (req, res, next) => {
     try {
       // eslint-disable-next-line prefer-destructuring
       token = authorization.split(' ')[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-      // console.log(decoded);
-      req.user = await User.findById(decoded.id).select(
-        '-general.password -google.accessToken  -naver.accessToken -kakao.accessToken -google.refreshToken -naver.refreshToken -kakao.refreshToken',
-      );
-      // console.log('req.user 객체에는?', req.user);
+      req.user = jwt.verify(token, process.env.JWT_SECRET_KEY);
       next();
     } catch (error) {
       console.error(error);
