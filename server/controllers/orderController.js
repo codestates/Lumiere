@@ -1,10 +1,13 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-underscore-dangle */
-import axios from 'axios';
 import asyncHandler from 'express-async-handler';
+import mongoose from 'mongoose';
+import axios from 'axios';
 import Order from '../models/order.js';
 import Product from '../models/product.js';
 import localTime from '../utils/localTime.js';
+
+const { ObjectId } = mongoose.Types;
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -65,7 +68,7 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   const { amount, status, merchant_uid } = paymentData;
 
   const order = await Order.findById(merchant_uid);
-  const amountToBePaid = order.totalPrice;
+  const amountToBePaid = order.totalPrice / 1000;
 
   if (amount === amountToBePaid && status === 'paid') {
     // 주문서에 imp_uid, 진행단계, 결제시간, 업데이트시간 고치기
@@ -331,8 +334,9 @@ const getMyOrders = asyncHandler(async (req, res) => {
     .limit(pageSize)
     .skip(pageSize * (page - 1))
     .exec();
+
   const status = await Order.aggregate([
-    { $match: { user: req.user.id } },
+    { $match: { user: new ObjectId(req.user.id) } },
     {
       $facet: {
         paid: [{ $match: { 'result.status': 0 } }, { $count: 'paid' }],
