@@ -6,11 +6,11 @@ const notFound = (req, res, next) => {
   const err = `Not Found - ${req.originalUrl}`;
   logger.error(err);
   res.status(404);
-  next(new Error(err));
+  next(err);
 };
 
 const errHandler = (err, req, res) => {
-  const statusCode = res.statusCode === 200 ? 400 : res.statusCode;
+  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   const data = {
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? null : err.stack,
