@@ -35,7 +35,7 @@ Lumiere에서 아래와 같은 서비스를 즐겨보세요!
 - 작가님의 모든 작품은 작가 상세페이지에서 모아보실 수 있습니다.
 
 ## 배포 링크
-https://www.lumieregallery.site
+서버 종료
 
 ## 위키
 https://github.com/codestates/Lumiere/wiki
