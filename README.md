@@ -36,6 +36,8 @@ Lumiere에서 아래와 같은 서비스를 즐겨보세요!
 
 ## 배포 링크
 서버 종료
+<br />
+<a href="https://github.com/codestates/Lumiere/wiki/Final-App-View">Final App View</a>
 
 ## 위키
 https://github.com/codestates/Lumiere/wiki
